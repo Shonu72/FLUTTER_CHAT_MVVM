@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1034498336374",
+    "project_id": "chatter-6f294",
+    "storage_bucket": "chatter-6f294.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034498336374:android:9adc9a44abdb267357a157",
+        "android_client_info": {
+          "package_name": "com.example.charterer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdM71Bk3IKhYYN0QagZLGWfC4ZvIc793g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

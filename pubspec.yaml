@@ -1,0 +1,92 @@
+name: charterer
+description: A new Flutter project.
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.18.5 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+  #state_mngt_arch
+  get: ^4.6.6
+  equatable: ^2.0.3
+  dio: ^4.0.6
+  json_annotation: ^4.6.0
+  dartz: ^0.10.1
+
+  #ui
+  sizer: ^2.0.15
+  dropdown_button2: ^1.7.2
+  flutter_svg: ^1.1.1+1
+
+  #ui_helpers
+  fluttertoast: ^8.0.9
+  flutter_smart_dialog: ^4.5.5+3
+
+  #cache_local
+  shared_preferences: ^2.0.15
+
+  #project_config
+  rename: ^2.0.1
+  flutter_dotenv: ^5.0.2
+  logger: ^1.1.0
+  firebase_core: ^2.27.0
+  firebase_storage: ^11.6.9
+  firebase_auth: ^4.17.8
+  file_picker: ^8.0.0+1
+  image_picker: ^1.0.8
+
+  flutter_contacts: ^1.1.8
+  permission_handler: ^10.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design:
+    true
+
+    #To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/
+    - assets/images/
+    - .env.production
+    - .env.development
+
+  # example:
+  fonts:
+    - family: Heebo
+      fonts:
+        - asset: assets/fonts/heebo/Heebo-Light.ttf
+          weight: 300
+        - asset: assets/fonts/heebo/Heebo-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/heebo/Heebo-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/heebo/Heebo-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/heebo/Heebo-Bold.ttf
+          weight: 700
+
+    - family: Noto Sans
+      fonts:
+        - asset: assets/fonts/notosans/NotoSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/notosans/NotoSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/notosans/NotoSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/notosans/NotoSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/notosans/NotoSans-Bold.ttf
+          weight: 700
