@@ -23,6 +23,11 @@ class Helpers {
         fontSize: 16.0);
   }
 
+  static saveUser({required String key, required bool value}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(key, value);
+  }
+
   static validateEmail(String value) {
     if (value.isEmpty) {
       return "field required";

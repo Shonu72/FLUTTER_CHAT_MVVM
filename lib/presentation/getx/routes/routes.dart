@@ -2,6 +2,7 @@ import 'package:charterer/presentation/screens/add_charterer_screen.dart';
 import 'package:charterer/presentation/screens/call_screen.dart';
 import 'package:charterer/presentation/screens/chat_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
+import 'package:charterer/presentation/screens/edit_profile_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
 import 'package:charterer/presentation/screens/login_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
@@ -21,6 +22,7 @@ class Routes {
   static String addChartererScreen = '/addChartererScreen';
   static String notificationPage = '/notificationPage';
   static String chatPage = '/chatPage';
+  static String editProfile = '/editProfile';
 }
 
 final getPages = [
@@ -30,6 +32,7 @@ final getPages = [
   GetPage(name: Routes.mainPage, page: () => const MainPage()),
   GetPage(name: Routes.callScreen, page: () => const CallScreen()),
   GetPage(name: Routes.profileScreen, page: () => const ProfileScreen()),
+  GetPage(name: Routes.editProfile, page: () => const EditProfileScreen()),
   GetPage(name: Routes.contactScreen, page: () => const ContactScreen()),
   GetPage(name: Routes.addChartererScreen, page: () => const AddCharterer()),
   GetPage(name: Routes.chatPage, page: () => const ChatScreen()),

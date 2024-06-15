@@ -1,42 +1,45 @@
-import 'package:charterer/core/utils/helpers.dart';
-import 'package:charterer/data/models/response_models/api_response.dart';
-import 'package:charterer/services/api/auth_services.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
-class AuthController extends GetxController {
-  final Dio dio;
-  AuthController(this.dio);
-  late AuthServices authService = AuthServices(dio);
+import 'package:charterer/data/datasource_impl/firebase_auth_datasource_impl.dart';
+import 'package:charterer/data/models/user_model.dart';
+import 'package:charterer/data/repositories/firebase_repository_impl.dart';
+import 'package:get/get.dart';
 
-  Future<ApiResponse> login(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
-    // isVerify.value = false;
+class AuthControlller extends GetxController {
+  final AuthRepository authRepository =
+      AuthRepository(dataSource: FirebaseAuthDataSource());
 
-    final response = await authService.login(
-      email: email,
-      password: password,
-      context: context,
-    );
-    Map<String, dynamic> data = {};
+  final user = Rxn<UserModel>();
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    response.fold((failure) {
-      print("failed");
+  Rxn<UserModel> get currentUser => user;
 
-      debugPrint(Helpers.convertFailureToMessage(failure));
-      debugPrint("Helpers.convertFailureToMessage(failure)");
-    }, (success) async {
-      data = success;
-      print("success");
-      print(success);
-      print("success");
-    });
-    return ApiResponse(status: response.isRight(), data: data);
-    // return response.isRight();
+  Future<void> getCurrentUser() async {
+    user.value = await authRepository.getCurrentUser();
+  }
+
+  Future<void> signInWithEmailPassword(String email, String password) async {
+    await authRepository.signInWithEmailPassword(email, password);
+  }
+
+  Future<void> signUpWithEmailPassword(String email, String password,
+      String name, String phoneNumber, String confirmPassword) async {
+    await authRepository.signUpWithEmailPassword(
+        email, password, name, phoneNumber, confirmPassword);
+  }
+
+  Future<void> saveUserData(String name, File? profilePic) async {
+    await authRepository.saveUserData(name, profilePic);
+  }
+
+  Stream<UserModel> userData(String userId) {
+    return authRepository.userData(userId);
+  }
+
+  Future<void> setUserState(bool isOnline) async {
+    await authRepository.setUserState(isOnline);
+  }
+
+  Future<void> signOut() async {
+    await authRepository.signOut();
   }
 }

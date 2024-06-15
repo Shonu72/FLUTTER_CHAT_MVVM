@@ -1,16 +1,13 @@
 import 'package:charterer/core/theme/colors.dart';
-import 'package:charterer/domain/entities/auth_service.dart';
+import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
-import 'package:charterer/presentation/screens/login_screen.dart';
-import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/screens/sign_up_screen.dart';
 import 'package:charterer/presentation/screens/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/widgets/button_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:charterer/presentation/widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,8 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController passwordController = TextEditingController();
 
-  bool _isSigningIn = false;
-  AuthController authController = Get.find<AuthController>();
+  final userController = Get.find<AuthControlller>();
 
   @override
   void initState() {
@@ -36,17 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void validateForm() {
-      if (_formKey.currentState!.validate()) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainPage(),
-          ),
-        );
-      }
-    }
-
     return Scaffold(
       backgroundColor: backgroundDarkColor,
       appBar: AppBar(
@@ -105,14 +90,15 @@ class _LoginScreenState extends State<LoginScreen> {
               AppButton(
                 color: Colors.blue,
                 text: "Login",
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // _login();
-                     Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MainPage()));
-                    
+                    Get.dialog(const CustomLoadingWidget(),
+                        barrierDismissible: false);
+                    await userController.signInWithEmailPassword(
+                        mailController.text, passwordController.text);
+
+                    Helpers.saveUser(key: "isLoggedIn", value: true);
+                    Get.toNamed(Routes.mainPage);
                   }
                 },
               ),
@@ -153,54 +139,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> getLoggedInStatus() async {
-    setState(() {});
-  }
-
-  void _signIn() async {
-    setState(() {
-      _isSigningIn = true;
-    });
-
-    User? user = await FirebaseAuthHelper.signInUsingEmailPassword(
-      email: mailController.text,
-      password: passwordController.text,
-    );
-
-    setState(() {
-      _isSigningIn = false;
-    });
-
-    if (user != null) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool('loggedIn', true);
-      getLoggedInStatus();
-      Get.offNamed(Routes.mainPage);
-    }
-  }
-
-  void _login() async {
-    if (_formKey.currentState!.validate()) {
-      await authController
-          .login(
-              email: mailController.text.trim(),
-              password: passwordController.text.trim(),
-              context: context)
-          .then((success) async {
-        if (success.status) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setBool('loggedIn', true);
-          getLoggedInStatus();
-          Get.offNamed(Routes.mainPage);
-        } else {
-          Get.snackbar("Error", "Invalid email or password",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.red,
-              colorText: Colors.white);
-        }
-      });
-    }
   }
 }

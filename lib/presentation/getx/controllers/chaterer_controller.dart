@@ -1,7 +1,6 @@
 import 'package:charterer/core/usecases/charterer_params.dart';
 import 'package:charterer/domain/entities/charterer.dart';
 import 'package:charterer/domain/usecases/add_charterer.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
