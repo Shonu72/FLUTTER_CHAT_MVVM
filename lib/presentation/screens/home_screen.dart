@@ -1,5 +1,5 @@
 import 'package:charterer/presentation/getx/routes/routes.dart';
-import 'package:charterer/presentation/screens/profile_screen.dart';
+import 'package:charterer/presentation/screens/profiles/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;

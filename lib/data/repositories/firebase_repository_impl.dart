@@ -22,14 +22,22 @@ class AuthRepository with AuthUseCase {
   }
 
   @override
-  Future<void> signUpWithEmailPassword(String email, String password,
-      String name, String phoneNumber, String confirmPassword) async {
+  Future<void> signUpWithEmailPassword(
+      String email,
+      String password,
+      File? profilePic,
+      String name,
+      String phoneNumber,
+      String confirmPassword) async {
     return _dataSource.signUpWithEmailPassword(
-        email, password, confirmPassword, name, phoneNumber);
+        email, password, profilePic, confirmPassword, name, phoneNumber);
   }
 
   @override
-  Future<void> saveUserData(String name, File? profilePic) async {
+  Future<void> saveUserData(
+    String name,
+    File? profilePic,
+  ) async {
     return _dataSource.saveUserDataToFirebase(name, profilePic);
   }
 
@@ -47,5 +55,4 @@ class AuthRepository with AuthUseCase {
   Future<void> signOut() async {
     return _dataSource.signOut();
   }
-
 }

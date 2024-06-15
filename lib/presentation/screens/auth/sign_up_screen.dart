@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
-import 'package:charterer/presentation/screens/login_screen.dart';
+import 'package:charterer/presentation/screens/auth/login_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/screens/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/widgets/button_widget.dart';
@@ -33,6 +35,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       TextEditingController();
 
   final userController = Get.find<AuthControlller>();
+  File? image;
+
+  void selectImage() async {
+    image = await Helpers.pickImageFromGallery(context);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +68,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const Text(
                 "Register to Chatter",
                 style: TextStyle(color: textWhiteColor, fontSize: 30),
+              ),
+              const SizedBox(height: 20),
+              Stack(
+                children: [
+                  image == null
+                      ? const CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png',
+                          ),
+                          radius: 64,
+                          backgroundColor: Colors.blue,
+                        )
+                      : CircleAvatar(
+                          backgroundImage: FileImage(
+                            image!,
+                          ),
+                          radius: 64,
+                        ),
+                  Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(
+                      onPressed: selectImage,
+                      icon: const Icon(
+                        Icons.add_a_photo,
+                        color: whiteColor,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               AuthTextFieldWidget(
@@ -147,11 +185,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     //   phone: phoneController.text,
                     // );
                     await userController.signUpWithEmailPassword(
-                        nameController.text,
-                        mailController.text,
-                        phoneController.text,
-                        passwordController.text,
-                        confirmPasswordController.text);
+                      nameController.text,
+                      mailController.text,
+                      image,
+                      phoneController.text,
+                      passwordController.text,
+                      confirmPasswordController.text,
+                    );
                     Helpers.saveUser(key: "isLoggedIn", value: true);
                     Helpers.toast("Account creation Successful");
                     Get.toNamed(Routes.mainPage);

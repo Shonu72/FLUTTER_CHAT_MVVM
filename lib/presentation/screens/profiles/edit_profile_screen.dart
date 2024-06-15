@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:charterer/core/theme/colors.dart';
+import 'package:charterer/core/utils/helpers.dart';
+import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/screens/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/widgets/button_widget.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
@@ -13,8 +17,20 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  final authController = Get.find<AuthControlller>();
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  File? image;
+
+void selectImage() async {
+    image = await Helpers.pickImageFromGallery(context);
+    setState(() {});
+  }
+
+void storeUserData() async{
+  final name = nameController.text;
+  final phone = phoneController.text;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         centerTitle: true,
         backgroundColor: Colors.grey[200],
         title: const AppText(
-          text: "Edit Profile",
+          text: "Complete your Profile",
           size: 24,
           color: Colors.black,
         ),
@@ -35,39 +51,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           Stack(
             children: [
-              Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/boy.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
+              image == null
+                  ? const CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png',
+                      ),
+                      radius: 64,
+                    )
+                  : CircleAvatar(
+                      backgroundImage: FileImage(
+                        image!,
+                      ),
+                      radius: 64,
                     ),
-                  ),
-                  child: Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
+              Positioned(
+                bottom: -10,
+                left: 80,
+                child: IconButton(
+                  onPressed: selectImage,
+                  icon: const Icon(
+                    Icons.add_a_photo,
                   ),
                 ),
               ),
             ],
           ),
+            
           SizedBox(
             height: 20,
           ),

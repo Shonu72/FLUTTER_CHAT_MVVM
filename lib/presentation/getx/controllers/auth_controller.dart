@@ -21,10 +21,15 @@ class AuthControlller extends GetxController {
     await authRepository.signInWithEmailPassword(email, password);
   }
 
-  Future<void> signUpWithEmailPassword(String email, String password,
-      String name, String phoneNumber, String confirmPassword) async {
+  Future<void> signUpWithEmailPassword(
+      String email,
+      String password,
+      File? profilePic,
+      String name,
+      String phoneNumber,
+      String confirmPassword) async {
     await authRepository.signUpWithEmailPassword(
-        email, password, name, phoneNumber, confirmPassword);
+        email, password, profilePic, name, phoneNumber, confirmPassword);
   }
 
   Future<void> saveUserData(String name, File? profilePic) async {

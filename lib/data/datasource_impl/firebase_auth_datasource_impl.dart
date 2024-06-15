@@ -39,11 +39,28 @@ class FirebaseAuthDataSource with AuthDataSource {
   }
 
   @override
-  Future<void> signUpWithEmailPassword(String name, String email,
+  Future<void> signUpWithEmailPassword(String name, String email, File? profilePic,
       String phoneNumber, String password, String confirmPassword) async {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      String uid = _auth.currentUser!.uid;
+            String photoUrl =
+          'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png';
+
+      if (profilePic != null) {
+        // Handle profile pic upload
+        photoUrl = await commonFirebaseStorageRepository.storeFileToFirebase(
+            "profilePic/$uid", profilePic);
+      }
+      var user = UserModel(
+          name: name,
+          uid: uid,
+          profilePic: photoUrl,
+          isOnline: true,
+          phoneNumber: phoneNumber,
+          groupId: []);
+      await _firestore.collection('users').doc(uid).set(user.toMap());
     } on FirebaseAuthException catch (e) {
       print("This went wrong $e");
     }

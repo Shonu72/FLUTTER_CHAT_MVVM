@@ -2,13 +2,13 @@ import 'package:charterer/presentation/screens/add_charterer_screen.dart';
 import 'package:charterer/presentation/screens/call_screen.dart';
 import 'package:charterer/presentation/screens/chat_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
-import 'package:charterer/presentation/screens/edit_profile_screen.dart';
+import 'package:charterer/presentation/screens/profiles/edit_profile_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
-import 'package:charterer/presentation/screens/login_screen.dart';
+import 'package:charterer/presentation/screens/auth/login_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/screens/notification_screen.dart';
-import 'package:charterer/presentation/screens/profile_screen.dart';
-import 'package:charterer/presentation/screens/sign_up_screen.dart';
+import 'package:charterer/presentation/screens/profiles/profile_screen.dart';
+import 'package:charterer/presentation/screens/auth/sign_up_screen.dart';
 import 'package:get/get.dart';
 
 class Routes {

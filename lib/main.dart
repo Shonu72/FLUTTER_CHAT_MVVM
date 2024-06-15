@@ -2,7 +2,7 @@ import 'package:charterer/di/injection.dart';
 import 'package:charterer/firebase_options.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
-import 'package:charterer/presentation/screens/login_screen.dart';
+import 'package:charterer/presentation/screens/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

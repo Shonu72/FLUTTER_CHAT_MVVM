@@ -47,6 +47,7 @@ dependencies:
   permission_handler: ^10.1.0
   cloud_firestore: ^4.15.8
   firebase_messaging: ^14.7.19
+  # enough_giphy_flutter: ^0.4.1
 
 dev_dependencies:
   flutter_test:

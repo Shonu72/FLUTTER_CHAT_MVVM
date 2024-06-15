@@ -2,7 +2,7 @@ import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
-import 'package:charterer/presentation/screens/sign_up_screen.dart';
+import 'package:charterer/presentation/screens/auth/sign_up_screen.dart';
 import 'package:charterer/presentation/screens/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/widgets/button_widget.dart';
 import 'package:charterer/presentation/widgets/custom_loading_widget.dart';

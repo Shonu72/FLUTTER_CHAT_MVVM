@@ -49,9 +49,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 50,
             ),
-            const CircleAvatar(
+            CircleAvatar(
               radius: 60,
-              backgroundImage: AssetImage('assets/images/bg.jpg'),
+              backgroundImage: NetworkImage(
+                user?.photoURL ??
+                    'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png',
+              ),
               backgroundColor: Colors.blue,
             ),
             const SizedBox(
