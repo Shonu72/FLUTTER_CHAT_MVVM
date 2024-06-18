@@ -4,19 +4,32 @@ import 'package:charterer/presentation/screens/chats/widgets/my_message_card.dar
 import 'package:charterer/presentation/screens/chats/widgets/sender_message_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class ChatList extends StatelessWidget {
+class ChatList extends StatefulWidget {
   final String receiverUserId;
-  ChatList({Key? key, required this.receiverUserId}) : super(key: key);
+  const ChatList({Key? key, required this.receiverUserId}) : super(key: key);
 
+  @override
+  State<ChatList> createState() => _ChatListState();
+}
+
+class _ChatListState extends State<ChatList> {
   final chatController = Get.find<ChatController>();
+  final ScrollController messageController = ScrollController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    messageController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: chatController.chatStream(receiverUserId),
+        stream: chatController.chatStream(widget.receiverUserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -24,9 +37,13 @@ class ChatList extends StatelessWidget {
             );
           }
 
-          // final messages = snapshot.data as List;
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            messageController
+                .jumpTo(messageController.position.maxScrollExtent);
+          });
           return ListView.builder(
             itemCount: snapshot.data!.length,
+            controller: messageController,
             itemBuilder: (context, index) {
               final messageData = snapshot.data![index];
               var timeSent = DateFormat.Hm().format(messageData.timeSent);
@@ -45,20 +62,5 @@ class ChatList extends StatelessWidget {
             },
           );
         });
-    //  ListView.builder(
-    //   itemCount: messages.length,
-    //   itemBuilder: (context, index) {
-    //     if (messages[index]['isMe'] == true) {
-    //       return MyMessageCard(
-    //         message: messages[index]['text'].toString(),
-    //         date: messages[index]['time'].toString(),
-    //       );
-    //     }
-    //     return SenderMessageCard(
-    //       message: messages[index]['text'].toString(),
-    //       date: messages[index]['time'].toString(),
-    //     );
-    //   },
-    // );
   }
 }

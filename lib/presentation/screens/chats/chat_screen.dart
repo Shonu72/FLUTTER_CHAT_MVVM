@@ -47,7 +47,7 @@ class ChatScreen extends StatelessWidget {
                 return Row(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: NetworkImage(snapshot.data!.profilePic),
+                      backgroundImage: NetworkImage(profile),
                     ),
                     const SizedBox(
                       width: 10,
@@ -96,7 +96,10 @@ class ChatScreen extends StatelessWidget {
         ),
         body: Column(
           children: [
-             Expanded(child: ChatList(receiverUserId: uid,)),
+            Expanded(
+                child: ChatList(
+              receiverUserId: uid,
+            )),
             BottomChatFieldSheet(
               receiverUserId: uid,
             )

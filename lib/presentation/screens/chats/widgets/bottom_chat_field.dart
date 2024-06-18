@@ -46,6 +46,7 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
               child: TextFormField(
                 focusNode: focusNode,
                 controller: messageController,
+                style: const TextStyle(color: whiteColor),
                 onChanged: (val) {
                   if (val.isNotEmpty) {
                     setState(() {
