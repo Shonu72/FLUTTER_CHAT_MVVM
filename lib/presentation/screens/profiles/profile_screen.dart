@@ -1,7 +1,7 @@
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
-import 'package:charterer/presentation/screens/widgets/button_widget.dart';
+import 'package:charterer/presentation/screens/auth/widgets/button_widget.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:charterer/presentation/widgets/profile_setting_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';

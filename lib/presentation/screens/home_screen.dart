@@ -1,8 +1,13 @@
+import 'package:charterer/core/theme/colors.dart';
+import 'package:charterer/data/models/chat_contact_model.dart';
+import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/profiles/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
+
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final chatController = Get.find<ChatController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,69 +148,82 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Expanded(
                       // conversations list
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 10,
-                                top: 10,
-                                right: 10,
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 47, 45, 57),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.chatPage);
-                                  },
-                                  child: ListTile(
-                                      leading: const CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        maxRadius: 30,
-                                        backgroundImage: AssetImage(
-                                          'assets/images/boy.png',
+                      child: StreamBuilder<List<ChatContact>>(
+                          stream: chatController.chatContacts(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                var chatContactData = snapshot.data![index];
+
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Get.toNamed(Routes.chatPage,
+                                            arguments: {
+                                              'name': chatContactData.name,
+                                              'uid': chatContactData.contactId,
+                                              // 'isGroupChat': false,
+                                              'profilePic':
+                                                  chatContactData.profilePic,
+                                            });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left:8, right: 8,top: 4),
+                                        child: ListTile(
+                                          tileColor: textLightColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          title: Text(
+                                            chatContactData.name,
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                color: whiteColor),
+                                          ),
+                                          subtitle: Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 6.0),
+                                            child: Text(
+                                              chatContactData.lastMessage,
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  color: whiteColor),
+                                            ),
+                                          ),
+                                          leading: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                              chatContactData.profilePic,
+                                            ),
+                                            radius: 30,
+                                          ),
+                                          trailing: Text(
+                                            DateFormat.Hm().format(
+                                                chatContactData.timeSent),
+                                            style: TextStyle(
+                                              color:
+                                                  whiteColor.withOpacity(0.7),
+                                              fontSize: 13,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      title: const Text(
-                                        "Name",
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      subtitle: Text(
-                                        "Message",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white.withOpacity(0.5),
-                                        ),
-                                      ),
-                                      trailing: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text("03:17 pm",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.white
-                                                    .withOpacity(0.5),
-                                              )),
-                                          const SizedBox(height: 5),
-                                          Text("2",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.blue
-                                                    .withOpacity(0.5),
-                                              )),
-                                        ],
-                                      )),
-                                ),
-                              ));
-                        },
-                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }),
                     ),
                   ],
                 ),

@@ -14,7 +14,7 @@ const Color textFieldColor = Color(0xFFE9EEF0);
 const Color textFieldHintColor = Color(0xFF787F89);
 const Color textBlackColor = Color(0xFF000000);
 const Color textWhiteColor = Color(0xFFfcfcfc);
-const Color textLightColor = Color(0xFF808191);
+const Color textLightColor = Color.fromARGB(255, 105, 107, 135);
 const Color textCharcoalBlueColor = Color(0xFF33343B);
 const Color textTunaBlueColor = Color(0xFF373A43);
 

@@ -1,6 +1,6 @@
 import 'package:charterer/presentation/screens/add_charterer_screen.dart';
 import 'package:charterer/presentation/screens/call_screen.dart';
-import 'package:charterer/presentation/screens/chat_screen.dart';
+import 'package:charterer/presentation/screens/chats/chat_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
 import 'package:charterer/presentation/screens/profiles/edit_profile_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
