@@ -1,13 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
+
+import 'package:get/get.dart';
 
 import 'package:charterer/data/datasource_impl/firebase_auth_datasource_impl.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/data/repositories/firebase_repository_impl.dart';
-import 'package:get/get.dart';
 
 class AuthControlller extends GetxController {
-  final AuthRepository authRepository =
-      AuthRepository(dataSource: FirebaseAuthDataSource());
+  final AuthRepository authRepository;
+  AuthControlller({
+    required this.authRepository,
+  });
+
+  // AuthRepository(dataSource: FirebaseAuthDataSource());
 
   final user = Rxn<UserModel>();
 
@@ -22,14 +28,14 @@ class AuthControlller extends GetxController {
   }
 
   Future<void> signUpWithEmailPassword(
-      String email,
-      String password,
       File? profilePic,
       String name,
+      String email,
       String phoneNumber,
+      String password,
       String confirmPassword) async {
     await authRepository.signUpWithEmailPassword(
-        email, password, profilePic, name, phoneNumber, confirmPassword);
+        profilePic, name, email, phoneNumber, password, confirmPassword);
   }
 
   Future<void> saveUserData(String name, File? profilePic) async {

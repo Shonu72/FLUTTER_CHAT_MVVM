@@ -23,14 +23,14 @@ class AuthRepository with AuthUseCase {
 
   @override
   Future<void> signUpWithEmailPassword(
-      String email,
-      String password,
       File? profilePic,
       String name,
+      String email,
       String phoneNumber,
+      String password,
       String confirmPassword) async {
     return _dataSource.signUpWithEmailPassword(
-        email, password, profilePic, confirmPassword, name, phoneNumber);
+         profilePic,name,email, phoneNumber,password, confirmPassword);
   }
 
   @override

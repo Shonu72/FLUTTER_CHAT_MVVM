@@ -3,6 +3,7 @@ import 'package:charterer/firebase_options.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
 import 'package:charterer/presentation/screens/auth/login_screen.dart';
+import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,7 +48,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: _isLoggedIn ? const HomeScreen() : const LoginScreen(),
+      home: _isLoggedIn ? const MainPage() : const LoginScreen(),
       getPages: getPages,
     );
   }

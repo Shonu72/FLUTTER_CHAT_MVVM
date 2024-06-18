@@ -33,9 +33,15 @@ final getPages = [
   GetPage(name: Routes.callScreen, page: () => const CallScreen()),
   GetPage(name: Routes.profileScreen, page: () => const ProfileScreen()),
   GetPage(name: Routes.editProfile, page: () => const EditProfileScreen()),
-  GetPage(name: Routes.contactScreen, page: () => const ContactScreen()),
+  GetPage(name: Routes.contactScreen, page: () => ContactScreen()),
   GetPage(name: Routes.addChartererScreen, page: () => const AddCharterer()),
-  GetPage(name: Routes.chatPage, page: () => const ChatScreen()),
+  // final argument = settings.arguments
+  GetPage(
+      name: Routes.chatPage,
+      page: () => const ChatScreen(
+            // name: 'user',
+            // uid: '1234',
+          )),
   GetPage(
       name: Routes.notificationPage, page: () => const NotificationScreen()),
 ];

@@ -185,10 +185,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     //   phone: phoneController.text,
                     // );
                     await userController.signUpWithEmailPassword(
+                      image,
                       nameController.text,
                       mailController.text,
-                      image,
-                      phoneController.text,
+                      "+91${phoneController.text}",
                       passwordController.text,
                       confirmPasswordController.text,
                     );

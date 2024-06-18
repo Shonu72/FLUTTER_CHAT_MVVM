@@ -20,7 +20,7 @@ class AddCharterer extends StatefulWidget {
 }
 
 class _AddChartererState extends State<AddCharterer> {
-  ChartererController chartererController = Get.find<ChartererController>();
+  // ChartererController chartererController = Get.find<ChartererController>();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -157,29 +157,29 @@ class _AddChartererState extends State<AddCharterer> {
                   bottom: 2.h,
                   top: 4.h,
                   onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      Helpers.loader();
-                      final isSuccess = await chartererController.addCharterer(
-                          fullName: fullName.text,
-                          email: email.text,
-                          country: country.text,
-                          address: address.text,
-                          state: state.text,
-                          city: city.text,
-                          website: website.text,
-                          mobileNumber: mobileNumber.text);
-                      Helpers.hideLoader();
-                      if (isSuccess) {
-                        fullName.clear();
-                        email.clear();
-                        country.clear();
-                        address.clear();
-                        state.clear();
-                        city.clear();
-                        website.clear();
-                        mobileNumber.clear();
-                      }
-                    }
+                    // if (_formKey.currentState!.validate()) {
+                    //   Helpers.loader();
+                    //   final isSuccess = await chartererController.addCharterer(
+                    //       fullName: fullName.text,
+                    //       email: email.text,
+                    //       country: country.text,
+                    //       address: address.text,
+                    //       state: state.text,
+                    //       city: city.text,
+                    //       website: website.text,
+                    //       mobileNumber: mobileNumber.text);
+                    //   Helpers.hideLoader();
+                    //   if (isSuccess) {
+                    //     fullName.clear();
+                    //     email.clear();
+                    //     country.clear();
+                    //     address.clear();
+                    //     state.clear();
+                    //     city.clear();
+                    //     website.clear();
+                    //     mobileNumber.clear();
+                    //   }
+                    // }
                   },
                 ),
               ],

@@ -1,20 +1,33 @@
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/data/models/chat_model.dart';
+import 'package:charterer/data/models/user_model.dart';
+import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
+import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+  // final String name;
+  // final String uid;
+  const ChatScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final args = Get.arguments;
+    final authcontroller = Get.find<AuthControlller>();
+
+    final String name = args["name"];
+    final String uid = args["uid"];
     List<ChatMessage> messages = [
       ChatMessage(messageContent: "Hello", messageType: "receiver"),
       ChatMessage(messageContent: "How are you?", messageType: "receiver"),
       ChatMessage(
           messageContent: "Hi there, I am doing fine. wbu?",
-          messageType: "sender"), 
+          messageType: "sender"),
       ChatMessage(messageContent: "I'm good.", messageType: "receiver"),
       ChatMessage(
           messageContent: "Is there any thing wrong?", messageType: "sender"),
@@ -30,50 +43,6 @@ class ChatScreen extends StatelessWidget {
           type: fileType,
         );
       }
-      // if (fileType == FileType.video) {
-      //   // if (result != null && result.files.single.path != null) {
-      //   //   final message = types.VideoMessage(
-      //   //     author: _user,
-      //   //     createdAt: DateTime.now().millisecondsSinceEpoch,
-      //   //     id: const Uuid().v4(),
-      //   //     name: result.files.single.name,
-      //   //     size: result.files.single.size,
-      //   //     uri: result.files.single.path!,
-      //   //   );
-      //   //   final isSuccess = await chatController.sendMessage(
-      //   //       chatId: int.tryParse(widget.chatId)!,
-      //   //       file: File(result.files.single.path!),
-      //   //       fileType: fType.FileType.video,
-      //   //       receiverId: widget.doctorId);
-      //   //   if (isSuccess) {
-      //   //     //_sendMessage(message);
-      //   //   } else {
-      //   //     Helpers.toast("Message Not Sent".tr);
-      //   //   }
-      //   // }
-      // // } else {
-      // //   if (result != null && result.files.single.path != null) {
-      // //     final message = types.FileMessage(
-      // //       author: _user,
-      // //       createdAt: DateTime.now().millisecondsSinceEpoch,
-      // //       id: const Uuid().v4(),
-      // //       mimeType: lookupMimeType(result.files.single.path!),
-      // //       name: result.files.single.name,
-      // //       size: result.files.single.size,
-      // //       uri: result.files.single.path!,
-      // //     );
-      // //     final isSuccess = await chatController.sendMessage(
-      // //         chatId: int.tryParse(widget.chatId)!,
-      // //         file: File(result.files.single.path!),
-      // //         fileType: fType.FileType.file,
-      // //         receiverId: widget.doctorId);
-      // //     if (isSuccess) {
-      // //       //_sendMessage(message);
-      // //     } else {
-      // //       Helpers.toast("Message Not Sent".tr);
-      // //     }
-      // //   }
-      // // }
     }
 
     void handleImageSelection(
@@ -87,29 +56,6 @@ class ChatScreen extends StatelessWidget {
       if (result != null) {
         final bytes = await result.readAsBytes();
         final image = await decodeImageFromList(bytes);
-
-        // final message = types.ImageMessage(
-        //   author: _user,
-        //   createdAt: DateTime.now().millisecondsSinceEpoch,
-        //   height: image.height.toDouble(),
-        //   id: const Uuid().v4(),
-        //   name: result.name,
-        //   size: bytes.length,
-        //   uri: result.path,
-        //   width: image.width.toDouble(),
-        // );
-
-        // final isSuccess = await chatController.sendMessage(
-        //   chatId: int.tryParse(widget.chatId)!,
-        //   file: File(result.path),
-        //   fileType: fType.FileType.image,
-        //   receiverId: widget.doctorId,
-        // );
-        // if (isSuccess) {
-        //   //_sendMessage(message);
-        // } else {
-        //   Helpers.toast("Message Not Sent".tr);
-        // }
       }
     }
 
@@ -212,72 +158,71 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 42, 39, 62),
       appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 37, 34, 51),
-        flexibleSpace: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.only(right: 16),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
+        backgroundColor:
+            backgroundDarkColor.withBlue(backgroundDarkColor.blue + 20),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: whiteColor,
+          ),
+        ),
+        titleSpacing: 0,
+        title: StreamBuilder<UserModel>(
+          stream: authcontroller.userData(uid),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              print(snapshot.data!.isOnline);
+              return Row(
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(snapshot.data!.profilePic),
                   ),
-                ),
-                const SizedBox(
-                  width: 2,
-                ),
-                const CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/bg.jpg"),
-                  maxRadius: 20,
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Text(
-                        "HK",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    children: [
+                      AppText(
+                        text: name,
+                        color: whiteColor,
+                        size: 18,
                       ),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      Text(
-                        "Online",
-                        style: TextStyle(
-                            color: Colors.green.shade400, fontSize: 13),
-                      ),
+                      Text(snapshot.data!.isOnline ? "Online" : "Offline",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: snapshot.data!.isOnline
+                                  ? Colors.green
+                                  : Colors.grey)),
                     ],
                   ),
-                ),
-                const Icon(
-                  Icons.video_call,
-                  size: 30,
-                  color: Colors.white,
-                ),
-                const SizedBox(
-                  width: 14,
-                ),
-                const Icon(
-                  Icons.call,
-                  size: 30,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-          ),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.video_call,
+                        color: whiteColor,
+                      )),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.call,
+                        color: whiteColor,
+                      )),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: whiteColor,
+                      )),
+                ],
+              );
+            } else {
+              return const Text("User");
+            }
+          },
         ),
       ),
       body: Stack(
@@ -318,7 +263,7 @@ class ChatScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
               height: 60,
               width: double.infinity,
-              color: Color.fromARGB(255, 58, 54, 77),
+              color: const Color.fromARGB(255, 58, 54, 77),
               child: Row(
                 children: <Widget>[
                   GestureDetector(
