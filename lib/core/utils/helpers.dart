@@ -5,6 +5,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:file_picker/file_picker.dart';
 
 import 'failure.dart';
 
@@ -75,25 +76,44 @@ class Helpers {
         image = File(pickedImage.path);
       }
     } catch (e) {
+      // ignore: use_build_context_synchronously
       showSnackBar(context: context, content: e.toString());
     }
     return image;
   }
 
-  // static Future<File?> pickVideoFromGallery(BuildContext context) async {
-  //   File? video;
-  //   try {
-  //     final pickedVideo =
-  //         await ImagePicker().pickVideo(source: ImageSource.gallery);
+  static Future<File?> pickVideoFromGallery(BuildContext context) async {
+    File? video;
+    try {
+      final pickedVideo =
+          await ImagePicker().pickVideo(source: ImageSource.gallery);
 
-  //     if (pickedVideo != null) {
-  //       video = File(pickedVideo.path);
-  //     }
-  //   } catch (e) {
-  //     showSnackBar(context: context, content: e.toString());
-  //   }
-  //   return video;
-  // }
+      if (pickedVideo != null) {
+        video = File(pickedVideo.path);
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, content: e.toString());
+    }
+    return video;
+  }
+
+  static Future<File?> pickFiles(BuildContext context) async {
+    File? file;
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+      );
+
+      if (result != null && result.files.single.path != null) {
+        file = File(result.files.single.path!);
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: context, content: e.toString());
+    }
+    return file;
+  }
 
   // static Future<GiphyGif?> pickGIF(BuildContext context) async {
   //   GiphyGif? gif;

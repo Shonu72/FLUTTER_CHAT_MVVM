@@ -29,18 +29,18 @@ class MyMessageCard extends StatelessWidget {
             children: [
               Padding(
                 padding: type == MessageEnum.text
-                      ? const EdgeInsets.only(
-                          left: 10,
-                          right: 60,
-                          top: 5,
-                          bottom: 20,
-                        )
-                      : const EdgeInsets.only(
-                          left: 1,
-                          top: 1,
-                          right: 1,
-                          bottom: 25,
-                        ),
+                    ? const EdgeInsets.only(
+                        left: 10,
+                        right: 60,
+                        top: 5,
+                        bottom: 20,
+                      )
+                    : const EdgeInsets.only(
+                        left: 1,
+                        top: 1,
+                        right: 1,
+                        bottom: 25,
+                      ),
                 child: DisplayTextImage(message: message, type: type),
               ),
               Positioned(

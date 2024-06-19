@@ -200,7 +200,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       var messageId = const Uuid().v1();
       var senderUserData =
           await firestore.collection('users').doc(auth.currentUser!.uid).get();
-              var senderUser = UserModel.fromMap(senderUserData.data()!);
+      var senderUser = UserModel.fromMap(senderUserData.data()!);
 
       String fileUrl = await commonFirebaseStorageRepository.storeFileToFirebase(
           'chat/${messageEnum.type}/${senderUser.uid}/$receiverUserId/$messageId',
@@ -221,7 +221,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           contactMsg = '🎵 Audio';
           break;
         case MessageEnum.video:
-          contactMsg = '📸 Video';
+          contactMsg = '📽️ Video';
           break;
         case MessageEnum.file:
           contactMsg = '📎 File';
@@ -230,7 +230,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           contactMsg = '📸 Image';
       }
 
-    await  _saveDataToContactsSubcollection(senderUser, receiverUserData,
+      await _saveDataToContactsSubcollection(senderUser, receiverUserData,
           contactMsg, timeSent, receiverUserId, false);
 
       _saveMessageToMessageSubcollection(

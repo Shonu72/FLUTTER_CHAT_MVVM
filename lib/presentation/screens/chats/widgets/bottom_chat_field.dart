@@ -4,8 +4,10 @@ import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/enums.dart';
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
+import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
 
 class BottomChatFieldSheet extends StatefulWidget {
   final String receiverUserId;
@@ -22,6 +24,16 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
   bool isRecording = false;
   FocusNode focusNode = FocusNode();
   File? _selectedImage;
+  File? _selectedVideo;
+  File? _selectedFile;
+  VideoPlayerController? _videoController;
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    _videoController?.dispose();
+    super.dispose();
+  }
 
   void sendMessage() {
     if (isShowSendButton) {
@@ -46,6 +58,8 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
     );
     setState(() {
       _selectedImage = null;
+      _selectedVideo = null;
+      _selectedFile = null;
     });
   }
 
@@ -54,8 +68,124 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
     if (image != null) {
       setState(() {
         _selectedImage = image;
+        _selectedVideo = null;
+        _videoController = null;
       });
     }
+  }
+
+  void sendVideo() async {
+    File? video = await Helpers.pickVideoFromGallery(context);
+    if (video != null) {
+      _videoController?.dispose();
+      _videoController = VideoPlayerController.file(video)
+        ..initialize().then((_) {
+          setState(() {
+            _selectedVideo = video;
+            _videoController!.play();
+          });
+        });
+    }
+  }
+
+  void sendFiles() async {
+    File? file = await Helpers.pickFiles(context);
+    if (file != null) {
+      sendFileMessage(file, MessageEnum.file);
+    }
+  }
+
+  void handleAttachmentPressed() {
+    FocusScope.of(context).unfocus();
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => SafeArea(
+        child: Container(
+          height: 200,
+          decoration: const BoxDecoration(
+            color: textTunaBlueColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(28),
+              topRight: Radius.circular(28),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    sendVideo();
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.videocam,
+                        color: whiteColor,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: AppText(
+                          text: "video",
+                          color: whiteColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    sendFiles();
+                    Navigator.pop(context);
+                  },
+                  child: const Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.file_copy_outlined,
+                          color: whiteColor,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        AppText(
+                          text: "file",
+                          color: whiteColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Row(
+                      children: [
+                        Icon(Icons.cancel, color: Colors.red),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        AppText(
+                          text: "cancel",
+                          color: whiteColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -81,6 +211,34 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
                     onPressed: () {
                       setState(() {
                         _selectedImage = null;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (_selectedVideo != null &&
+            _videoController != null &&
+            _videoController!.value.isInitialized)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                AspectRatio(
+                  aspectRatio: 9 / 16,
+                  child: VideoPlayer(_videoController!),
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: IconButton(
+                    icon: const Icon(Icons.cancel, color: Colors.red),
+                    onPressed: () {
+                      setState(() {
+                        _selectedVideo = null;
+                        _videoController?.dispose();
+                        _videoController = null;
                       });
                     },
                   ),
@@ -122,7 +280,7 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: handleAttachmentPressed,
                           icon: const Icon(
                             Icons.attach_file,
                             color: whiteColor,
@@ -159,12 +317,16 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
                   onTap: () {
                     if (_selectedImage != null) {
                       sendFileMessage(_selectedImage!, MessageEnum.image);
+                    } else if (_selectedVideo != null) {
+                      sendFileMessage(_selectedVideo!, MessageEnum.video);
                     } else {
                       sendMessage();
                     }
                   },
                   child: Icon(
-                    isShowSendButton || _selectedImage != null
+                    isShowSendButton ||
+                            _selectedImage != null ||
+                            _selectedVideo != null
                         ? Icons.send
                         : isRecording
                             ? Icons.close
