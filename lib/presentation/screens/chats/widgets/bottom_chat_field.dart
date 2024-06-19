@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:charterer/core/theme/colors.dart';
+import 'package:charterer/core/utils/enums.dart';
+import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get/get.dart';
 
 class BottomChatFieldSheet extends StatefulWidget {
@@ -16,11 +19,9 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
   final TextEditingController messageController = TextEditingController();
   final ChatController chatController = Get.find<ChatController>();
   bool isShowSendButton = false;
-  FlutterSoundRecorder? _soundRecorder;
-  bool isRecorderInit = false;
-  bool isShowEmojiContainer = false;
   bool isRecording = false;
   FocusNode focusNode = FocusNode();
+  File? _selectedImage;
 
   void sendMessage() {
     if (isShowSendButton) {
@@ -36,10 +37,57 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
     }
   }
 
+  void sendFileMessage(File file, MessageEnum messageEnum) {
+    chatController.sendFileMessage(
+      context: context,
+      file: file,
+      receiverUserId: widget.receiverUserId,
+      messageEnum: messageEnum,
+    );
+    setState(() {
+      _selectedImage = null;
+    });
+  }
+
+  void sendImage() async {
+    File? image = await Helpers.pickImageFromGallery(context);
+    if (image != null) {
+      setState(() {
+        _selectedImage = image;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        if (_selectedImage != null)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                Image.file(
+                  _selectedImage!,
+                  height: 300,
+                  width: 300,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: IconButton(
+                    icon: const Icon(Icons.cancel, color: Colors.red),
+                    onPressed: () {
+                      setState(() {
+                        _selectedImage = null;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         Row(
           children: [
             Expanded(
@@ -67,7 +115,7 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: sendImage,
                           icon: const Icon(
                             Icons.camera_alt,
                             color: whiteColor,
@@ -108,15 +156,21 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
                 backgroundColor: Colors.blue,
                 radius: 24,
                 child: GestureDetector(
+                  onTap: () {
+                    if (_selectedImage != null) {
+                      sendFileMessage(_selectedImage!, MessageEnum.image);
+                    } else {
+                      sendMessage();
+                    }
+                  },
                   child: Icon(
-                    isShowSendButton
+                    isShowSendButton || _selectedImage != null
                         ? Icons.send
                         : isRecording
                             ? Icons.close
                             : Icons.mic,
                     color: Colors.white,
                   ),
-                  onTap: sendMessage,
                 ),
               ),
             ),

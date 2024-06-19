@@ -1,5 +1,4 @@
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
-import 'package:charterer/presentation/screens/chats/info.dart';
 import 'package:charterer/presentation/screens/chats/widgets/my_message_card.dart';
 import 'package:charterer/presentation/screens/chats/widgets/sender_message_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,11 +52,13 @@ class _ChatListState extends State<ChatList> {
                 return MyMessageCard(
                   message: messageData.text,
                   date: timeSent,
+                  type: messageData.type,
                 );
               }
               return SenderMessageCard(
                 message: messageData.text,
                 date: timeSent,
+                type: messageData.type,
               );
             },
           );
