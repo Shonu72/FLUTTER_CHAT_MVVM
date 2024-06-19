@@ -32,7 +32,7 @@ class _CharterersState extends State<Charterers> {
           style: textTheme.headline3,
         ),
         SizedBox(
-          height: 2.h,
+          height: 20,
         ),
         TextFieldWidget(
           textEditingController: search,
@@ -42,10 +42,10 @@ class _CharterersState extends State<Charterers> {
           },
         ),
         SizedBox(
-          height: 2.h,
+          height: 20,
         ),
         Container(
-          height: 50.h,
+          height: 50,
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.2),
             borderRadius: BorderRadius.circular(14.0),
@@ -76,7 +76,7 @@ class _CharterersState extends State<Charterers> {
           }),
         ),
         SizedBox(
-          height: 2.h,
+          height: 20,
         ),
         Row(
           children: [

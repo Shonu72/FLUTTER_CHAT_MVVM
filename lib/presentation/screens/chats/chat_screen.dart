@@ -1,15 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:charterer/core/theme/colors.dart';
-import 'package:charterer/data/models/chat_model.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/screens/chats/widgets/bottom_chat_field.dart';
 import 'package:charterer/presentation/screens/chats/widgets/chat_list.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({
@@ -43,7 +40,7 @@ class ChatScreen extends StatelessWidget {
             stream: authcontroller.userData(uid),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                print(snapshot.data!.isOnline);
+                print("online : ${snapshot.data!.isOnline}");
                 return Row(
                   children: <Widget>[
                     CircleAvatar(

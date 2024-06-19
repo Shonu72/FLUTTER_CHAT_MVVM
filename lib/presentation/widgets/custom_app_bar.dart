@@ -28,7 +28,7 @@ PreferredSizeWidget appBar({
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold)),
             ),
             isBackIcon
@@ -40,7 +40,7 @@ PreferredSizeWidget appBar({
                         Navigator.pop(context);
                       }
                     },
-                    child: const SizedBox(
+                    child:  SizedBox(
                       width: 42,
                       height: 42,
                       child: Icon(

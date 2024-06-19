@@ -1,9 +1,11 @@
+import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/screens/add_charterer_screen.dart';
 import 'package:charterer/presentation/screens/call_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
 import 'package:charterer/presentation/screens/notification_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,7 +14,37 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
+  final authController = Get.find<AuthControlller>();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        debugPrint("resumed");
+        authController.setUserState(true);
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        authController.setUserState(false);
+        break;
+    }
+  }
+
   List pages = [
     const HomeScreen(),
     const NotificationScreen(),

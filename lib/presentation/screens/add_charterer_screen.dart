@@ -20,7 +20,6 @@ class AddCharterer extends StatefulWidget {
 }
 
 class _AddChartererState extends State<AddCharterer> {
-  // ChartererController chartererController = Get.find<ChartererController>();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -50,7 +49,7 @@ class _AddChartererState extends State<AddCharterer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 2.h,
+                  height: 20,
                 ),
                 TextFieldWidget(
                   textEditingController: fullName,
@@ -58,7 +57,7 @@ class _AddChartererState extends State<AddCharterer> {
                   isRequired: true,
                 ),
                 SizedBox(
-                  height: 1.h,
+                  height: 10,
                 ),
                 TextFieldWidget(
                   textEditingController: email,
@@ -67,7 +66,7 @@ class _AddChartererState extends State<AddCharterer> {
                   isRequired: true,
                 ),
                 SizedBox(
-                  height: 1.h,
+                  height: 10,
                 ),
                 BuildDropdown(
                   selectedValue: country,
@@ -86,7 +85,7 @@ class _AddChartererState extends State<AddCharterer> {
                   },
                 ),
                 SizedBox(
-                  height: 1.h,
+                  height: 10,
                 ),
                 TextFieldWidget(
                   textEditingController: mobileNumber,
@@ -96,7 +95,7 @@ class _AddChartererState extends State<AddCharterer> {
                   isRequired: true,
                 ),
                 SizedBox(
-                  height: 1.h,
+                  height: 10,
                 ),
                 TextFieldWidget(
                   textEditingController: address,
@@ -104,7 +103,7 @@ class _AddChartererState extends State<AddCharterer> {
                   isRequired: true,
                 ),
                 SizedBox(
-                  height: 1.h,
+                  height: 10,
                 ),
                 TextFieldWidget(
                   textEditingController: state,
@@ -112,7 +111,7 @@ class _AddChartererState extends State<AddCharterer> {
                   isRequired: true,
                 ),
                 SizedBox(
-                  height: 1.h,
+                  height: 10,
                 ),
                 TextFieldWidget(
                   textEditingController: city,
@@ -120,7 +119,7 @@ class _AddChartererState extends State<AddCharterer> {
                   isRequired: true,
                 ),
                 SizedBox(
-                  height: 1.h,
+                  height: 10,
                 ),
                 TextFieldWidget(
                   textEditingController: website,
@@ -128,7 +127,7 @@ class _AddChartererState extends State<AddCharterer> {
                   isRequired: true,
                 ),
                 SizedBox(
-                  height: 2.h,
+                  height: 20,
                 ),
                 Row(
                   children: [
@@ -152,10 +151,10 @@ class _AddChartererState extends State<AddCharterer> {
                   name: "Continue",
                   color: primaryColor,
                   textColor: whiteColor,
-                  left: 6.w,
-                  right: 6.w,
-                  bottom: 2.h,
-                  top: 4.h,
+                  left: 60,
+                  right: 60,
+                  bottom: 20,
+                  top: 40,
                   onTap: () async {
                     // if (_formKey.currentState!.validate()) {
                     //   Helpers.loader();
