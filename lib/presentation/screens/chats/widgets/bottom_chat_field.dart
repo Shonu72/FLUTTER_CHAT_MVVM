@@ -6,7 +6,11 @@ import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:video_player/video_player.dart';
 
 class BottomChatFieldSheet extends StatefulWidget {
@@ -21,7 +25,9 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
   final TextEditingController messageController = TextEditingController();
   final ChatController chatController = Get.find<ChatController>();
   bool isShowSendButton = false;
+  bool isRecorderInit = false;
   bool isRecording = false;
+  FlutterSoundRecorder? _recorder;
   FocusNode focusNode = FocusNode();
   File? _selectedImage;
   File? _selectedVideo;
@@ -29,13 +35,31 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
   VideoPlayerController? _videoController;
 
   @override
+  void initState() {
+    super.initState();
+    _recorder = FlutterSoundRecorder();
+    openAudio();
+  }
+
+  @override
   void dispose() {
     messageController.dispose();
     _videoController?.dispose();
+    _recorder?.closeRecorder();
+    isRecorderInit = false;
     super.dispose();
   }
 
-  void sendMessage() {
+  void openAudio() async {
+    final status = await Permission.microphone.request();
+    if (status != PermissionStatus.granted) {
+      throw RecordingPermissionException('Microphone permission not granted');
+    }
+    await _recorder!.openRecorder();
+    isRecorderInit = true;
+  }
+
+  void sendTextMessage() async {
     if (isShowSendButton) {
       chatController.sendTextMessage(
         context: context,
@@ -45,6 +69,24 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
       setState(() {
         messageController.clear();
         isShowSendButton = false;
+      });
+    } else {
+      var tempDir = await getTemporaryDirectory();
+      var path = '${tempDir.path}/flutter_sound.aac';
+      if (!isRecorderInit) {
+        return;
+      }
+      if (isRecording) {
+        await _recorder!.stopRecorder();
+        sendFileMessage(File(path), MessageEnum.audio);
+      } else {
+        await _recorder!.startRecorder(
+          toFile: path,
+        );
+      }
+
+      setState(() {
+        isRecording = !isRecording;
       });
     }
   }
@@ -320,7 +362,7 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
                     } else if (_selectedVideo != null) {
                       sendFileMessage(_selectedVideo!, MessageEnum.video);
                     } else {
-                      sendMessage();
+                      sendTextMessage();
                     }
                   },
                   child: Icon(
@@ -329,9 +371,9 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
                             _selectedVideo != null
                         ? Icons.send
                         : isRecording
-                            ? Icons.close
+                            ? Icons.stop
                             : Icons.mic,
-                    color: Colors.white,
+                    color: isRecording ? Colors.red : whiteColor,
                   ),
                 ),
               ),

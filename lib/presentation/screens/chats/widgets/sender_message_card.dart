@@ -28,7 +28,7 @@ class SenderMessageCard extends StatelessWidget {
           child: Stack(
             children: [
               Padding(
-                padding: type == MessageEnum.text
+                padding: type == MessageEnum.text || type == MessageEnum.audio
                     ? const EdgeInsets.only(
                         left: 10,
                         right: 60,

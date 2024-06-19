@@ -4,6 +4,8 @@ import 'package:charterer/presentation/screens/chats/widgets/cached_video_player
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:file_preview/file_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 
 class DisplayTextImage extends StatelessWidget {
@@ -17,23 +19,49 @@ class DisplayTextImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isPlaying = false;
+    final AudioPlayer audioPlayer = AudioPlayer();
     return type == MessageEnum.text
         ? AppText(
             text: message,
             color: whiteColor,
           )
-        : type == MessageEnum.video
-            ? VideoPlayerItem(
-                videoUrl: message,
-              )
-            : type == MessageEnum.file
-                ? FilePreviewWidget(
-                    width: 100,
-                    height: 30,
-                    path: message,
+        : type == MessageEnum.audio
+            ? StatefulBuilder(builder: (context, setState) {
+                return IconButton(
+                  constraints: const BoxConstraints(
+                    minWidth: 60,
+                  ),
+                  onPressed: () async {
+                    if (isPlaying) {
+                      await audioPlayer.pause();
+                      setState(() {
+                        isPlaying = false;
+                      });
+                    } else {
+                      await audioPlayer.play(UrlSource(message));
+                      setState(() {
+                        isPlaying = true;
+                      });
+                    }
+                  },
+                  icon: Icon(
+                    isPlaying ? Icons.pause_circle : Icons.play_circle,
+                    color: isPlaying ? whiteColor : Colors.yellowAccent,
+                  ),
+                );
+              })
+            : type == MessageEnum.video
+                ? VideoPlayerItem(
+                    videoUrl: message,
                   )
-                : CachedNetworkImage(
-                    imageUrl: message,
-                  );
+                : type == MessageEnum.file
+                    ? const AppText(
+                        text: "Working on the preview for file type",
+                        color: whiteColor,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: message,
+                      );
   }
 }
