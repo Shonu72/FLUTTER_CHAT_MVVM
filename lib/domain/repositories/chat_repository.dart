@@ -23,4 +23,10 @@ abstract class ChatRepository {
     required MessageEnum messageEnum,
     required MessageReply? messageReply,
   });
+
+  void setChatMessageSeen(
+    BuildContext context,
+    String receiverUserId,
+    String messageId,
+  );
 }

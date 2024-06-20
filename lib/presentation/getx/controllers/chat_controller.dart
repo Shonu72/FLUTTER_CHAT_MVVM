@@ -4,6 +4,7 @@ import 'package:charterer/core/utils/enums.dart';
 import 'package:charterer/data/models/chat_contact_model.dart';
 import 'package:charterer/data/models/messages_model.dart';
 import 'package:charterer/domain/usecases/chat_usecase.dart';
+import 'package:charterer/domain/usecases/mark_as_seen_usecase.dart';
 import 'package:charterer/domain/usecases/send_file_msg_usecase.dart';
 import 'package:charterer/domain/usecases/send_text_msg_usecase.dart';
 import 'package:charterer/presentation/getx/controllers/message_reply_controller.dart';
@@ -15,12 +16,15 @@ class ChatController extends GetxController {
   final GetChatStream getChatStreamUseCase;
   final SendTextMessage sendTextMessageUseCase;
   final SendFileMsgUseCase sendFileMessageUseCase;
+  final MarkAsSeenUseCase setChatMessageSeen;
 
-  ChatController(
-      {required this.getChatStreamUseCase,
-      required this.sendTextMessageUseCase,
-      required this.getChatContactsUseCase,
-      required this.sendFileMessageUseCase});
+  ChatController({
+    required this.getChatStreamUseCase,
+    required this.sendTextMessageUseCase,
+    required this.getChatContactsUseCase,
+    required this.sendFileMessageUseCase,
+    required this.setChatMessageSeen,
+  });
 
   final messageReply = Get.find<MessageReplyController>();
   Stream<List<ChatContact>> chatContacts() {
@@ -66,15 +70,15 @@ class ChatController extends GetxController {
     messageReplyController.clearMessageReply();
   }
 
-  // void setChatMessageSeen({
-  //   required BuildContext context,
-  //   required String receiverUserId,
-  //   required String messageId,
-  // }) {
-  //   setChatMessageSeen(
-  //     context: context,
-  //     receiverUserId: receiverUserId,
-  //     messageId: messageId,
-  //   );
-  // }
+  void markAsSeen({
+    required BuildContext context,
+    required String receiverUserId,
+    required String messageId,
+  }) {
+    setChatMessageSeen(
+      context,
+      receiverUserId,
+      messageId,
+    );
+  }
 }

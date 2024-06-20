@@ -23,4 +23,10 @@ abstract class ChatRemoteDataSource {
     required MessageEnum messageEnum,
     required MessageReply? messageReply,
   });
+
+  Future<void> setChatMessageSeen(
+    BuildContext context,
+    String receiverUserId,
+    String messageId,
+  );
 }

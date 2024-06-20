@@ -10,6 +10,7 @@ import 'package:charterer/domain/repositories/chat_repository.dart';
 import 'package:charterer/domain/repositories/contact_repository.dart';
 import 'package:charterer/domain/usecases/chat_usecase.dart';
 import 'package:charterer/domain/usecases/contact_usecase.dart';
+import 'package:charterer/domain/usecases/mark_as_seen_usecase.dart';
 import 'package:charterer/domain/usecases/send_file_msg_usecase.dart';
 import 'package:charterer/domain/usecases/send_text_msg_usecase.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
@@ -56,6 +57,7 @@ class DependencyInjector {
     Get.lazyPut(() => SendTextMessage(Get.find<ChatRepository>()));
     Get.lazyPut(() => GetChatStream(Get.find<ChatRepository>()));
     Get.lazyPut(() => SendFileMsgUseCase(Get.find<ChatRepository>()));
+    Get.lazyPut(() => MarkAsSeenUseCase(Get.find<ChatRepository>()));
   }
 
   static void injectController() {
@@ -70,6 +72,7 @@ class DependencyInjector {
           getChatStreamUseCase: Get.find(),
           sendTextMessageUseCase: Get.find(),
           sendFileMessageUseCase: Get.find(),
+          setChatMessageSeen: Get.find(),
         ));
 
     Get.lazyPut(() => MessageReplyController());

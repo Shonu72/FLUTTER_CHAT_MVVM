@@ -58,6 +58,15 @@ class _ChatListState extends State<ChatList> {
               final messageData = snapshot.data![index];
               var timeSent = DateFormat.Hm().format(messageData.timeSent);
 
+              if (!messageData.isSeen &&
+                  messageData.recieverid ==
+                      FirebaseAuth.instance.currentUser!.uid) {
+                chatController.markAsSeen(
+                    context: context,
+                    receiverUserId: widget.receiverUserId,
+                    messageId: messageData.messageId);
+              }
+
               if (messageData.senderId ==
                   FirebaseAuth.instance.currentUser!.uid) {
                 return MyMessageCard(
@@ -70,6 +79,7 @@ class _ChatListState extends State<ChatList> {
                   onLeftSwipe: () => {
                     onMessageSwipe(messageData.text, true, messageData.type)
                   },
+                  isSeen: messageData.isSeen,
                 );
               }
               return SenderMessageCard(
