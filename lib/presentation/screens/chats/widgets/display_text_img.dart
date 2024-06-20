@@ -1,12 +1,10 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/enums.dart';
 import 'package:charterer/presentation/screens/chats/widgets/cached_video_player.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
-import 'package:file_preview/file_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
-
-import 'package:cached_network_image/cached_network_image.dart';
 
 class DisplayTextImage extends StatelessWidget {
   final String message;

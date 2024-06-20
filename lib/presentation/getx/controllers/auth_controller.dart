@@ -19,6 +19,7 @@ class AuthControlller extends GetxController {
 
   Future<void> getCurrentUser() async {
     user.value = await authRepository.getCurrentUser();
+    print("user: ${user.value!.profilePic}");
   }
 
   Future<void> signInWithEmailPassword(String email, String password) async {

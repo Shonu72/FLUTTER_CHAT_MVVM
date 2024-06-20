@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:charterer/presentation/getx/controllers/message_reply_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:charterer/core/utils/enums.dart';
@@ -32,25 +33,30 @@ class ChatRepositoryImpl implements ChatRepository {
     required BuildContext context,
     required String text,
     required String receiverUserId,
+    required MessageReply? messageReply,
   }) {
     remoteDataSource.sendTextMessage(
       context: context,
       text: text,
       receiverUserId: receiverUserId,
+      messageReply: messageReply,
     );
   }
 
   @override
-  void sendFileMessage(
-      {required BuildContext context,
-      required File file,
-      required String receiverUserId,
-      required MessageEnum messageEnum}) {
+  void sendFileMessage({
+    required BuildContext context,
+    required File file,
+    required String receiverUserId,
+    required MessageEnum messageEnum,
+    required MessageReply? messageReply,
+  }) {
     remoteDataSource.sendFileMessage(
       context: context,
       file: file,
       receiverUserId: receiverUserId,
       messageEnum: messageEnum,
+      messageReply: messageReply,
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:charterer/data/models/chat_contact_model.dart';
 import 'package:charterer/data/models/messages_model.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/data/repositories/common_firebase_repo.dart';
+import 'package:charterer/presentation/getx/controllers/message_reply_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required BuildContext context,
     required String text,
     required String receiverUserId,
+    required MessageReply? messageReply,
   }) async {
     var timeSent = DateTime.now();
     var messageId = const Uuid().v1();
@@ -106,6 +108,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       messageType: MessageEnum.text,
       senderUsername: senderUser.name,
       receiverUserName: receiverUser.name,
+      messageReply: messageReply,
     );
   }
 
@@ -157,6 +160,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required MessageEnum messageType,
     required String senderUsername,
     required String receiverUserName,
+    required MessageReply? messageReply,
   }) async {
     final message = Message(
       senderId: auth.currentUser!.uid,
@@ -166,6 +170,14 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       timeSent: timeSent,
       messageId: messageId,
       isSeen: false,
+      repliedMessage: messageReply == null ? '' : messageReply.message,
+      repliedTo: messageReply == null
+          ? ''
+          : messageReply.isMe
+              ? senderUsername
+              : receiverUserName,
+      repliedMessageType:
+          messageReply == null ? MessageEnum.text : messageReply.messageEnum,
     );
 
     await firestore
@@ -194,6 +206,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required String receiverUserId,
     // required UserModel senderUserData,
     required MessageEnum messageEnum,
+    required MessageReply? messageReply,
   }) async {
     try {
       var timeSent = DateTime.now();
@@ -234,14 +247,18 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           contactMsg, timeSent, receiverUserId, false);
 
       _saveMessageToMessageSubcollection(
-          receiverUserId: receiverUserId,
-          text: fileUrl,
-          timeSent: timeSent,
-          messageId: messageId,
-          username: senderUser.name,
-          messageType: messageEnum,
-          senderUsername: senderUser.name,
-          receiverUserName: receiverUserData.name);
+        receiverUserId: receiverUserId,
+        text: fileUrl,
+        timeSent: timeSent,
+        messageId: messageId,
+        username: senderUser.name,
+        messageType: messageEnum,
+        senderUsername: senderUser.name,
+        receiverUserName: receiverUserData.name,
+        messageReply: messageReply,
+      );
+
+      
     } catch (e) {
       // ignore: use_build_context_synchronously
       Helpers.showSnackBar(context: context, content: e.toString());

@@ -11,7 +11,7 @@ const Color lightGreyColor = Color(0xFFD9D9D9);
 
 // text Colors Light Theme
 const Color textFieldColor = Color(0xFFE9EEF0);
-const Color textFieldHintColor = Color(0xFF787F89);
+const Color textFieldHintColor = Color.fromARGB(255, 98, 103, 110);
 const Color textBlackColor = Color(0xFF000000);
 const Color textWhiteColor = Color(0xFFfcfcfc);
 const Color textLightColor = Color.fromARGB(255, 105, 107, 135);

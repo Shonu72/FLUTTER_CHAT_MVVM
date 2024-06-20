@@ -4,6 +4,8 @@ import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/enums.dart';
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
+import 'package:charterer/presentation/getx/controllers/message_reply_controller.dart';
+import 'package:charterer/presentation/screens/chats/widgets/message_reply_preview.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
@@ -23,7 +25,8 @@ class BottomChatFieldSheet extends StatefulWidget {
 
 class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
   final TextEditingController messageController = TextEditingController();
-  final ChatController chatController = Get.find<ChatController>();
+  final chatController = Get.find<ChatController>();
+  final messageReplyController = Get.find<MessageReplyController>();
   bool isShowSendButton = false;
   bool isRecorderInit = false;
   bool isRecording = false;
@@ -232,8 +235,11 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final messageReply = messageReplyController.messageReply.value;
+    final isShowMessageReply = messageReply != null;
     return Column(
       children: [
+        isShowMessageReply ? MessageReplyPreview() : const SizedBox(),
         if (_selectedImage != null)
           Padding(
             padding: const EdgeInsets.all(8.0),

@@ -15,6 +15,7 @@ import 'package:charterer/domain/usecases/send_text_msg_usecase.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:charterer/presentation/getx/controllers/contact_controller.dart';
+import 'package:charterer/presentation/getx/controllers/message_reply_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -70,5 +71,7 @@ class DependencyInjector {
           sendTextMessageUseCase: Get.find(),
           sendFileMessageUseCase: Get.find(),
         ));
+
+    Get.lazyPut(() => MessageReplyController());
   }
 }

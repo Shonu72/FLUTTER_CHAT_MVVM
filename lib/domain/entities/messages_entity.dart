@@ -9,6 +9,10 @@ class MessageEntity extends Equatable {
   final DateTime timeSent;
   final String messageId;
   final bool isSeen;
+  final String repliedMessage;
+  final String repliedTo;
+  final MessageEnum repliedMessageType;
+
 
   const MessageEntity({
     required this.senderId,
@@ -18,6 +22,9 @@ class MessageEntity extends Equatable {
     required this.timeSent,
     required this.messageId,
     required this.isSeen,
+    required this.repliedMessage,
+    required this.repliedTo,
+    required this.repliedMessageType,
   });
 
   @override
@@ -29,5 +36,8 @@ class MessageEntity extends Equatable {
         timeSent,
         messageId,
         isSeen,
+        repliedMessage,
+        repliedTo,
+        repliedMessageType,
       ];
 }
