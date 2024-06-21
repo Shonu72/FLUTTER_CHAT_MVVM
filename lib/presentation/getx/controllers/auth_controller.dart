@@ -1,29 +1,33 @@
 import 'dart:io';
 
+import 'package:charterer/data/models/user_model.dart';
+import 'package:charterer/domain/usecases/firebase_auth_usecase.dart';
 import 'package:get/get.dart';
 
-import 'package:charterer/data/models/user_model.dart';
-import 'package:charterer/data/repositories/firebase_repository_impl.dart';
-
 class AuthControlller extends GetxController {
-  final AuthRepository authRepository;
+  final GetCurrentUserUseCase getCurrentUserUseCase;
+  final SignInWithEmailPasswordUseCase signInWithEmailPasswordUseCase;
+  final SignUpWithEmailPasswordUseCase signUpWithEmailPasswordUseCase;
+  final UserDataUseCase userDataUseCase;
+  final SetUserStateUseCase setUserStateUseCase;
+  final SignOutUseCase signOutUseCase;
+
   AuthControlller({
-    required this.authRepository,
+    required this.getCurrentUserUseCase,
+    required this.signInWithEmailPasswordUseCase,
+    required this.signUpWithEmailPasswordUseCase,
+    required this.userDataUseCase,
+    required this.setUserStateUseCase,
+    required this.signOutUseCase,
   });
 
-  // AuthRepository(dataSource: FirebaseAuthDataSource());
-
-  final user = Rxn<UserModel>();
-
-  Rxn<UserModel> get currentUser => user;
-
-  Future<void> getCurrentUser() async {
-    user.value = await authRepository.getCurrentUser();
-    print("user: ${user.value!.profilePic}");
+  Future<UserModel?> getCurrentUser() async {
+    UserModel? user = await getCurrentUserUseCase();
+    return user;
   }
 
   Future<void> signInWithEmailPassword(String email, String password) async {
-    await authRepository.signInWithEmailPassword(email, password);
+    await signInWithEmailPasswordUseCase(email, password);
   }
 
   Future<void> signUpWithEmailPassword(
@@ -33,23 +37,19 @@ class AuthControlller extends GetxController {
       String phoneNumber,
       String password,
       String confirmPassword) async {
-    await authRepository.signUpWithEmailPassword(
-        profilePic, name, email, phoneNumber, password, confirmPassword);
-  }
-
-  Future<void> saveUserData(String name, File? profilePic) async {
-    await authRepository.saveUserData(name, profilePic);
+    await signUpWithEmailPasswordUseCase(
+        profilePic!, name, email, phoneNumber, password, confirmPassword);
   }
 
   Stream<UserModel> userData(String userId) {
-    return authRepository.userData(userId);
+    return userDataUseCase(userId);
   }
 
   Future<void> setUserState(bool isOnline) async {
-    await authRepository.setUserState(isOnline);
+    await setUserStateUseCase(isOnline);
   }
 
   Future<void> signOut() async {
-    await authRepository.signOut();
+    await signOutUseCase();
   }
 }

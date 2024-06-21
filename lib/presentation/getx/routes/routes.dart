@@ -1,14 +1,15 @@
 import 'package:charterer/presentation/screens/add_charterer_screen.dart';
+import 'package:charterer/presentation/screens/auth/login_screen.dart';
+import 'package:charterer/presentation/screens/auth/sign_up_screen.dart';
 import 'package:charterer/presentation/screens/call_screen.dart';
 import 'package:charterer/presentation/screens/chats/chat_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
-import 'package:charterer/presentation/screens/profiles/edit_profile_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
-import 'package:charterer/presentation/screens/auth/login_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/screens/notification_screen.dart';
+import 'package:charterer/presentation/screens/profiles/edit_profile_screen.dart';
 import 'package:charterer/presentation/screens/profiles/profile_screen.dart';
-import 'package:charterer/presentation/screens/auth/sign_up_screen.dart';
+import 'package:charterer/presentation/screens/stories/confirm_stories_screen.dart';
 import 'package:get/get.dart';
 
 class Routes {
@@ -23,25 +24,21 @@ class Routes {
   static String notificationPage = '/notificationPage';
   static String chatPage = '/chatPage';
   static String editProfile = '/editProfile';
+  static String confirmStory = '/confirmStory';
 }
 
 final getPages = [
-  GetPage(name: Routes.login, page: () => LoginScreen()),
-  GetPage(name: Routes.signup, page: () => SignUpScreen()),
+  GetPage(name: Routes.login, page: () => const LoginScreen()),
+  GetPage(name: Routes.signup, page: () => const SignUpScreen()),
   GetPage(name: Routes.homePage, page: () => const HomeScreen()),
   GetPage(name: Routes.mainPage, page: () => const MainPage()),
   GetPage(name: Routes.callScreen, page: () => const CallScreen()),
   GetPage(name: Routes.profileScreen, page: () => const ProfileScreen()),
   GetPage(name: Routes.editProfile, page: () => const EditProfileScreen()),
-  GetPage(name: Routes.contactScreen, page: () => ContactScreen()),
+  GetPage(name: Routes.contactScreen, page: () => const ContactScreen()),
   GetPage(name: Routes.addChartererScreen, page: () => const AddCharterer()),
-  // final argument = settings.arguments
-  GetPage(
-      name: Routes.chatPage,
-      page: () => const ChatScreen(
-            // name: 'user',
-            // uid: '1234',
-          )),
+  GetPage(name: Routes.chatPage, page: () => const ChatScreen()),
+  GetPage(name: Routes.confirmStory, page: () => ConfirmStoryScreen()),
   GetPage(
       name: Routes.notificationPage, page: () => const NotificationScreen()),
 ];

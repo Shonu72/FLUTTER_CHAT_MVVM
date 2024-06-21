@@ -4,12 +4,9 @@ import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
-import 'package:charterer/presentation/screens/auth/login_screen.dart';
-import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/screens/auth/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/auth/widgets/button_widget.dart';
 import 'package:charterer/presentation/widgets/custom_loading_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

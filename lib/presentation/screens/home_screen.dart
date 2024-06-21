@@ -1,12 +1,14 @@
+import 'dart:io';
+import 'dart:math' as math;
+
 import 'package:charterer/core/theme/colors.dart';
+import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/data/models/chat_contact_model.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/profiles/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:math' as math;
-
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -91,40 +93,112 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Expanded(
-                    // stories list
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return const Padding(
-                          padding: EdgeInsets.only(
-                            left: 10,
-                            top: 10,
-                            right: 10,
-                          ),
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.white,
-                                maxRadius: 25,
-                                backgroundImage: AssetImage(
-                                  'assets/images/boy.png',
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Name",
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.white),
-                              ),
-                            ],
-                          ),
+                      // stories list
+                      child: StreamBuilder<List<ChatContact>>(
+                    stream: chatController.chatContacts(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
-                      },
-                    ),
-                  ),
+                      }
+                      String currentUserProfilePic = 'assets/images/boy.png';
+                      String currentUserName = 'Me';
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: snapshot.data!.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                left: 10,
+                                top: 10,
+                                right: 10,
+                              ),
+                              child: Column(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        maxRadius: 25,
+                                        backgroundImage:
+                                            AssetImage(currentUserProfilePic),
+                                      ),
+                                      Positioned(
+                                        bottom: 0,
+                                        right: 0,
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            File? image = await Helpers
+                                                .pickImageFromGallery(context);
+                                            if (image != null) {
+                                              Get.toNamed(Routes.confirmStory,
+                                                  arguments: {
+                                                    'storyImage': image,
+                                                  });
+                                            }
+                                          },
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.blue,
+                                            ),
+                                            child: const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    currentUserName,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            var chatContactData = snapshot.data![index - 1];
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                left: 10,
+                                top: 10,
+                                right: 10,
+                              ),
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    maxRadius: 25,
+                                    backgroundImage: NetworkImage(
+                                        chatContactData.profilePic),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    chatContactData.name,
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  )),
                 ],
               ),
             ),
@@ -178,7 +252,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             });
                                       },
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left:8, right: 8,top: 4),
+                                        padding: const EdgeInsets.only(
+                                            left: 8, right: 8, top: 4),
                                         child: ListTile(
                                           tileColor: textLightColor,
                                           shape: RoundedRectangleBorder(

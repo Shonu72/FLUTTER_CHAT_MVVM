@@ -2,23 +2,21 @@ import 'dart:io';
 
 import 'package:charterer/data/datasources/firebase_auth_datasource.dart';
 import 'package:charterer/data/models/user_model.dart';
-import 'package:charterer/domain/usecases/auth_usecase.dart';
+import 'package:charterer/domain/repositories/firebase_repository.dart';
 
-class AuthRepository with AuthUseCase {
-  final AuthDataSource _dataSource;
+class AuthRepositoryImpl implements FirebaseRepository {
+  final AuthDataSource dataSource;
 
-  AuthRepository({
-    required AuthDataSource dataSource,
-  }) : _dataSource = dataSource;
+  AuthRepositoryImpl({required this.dataSource});
 
   @override
   Future<UserModel?> getCurrentUser() async {
-    return _dataSource.getCurrentUserData();
+    return await dataSource.getCurrentUserData();
   }
 
   @override
   Future<void> signInWithEmailPassword(String email, String password) async {
-    return _dataSource.signInWithEmailPassword(email, password);
+    return dataSource.signInWithEmailPassword(email, password);
   }
 
   @override
@@ -29,30 +27,22 @@ class AuthRepository with AuthUseCase {
       String phoneNumber,
       String password,
       String confirmPassword) async {
-    return _dataSource.signUpWithEmailPassword(
-         profilePic,name,email, phoneNumber,password, confirmPassword);
-  }
-
-  @override
-  Future<void> saveUserData(
-    String name,
-    File? profilePic,
-  ) async {
-    return _dataSource.saveUserDataToFirebase(name, profilePic);
+    return dataSource.signUpWithEmailPassword(
+        profilePic, name, email, phoneNumber, password, confirmPassword);
   }
 
   @override
   Stream<UserModel> userData(String userId) {
-    return _dataSource.userData(userId);
+    return dataSource.userData(userId);
   }
 
   @override
   Future<void> setUserState(bool isOnline) async {
-    return _dataSource.setUserState(isOnline);
+    return dataSource.setUserState(isOnline);
   }
 
   @override
   Future<void> signOut() async {
-    return _dataSource.signOut();
+    return dataSource.signOut();
   }
 }

@@ -21,38 +21,3 @@ class GetChatStream {
     return repository.getChatStream(receiverUserId);
   }
 }
-
-
-// class SendFileMessage {
-//   final ChatRepository repository;
-//   SendFileMessage(this.repository);
-//   void call({
-//     required BuildContext context,
-//     required File file,
-//     required String receiverUserId,
-//     required MessageEnum messageEnum,
-//   }) {
-//     repository.sendFileMessage(
-//       context: context,
-//       file: file,
-//       receiverUserId: receiverUserId,
-//       messageEnum: messageEnum,
-//     );
-//   }
-// }
-
-// class SetChatMessageSeen {
-//   final ChatRepository repository;
-//   SetChatMessageSeen(this.repository);
-//   void call({
-//     required BuildContext context,
-//     required String receiverUserId,
-//     required String messageId,
-//   }) {
-//     repository.setChatMessageSeen(
-//       context: context,
-//       receiverUserId: receiverUserId,
-//       messageId: messageId,
-//     );
-//   }
-// }
