@@ -64,7 +64,7 @@ class SenderMessageCard extends StatelessWidget {
                     children: [
                       if (isReplying) ...[
                         Text(
-                          'replied to ~$username',
+                          'replied by ~$username',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[400],

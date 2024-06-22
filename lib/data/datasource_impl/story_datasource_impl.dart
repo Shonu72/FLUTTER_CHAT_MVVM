@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:charterer/core/utils/helpers.dart';
@@ -31,76 +33,129 @@ class StoryDataSourceImpl implements StoryDataSource {
     try {
       var storyId = const Uuid().v1();
       String uid = auth.currentUser!.uid;
-
-      String imageUrl = await commonFirebaseStorageRepository
-          .storeFileToFirebase('/stories/$storyId$uid', storyImage);
-
+      // String phoneNumber = auth.currentUser!.phoneNumber!;
+      String imageurl =
+          await commonFirebaseStorageRepository.storeFileToFirebase(
+        '/stories/$storyId$uid',
+        storyImage,
+      );
       List<Contact> contacts = [];
+
       if (await FlutterContacts.requestPermission()) {
         contacts = await FlutterContacts.getContacts(
-            withProperties: true, withPhoto: true);
+          withProperties: true,
+          withPhoto: true,
+        );
       }
+
+      print("contacts length : ${contacts.length}");
+
       List<String> uidWhoCanSee = [];
-// looping through coontacts and checking if the contact is in the firestore
-      for (int i = 0; i < contacts.length; i++) {
-        var userDataFirebase = await firestore
-            .collection('users')
-            .where('phoneNumber', isEqualTo: contacts[i].phones[0].number)
-            .get();
-        if (userDataFirebase.docs.isNotEmpty) {
-          // converting the data to UserModel
-          var userData = UserModel.fromMap(userDataFirebase.docs[0].data());
-          uidWhoCanSee.add(userData.uid);
+
+      // for (int i = 0; i < contacts.length; i++) {
+      var userDataFirebase = await firestore
+          .collection('users')
+          // .where('phoneNumber', isEqualTo: contacts[i].phones[0].number)
+          .get();
+      // print("userData: ${contacts[i].phones[0].number}");
+      if (userDataFirebase.docs.isNotEmpty) {
+        for (var doc in userDataFirebase.docs) {
+          var userData = UserModel.fromMap(doc.data());
+          if (userData.uid != auth.currentUser!.uid) {
+            uidWhoCanSee.add(userData.uid);
+            print("userData.uid: ${userData.uid}");
+          }
         }
+        // }
       }
 
       List<String> storyImageUrls = [];
+
       var storySnapshot = await firestore
           .collection('stories')
-          .where('uid', isEqualTo: auth.currentUser!.uid)
+          .where(
+            'uid',
+            isEqualTo: auth.currentUser!.uid,
+          )
+          .where('createdAt',
+              isLessThan: DateTime.now().subtract(const Duration(hours: 24)))
           .get();
 
       if (storySnapshot.docs.isNotEmpty) {
-        StoryModel storyModel =
-            StoryModel.fromMap(storySnapshot.docs[0].data());
-        storyImageUrls = storyModel.photoUrl;
-        // if story image is already availabe then add the new image to the list
-        storyImageUrls.add(imageUrl);
+        // converting snapshot to model
+        StoryModel story = StoryModel.fromMap(storySnapshot.docs[0].data());
+        storyImageUrls = story.photoUrl;
+        storyImageUrls.add(imageurl);
         await firestore
             .collection('stories')
             .doc(storySnapshot.docs[0].id)
             .update({
           'photoUrl': storyImageUrls,
         });
-        return;
+        // return;
       } else {
-        // if story image is not available then create a new story
-        storyImageUrls = [imageUrl];
+        storyImageUrls = [imageurl];
       }
 
-      StoryModel storyModel = StoryModel(
-        uid: auth.currentUser!.uid,
+      StoryModel story = StoryModel(
+        uid: uid,
         username: username,
-        profilePic: profilePic,
         phoneNumber: phoneNumber,
         photoUrl: storyImageUrls,
-        whoCanSee: uidWhoCanSee,
         createdAt: DateTime.now(),
+        profilePic: profilePic,
         storyId: storyId,
+        whoCanSee: uidWhoCanSee,
       );
 
-      await firestore
-          .collection('stories')
-          .doc(storyId)
-          .set(storyModel.toMap());
-    } catch (e) {
-      // ignore: use_build_context_synchronously
-      Helpers.showSnackBar(context: context, content: e.toString());
+      await firestore.collection('stories').doc(storyId).set(story.toMap());
+      print("upload ho gya : ${story.toMap()}");
+    } catch (e, stackTrace) {
+      debugPrint("Error: ${e.toString()}");
+      debugPrint("StackTrace: ${stackTrace.toString()}");
+      Helpers.toast("Something went wrong, try again later");
     }
   }
 
   @override
-  Future<List<StoryModel>> getStories(BuildContext context) {
-    throw UnimplementedError();
+  Future<List<StoryModel>> getStories() async {
+    List<StoryModel> storyData = [];
+    try {
+      List<Contact> contacts = [];
+      if (await FlutterContacts.requestPermission()) {
+        contacts = await FlutterContacts.getContacts(
+            withProperties: true, withPhoto: true);
+      }
+      // for (int i = 0; i < contacts.length; i++) {
+      var storySnapshot = await firestore
+          .collection('stories')
+          // .where(
+          //   'phoneNumber',
+          //   isEqualTo: contacts[i].phones[0].number.replaceAll(
+          //         ' ',
+          //         '',
+          //       ),
+          // )
+          // .where(
+          //   'createdAt',
+          //   isGreaterThan: DateTime.now()
+          //       .subtract(const Duration(hours: 24))
+          //       .millisecondsSinceEpoch,
+          // )
+          .get();
+      for (var tempData in storySnapshot.docs) {
+        StoryModel tempStory = StoryModel.fromMap(tempData.data());
+        if (tempStory.whoCanSee.contains(auth.currentUser!.uid)) {
+          storyData.add(tempStory);
+        }
+      }
+      // }
+    } catch (e) {
+      print("loading me problem : ${e.toString()}");
+      // Helpers.toast("loading me problem : ${e.toString()}");
+    }
+    debugPrint("storyData.length: ${storyData.length}");
+    debugPrint("storyData.toString(): ${storyData.toString()}");
+    return storyData;
   }
 }

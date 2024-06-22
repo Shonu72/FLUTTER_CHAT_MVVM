@@ -4,9 +4,13 @@ import 'dart:math' as math;
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/data/models/chat_contact_model.dart';
+import 'package:charterer/data/models/story_model.dart';
+import 'package:charterer/data/models/user_model.dart';
+import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
+import 'package:charterer/presentation/getx/controllers/story_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
-import 'package:charterer/presentation/screens/profiles/profile_screen.dart';
+import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +24,24 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final chatController = Get.find<ChatController>();
+  final authcontroller = Get.find<AuthControlller>();
+  final storyController = Get.find<StoryController>();
+
+  UserModel? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentUser();
+  }
+
+  Future<void> _loadCurrentUser() async {
+    UserModel? user = await authcontroller.getCurrentUser();
+    setState(() {
+      currentUser = user;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,18 +74,19 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               GestureDetector(
                 onTap: () {
-                  // Get.toNamed(Routes.profileScreen);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ProfileScreen()));
+                  Get.toNamed(Routes.profileScreen, arguments: {
+                    'profilePic': currentUser?.profilePic,
+                    'name': currentUser?.name,
+                    'phoneNumber': currentUser?.phoneNumber,
+                  });
                 },
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 10),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
-                    backgroundImage: AssetImage(
-                      'assets/images/boy.png',
+                    backgroundImage: NetworkImage(
+                      currentUser?.profilePic ??
+                          'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png',
                     ),
                   ),
                 ),
@@ -92,113 +115,151 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  Expanded(
-                      // stories list
-                      child: StreamBuilder<List<ChatContact>>(
-                    stream: chatController.chatContacts(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      String currentUserProfilePic = 'assets/images/boy.png';
-                      String currentUserName = 'Me';
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data!.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 10,
-                                top: 10,
-                                right: 10,
-                              ),
-                              child: Column(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        maxRadius: 25,
-                                        backgroundImage:
-                                            AssetImage(currentUserProfilePic),
-                                      ),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: 0,
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            File? image = await Helpers
-                                                .pickImageFromGallery(context);
-                                            if (image != null) {
-                                              Get.toNamed(Routes.confirmStory,
-                                                  arguments: {
-                                                    'storyImage': image,
-                                                  });
-                                            }
-                                          },
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.blue,
-                                            ),
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                              size: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    currentUserName,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            var chatContactData = snapshot.data![index - 1];
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 10,
-                                top: 10,
-                                right: 10,
-                              ),
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          top: 10,
+                          right: 10,
+                        ),
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    File? image =
+                                        await Helpers.pickImageFromGallery(
+                                            context);
+                                    if (image != null) {
+                                      Get.toNamed(Routes.confirmStory,
+                                          arguments: {
+                                            'storyImage': image,
+                                          });
+                                    }
+                                  },
+                                  child: CircleAvatar(
                                     backgroundColor: Colors.white,
                                     maxRadius: 25,
                                     backgroundImage: NetworkImage(
-                                        chatContactData.profilePic),
+                                        currentUser?.profilePic ?? ''),
                                   ),
-                                  const SizedBox(
-                                    height: 5,
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      File? image =
+                                          await Helpers.pickImageFromGallery(
+                                              context);
+                                      if (image != null) {
+                                        Get.toNamed(Routes.confirmStory,
+                                            arguments: {
+                                              'storyImage': image,
+                                            });
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.blue,
+                                      ),
+                                      child: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ),
                                   ),
-                                  Text(
-                                    chatContactData.name,
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                  ),
-                                ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              currentUser?.name ?? '',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
                               ),
-                            );
-                          }
-                        },
-                      );
-                    },
-                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 100,
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        child: Expanded(
+                          // stories list
+                          child: FutureBuilder<List<StoryModel>>(
+                            future: storyController.getStories(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                return const Center(
+                                    child: AppText(
+                                  text: "No stories available",
+                                  color: whiteColor,
+                                ));
+                              }
+                              return ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  var storyData = snapshot.data![index];
+                                  print(storyData.username);
+                                  print(storyData.profilePic);
+
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                      top: 10,
+                                      right: 10,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.toNamed(Routes.storyview,
+                                                arguments: {
+                                                  'storyData': storyData,
+                                                });
+                                          },
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            maxRadius: 25,
+                                            backgroundImage: NetworkImage(
+                                                storyData.profilePic),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          storyData.username,
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -343,25 +404,6 @@ class MySearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // Implement your suggestion display logic here
     return Container();
   }
-
-  // @override
-  // ThemeData appBarTheme(BuildContext context) {
-  //   return Theme.of(context).copyWith(
-  //     inputDecorationTheme: searchFieldDecorationTheme?.copyWith(
-  //       labelStyle: TextStyle(color: Colors.white),
-  //     ),
-  //     scaffoldBackgroundColor: Colors.black.withOpacity(0.5),
-  //     appBarTheme: Theme.of(context).appBarTheme.copyWith(
-  //           backgroundColor: Colors.black.withOpacity(0.5),
-  //           iconTheme: IconThemeData(color: Colors.white),
-  //           titleTextStyle: TextStyle(color: Colors.white),
-  //         ),
-  //     textTheme: Theme.of(context).textTheme.copyWith(
-  //           titleSmall: const TextStyle(color: Colors.white),
-  //         ),
-  //   );
-  // }
 }

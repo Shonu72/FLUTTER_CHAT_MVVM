@@ -2,6 +2,8 @@
 
 import 'dart:io';
 
+import 'package:charterer/core/utils/helpers.dart';
+import 'package:charterer/data/models/story_model.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/domain/usecases/get_story_usecase.dart';
 import 'package:charterer/domain/usecases/upload_story_usecase.dart';
@@ -22,14 +24,23 @@ class StoryController extends GetxController {
 
   Future<void> uploadStory(File file, BuildContext context) async {
     UserModel? currentUser = await authController.getCurrentUser();
-    print(currentUser.toString());
+    print("current user : ${currentUser!.name}");
+    print("current user : ${currentUser.profilePic}");
+    print("current user : ${currentUser.phoneNumber}");
 
     await uploadStoryUseCase(
-      username: currentUser!.name,
+      username: currentUser.name,
       profilePic: currentUser.profilePic,
       phoneNumber: currentUser.phoneNumber,
       storyImage: file,
       context: context,
     );
+    Helpers.toast("Story uploaded successfully");
+  }
+
+  Future<List<StoryModel>> getStories() async {
+    List<StoryModel> stories = await getStoryUseCase();
+    print("stories.length from controller: ${stories.length}");
+    return stories;
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:charterer/core/theme/colors.dart';
+import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/story_controller.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,10 @@ class ConfirmStoryScreen extends StatelessWidget {
 
   void addStory(File file, BuildContext context) {
     storyController.uploadStory(file, context);
+    Helpers.toast("uploading story");
+    Future.delayed(const Duration(seconds: 3), () {
+      Get.back();
+    });
   }
 
   @override
@@ -44,7 +49,9 @@ class ConfirmStoryScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => addStory(storyImage, context),
+          onPressed: () {
+            addStory(storyImage, context);
+          },
           child: const Icon(Icons.check)),
     );
   }

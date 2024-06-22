@@ -26,8 +26,7 @@ class StoryRepositoryImpl implements StoryRepository {
   }
 
   @override
-  Future<List<StoryModel>> getStories(BuildContext context) {
-    // TODO: implement getStories
-    throw UnimplementedError();
+  Future<List<StoryModel>> getStories() async {
+    return storyDataSource.getStories();
   }
 }

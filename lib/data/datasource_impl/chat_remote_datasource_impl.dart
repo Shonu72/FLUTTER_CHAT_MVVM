@@ -26,7 +26,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   Stream<List<ChatContact>> getChatContacts() {
     return firestore
         .collection('users')
-        .doc(auth.currentUser!.uid)
+        .doc(auth.currentUser?.uid)
         .collection('chats')
         .snapshots()
         .asyncMap((event) async {

@@ -1,16 +1,16 @@
 import 'package:charterer/domain/entities/story_entity.dart';
 
 class StoryModel extends StoryEntity {
-  const StoryModel(
-      {required uid,
-      required username,
-      required phoneNumber,
-      required photoUrl,
-      required createdAt,
-      required profilePic,
-      required storyId,
-      required whoCanSee})
-      : super(
+  const StoryModel({
+    required uid,
+    required username,
+    required phoneNumber,
+    required photoUrl,
+    required createdAt,
+    required profilePic,
+    required storyId,
+    required whoCanSee,
+  }) : super(
           uid: uid,
           username: username,
           phoneNumber: phoneNumber,

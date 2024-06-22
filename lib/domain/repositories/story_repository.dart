@@ -12,5 +12,5 @@ abstract class StoryRepository {
     required BuildContext context,
   });
 
-  Future<List<StoryModel>> getStories(BuildContext context);
+  Future<List<StoryModel>> getStories();
 }

@@ -15,7 +15,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
   @override
   Future<UserModel?> getCurrentUserData() async {
     var userData =
-        await firestore.collection('users').doc(auth.currentUser!.uid).get();
+        await firestore.collection('users').doc(auth.currentUser?.uid).get();
 
     UserModel? user;
     if (userData.data() != null) {
