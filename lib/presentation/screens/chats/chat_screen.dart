@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/screens/chats/widgets/bottom_chat_field.dart';
 import 'package:charterer/presentation/screens/chats/widgets/chat_list.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({
@@ -44,7 +44,7 @@ class ChatScreen extends StatelessWidget {
                 return Row(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: NetworkImage(profile),
+                      backgroundImage: CachedNetworkImageProvider(profile),
                     ),
                     const SizedBox(
                       width: 10,

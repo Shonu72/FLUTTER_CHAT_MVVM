@@ -1,11 +1,12 @@
 import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 // import 'package:enough_giphy_flutter/enough_giphy_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:file_picker/file_picker.dart';
 
 import 'failure.dart';
 
@@ -102,7 +103,7 @@ class Helpers {
     File? file;
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
+        type: FileType.any,
       );
 
       if (result != null && result.files.single.path != null) {

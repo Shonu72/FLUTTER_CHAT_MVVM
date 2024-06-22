@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/data/datasources/firebase_auth_datasource.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/data/repositories/common_firebase_repo.dart';
+import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class FirebaseAuthDataSource implements AuthDataSource {
   final FirebaseAuth auth;
@@ -21,8 +25,8 @@ class FirebaseAuthDataSource implements AuthDataSource {
     if (userData.data() != null) {
       user = UserModel.fromMap(userData.data()!);
     }
-    print("userData.data:  ${userData.data()}");
-    print(user);
+    debugPrint("userData data:  ${userData.data()}");
+    debugPrint("user:  $user");
     return user;
   }
 
@@ -33,12 +37,12 @@ class FirebaseAuthDataSource implements AuthDataSource {
         email: email,
         password: password,
       );
+      Helpers.saveUser(key: "isLoggedIn", value: true);
+      Helpers.toast("Login Successful");
+      Get.toNamed(Routes.mainPage);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided.');
-      }
+      print(e.toString());
+      Helpers.toast('Incorrect email or password');
     }
   }
 
@@ -58,7 +62,6 @@ class FirebaseAuthDataSource implements AuthDataSource {
           'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png';
 
       if (profilePic != null) {
-        // Handle profile pic upload
         photoUrl = await commonFirebaseStorageRepository.storeFileToFirebase(
             "profilePic/$uid", profilePic);
       }
@@ -71,8 +74,11 @@ class FirebaseAuthDataSource implements AuthDataSource {
         groupId: const [],
       );
       await firestore.collection('users').doc(uid).set(user.toMap());
+      Helpers.saveUser(key: "isLoggedIn", value: true);
+      Helpers.toast("Account creation Successful");
+      Get.toNamed(Routes.mainPage);
     } on FirebaseAuthException catch (e) {
-      print("This went wrong $e");
+      Helpers.toast(e.message!);
     }
   }
 

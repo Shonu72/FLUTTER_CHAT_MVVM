@@ -1,5 +1,4 @@
 import 'package:charterer/presentation/screens/main_page.dart';
-import 'package:charterer/presentation/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -72,7 +71,7 @@ class NotificationScreen extends StatelessWidget {
                               ),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 44, 43, 52),
+                                  color: const Color.fromARGB(255, 44, 43, 52),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: ListTile(
@@ -86,7 +85,7 @@ class NotificationScreen extends StatelessWidget {
                                     title: const Row(
                                       children: [
                                         Text(
-                                          "John Doe",
+                                          "Unknown User",
                                           style: TextStyle(
                                               fontSize: 20,
                                               color: Colors.white),
@@ -105,7 +104,7 @@ class NotificationScreen extends StatelessWidget {
                                         color: Colors.white.withOpacity(0.5),
                                       ),
                                     ),
-                                    trailing: Container(
+                                    trailing: SizedBox(
                                         height: 50,
                                         width: 50,
                                         child: Image.asset(

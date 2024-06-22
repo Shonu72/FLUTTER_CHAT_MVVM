@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/data/models/chat_contact_model.dart';
@@ -47,51 +48,58 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 37, 34, 51),
         appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 37, 34, 51),
-            title: const Text(
-              "Messages",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-            centerTitle: true,
-            leading: Transform.rotate(
-                angle: 360 * math.pi / 180,
-                child: IconButton(
-                  onPressed: () {
-                    showSearch(
-                      context: context,
-                      delegate: MySearchDelegate(),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.search,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                )),
-            actions: [
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.profileScreen, arguments: {
-                    'profilePic': currentUser?.profilePic,
-                    'name': currentUser?.name,
-                    'phoneNumber': currentUser?.phoneNumber,
-                  });
+          backgroundColor: const Color.fromARGB(255, 37, 34, 51),
+          title: const Text(
+            "Messages",
+            style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          centerTitle: true,
+          leading: Transform.rotate(
+              angle: 360 * math.pi / 180,
+              child: IconButton(
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: MySearchDelegate(),
+                  );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(
-                      currentUser?.profilePic ??
-                          'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png',
-                    ),
+                icon: const Icon(
+                  Icons.search,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              )),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.person_add_alt_1_sharp,
+                color: whiteColor,
+                size: 32,
+              ),
+              onPressed: () => Get.toNamed(Routes.createGroup),
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.profileScreen, arguments: {
+                  'profilePic': currentUser?.profilePic,
+                  'name': currentUser?.name,
+                  'phoneNumber': currentUser?.phoneNumber,
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10, left: 5),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: CachedNetworkImageProvider(
+                    currentUser?.profilePic ??
+                        'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png',
                   ),
                 ),
-              )
-            ]),
+              ),
+            ),
+          ],
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -142,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: CircleAvatar(
                                     backgroundColor: Colors.white,
                                     maxRadius: 25,
-                                    backgroundImage: NetworkImage(
+                                    backgroundImage: CachedNetworkImageProvider(
                                         currentUser?.profilePic ?? ''),
                                   ),
                                 ),
@@ -236,8 +244,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: CircleAvatar(
                                             backgroundColor: Colors.white,
                                             maxRadius: 25,
-                                            backgroundImage: NetworkImage(
-                                                storyData.profilePic),
+                                            backgroundImage:
+                                                CachedNetworkImageProvider(
+                                                    storyData.profilePic),
                                           ),
                                         ),
                                         const SizedBox(
@@ -338,7 +347,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                           leading: CircleAvatar(
-                                            backgroundImage: NetworkImage(
+                                            backgroundImage:
+                                                CachedNetworkImageProvider(
                                               chatContactData.profilePic,
                                             ),
                                             radius: 30,

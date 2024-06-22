@@ -30,7 +30,8 @@ class ContactScreen extends StatelessWidget {
               color: whiteColor,
             ),
           )),
-      body: FutureBuilder<List<Contact>>(
+      body: 
+      FutureBuilder<List<Contact>>(
         future: controller.getContacts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -79,6 +80,7 @@ class ContactScreen extends StatelessWidget {
           );
         },
       ),
+   
     );
   }
 }

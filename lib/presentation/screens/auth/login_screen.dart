@@ -1,10 +1,8 @@
 import 'package:charterer/core/theme/colors.dart';
-import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/auth/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/auth/widgets/button_widget.dart';
-import 'package:charterer/presentation/widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -91,13 +89,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: "Login",
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    Get.dialog(const CustomLoadingWidget(),
-                        barrierDismissible: false);
+                    // Get.dialog(const CustomLoadingWidget(),
+                    //     barrierDismissible: true);
                     await userController.signInWithEmailPassword(
                         mailController.text, passwordController.text);
-
-                    Helpers.saveUser(key: "isLoggedIn", value: true);
-                    Get.toNamed(Routes.mainPage);
                   }
                 },
               ),

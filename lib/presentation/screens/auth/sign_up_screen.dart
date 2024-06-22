@@ -6,7 +6,6 @@ import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/auth/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/auth/widgets/button_widget.dart';
-import 'package:charterer/presentation/widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -171,16 +170,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 text: "Register",
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    Get.dialog(const CustomLoadingWidget(),
-                        barrierDismissible: false);
+                    // Get.dialog(const CustomLoadingWidget(),
+                    //     barrierDismissible: false);
 
-                    // User? user = await authController.register(
-                    //   name: nameController.text,
-                    //   email: mailController.text,
-                    //   password: passwordController.text,
-                    //   confirmpassword: confirmPasswordController.text,
-                    //   phone: phoneController.text,
-                    // );
                     await userController.signUpWithEmailPassword(
                       image,
                       nameController.text,
@@ -189,9 +181,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       passwordController.text,
                       confirmPasswordController.text,
                     );
-                    Helpers.saveUser(key: "isLoggedIn", value: true);
-                    Helpers.toast("Account creation Successful");
-                    Get.toNamed(Routes.mainPage);
                   }
                 },
               ),

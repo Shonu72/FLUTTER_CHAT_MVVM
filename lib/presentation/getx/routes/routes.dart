@@ -4,6 +4,7 @@ import 'package:charterer/presentation/screens/auth/sign_up_screen.dart';
 import 'package:charterer/presentation/screens/call_screen.dart';
 import 'package:charterer/presentation/screens/chats/chat_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
+import 'package:charterer/presentation/screens/groups/create_group_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/screens/notification_screen.dart';
@@ -27,6 +28,7 @@ class Routes {
   static String editProfile = '/editProfile';
   static String confirmStory = '/confirmStory';
   static String storyview = '/storyview';
+  static String createGroup = '/createGroup';
 }
 
 final getPages = [
@@ -42,6 +44,7 @@ final getPages = [
   GetPage(name: Routes.chatPage, page: () => const ChatScreen()),
   GetPage(name: Routes.confirmStory, page: () => ConfirmStoryScreen()),
   GetPage(name: Routes.storyview, page: () => const StoryViewScreen()),
+  GetPage(name: Routes.createGroup, page: () => const CreateGroupScreen()),
   GetPage(
       name: Routes.notificationPage, page: () => const NotificationScreen()),
 ];

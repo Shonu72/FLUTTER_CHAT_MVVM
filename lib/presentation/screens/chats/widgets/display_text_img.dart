@@ -54,9 +54,8 @@ class DisplayTextImage extends StatelessWidget {
                     videoUrl: message,
                   )
                 : type == MessageEnum.file
-                    ? const AppText(
-                        text: "Working on the preview for file type",
-                        color: whiteColor,
+                    ? CachedNetworkImage(
+                        imageUrl: message,
                       )
                     : CachedNetworkImage(
                         imageUrl: message,
