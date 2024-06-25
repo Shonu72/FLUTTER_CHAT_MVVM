@@ -1,5 +1,6 @@
 import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
@@ -20,8 +21,7 @@ class NotificationScreen extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MainPage()));
+                Get.to(const MainPage(initialIndex: 0));
               },
               icon: const Icon(
                 Icons.arrow_back_ios_new,

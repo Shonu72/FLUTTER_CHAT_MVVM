@@ -6,6 +6,7 @@ import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/auth/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/auth/widgets/button_widget.dart';
+import 'package:charterer/presentation/widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -32,6 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final userController = Get.find<AuthControlller>();
   File? image;
+  bool _isLoading = false;
 
   void selectImage() async {
     image = await Helpers.pickImageFromGallery(context);
@@ -165,25 +167,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              AppButton(
-                color: Colors.blue,
-                text: "Register",
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    // Get.dialog(const CustomLoadingWidget(),
-                    //     barrierDismissible: false);
+              _isLoading
+                  ? const Center(child: CustomLoadingWidget())
+                  : AppButton(
+                      color: Colors.blue,
+                      text: "Register",
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isLoading = true;
+                          });
 
-                    await userController.signUpWithEmailPassword(
-                      image,
-                      nameController.text,
-                      mailController.text,
-                      "+91${phoneController.text}",
-                      passwordController.text,
-                      confirmPasswordController.text,
-                    );
-                  }
-                },
-              ),
+                          await userController.signUpWithEmailPassword(
+                            image,
+                            nameController.text.trim(),
+                            mailController.text.trim(),
+                            "+91${phoneController.text.trim()}",
+                            passwordController.text.trim(),
+                            confirmPasswordController.text.trim(),
+                          );
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
+                      },
+                    ),
               const SizedBox(
                 height: 20,
               ),

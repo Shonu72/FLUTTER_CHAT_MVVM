@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final int initialIndex;
+
+  const MainPage({super.key, required this.initialIndex});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -16,9 +18,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   final authController = Get.find<AuthControlller>();
+  late int currentIndex;
+
   @override
   void initState() {
     super.initState();
+    currentIndex = widget.initialIndex;
+
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -53,7 +59,6 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     const ContactScreen(),
   ];
 
-  int currentIndex = 0;
   void onTap(int index) {
     setState(() {
       currentIndex = index;

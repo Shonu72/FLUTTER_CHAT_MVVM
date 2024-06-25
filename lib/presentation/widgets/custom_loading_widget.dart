@@ -6,8 +6,10 @@ class CustomLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
-        height: 120,
-        width: 120,
-        child: Image(image: AssetImage('assets/images/loading.gif'),));
+        height: 50,
+        width: 200,
+        child: Image(
+          image: AssetImage('assets/images/loading.gif'),
+        ));
   }
 }

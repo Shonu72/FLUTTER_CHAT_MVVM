@@ -29,7 +29,8 @@ class ChatScreen extends StatelessWidget {
               backgroundDarkColor.withBlue(backgroundDarkColor.blue + 20),
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              // Get.to(const MainPage());
+              Get.back();
             },
             icon: const Icon(
               Icons.arrow_back,

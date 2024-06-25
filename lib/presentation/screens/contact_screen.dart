@@ -1,5 +1,6 @@
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/presentation/getx/controllers/contact_controller.dart';
+import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
@@ -23,7 +24,9 @@ class ContactScreen extends StatelessWidget {
           ),
           leading: IconButton(
             onPressed: () {
-              // Navigator.pop(context);
+              Get.to(const MainPage(
+                initialIndex: 0,
+              ));
             },
             icon: const Icon(
               Icons.arrow_back,
@@ -44,6 +47,7 @@ class ContactScreen extends StatelessWidget {
           }
           final contacts = snapshot.data!;
           return ListView.builder(
+            shrinkWrap: true,
             itemCount: contacts.length,
             itemBuilder: (context, index) {
               final contact = contacts[index];

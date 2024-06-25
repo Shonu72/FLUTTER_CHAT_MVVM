@@ -64,7 +64,9 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
         ),
         leading: IconButton(
           onPressed: () {
-            Get.to(const MainPage());
+            Get.to(const MainPage(
+              initialIndex: 0,
+            ));
           },
           icon: const Icon(
             Icons.arrow_back,

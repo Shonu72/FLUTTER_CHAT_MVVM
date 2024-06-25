@@ -42,6 +42,7 @@ class SelectContactRemoteDataSourceImpl
             'name': selectedContact.displayName,
             'uid': userData.uid,
             'profilePic': userData.profilePic,
+            'isGroupChat': false
           });
           return true;
         }

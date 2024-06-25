@@ -3,6 +3,7 @@ import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/auth/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/auth/widgets/button_widget.dart';
+import 'package:charterer/presentation/widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   final userController = Get.find<AuthControlller>();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -84,18 +86,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              AppButton(
-                color: Colors.blue,
-                text: "Login",
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    // Get.dialog(const CustomLoadingWidget(),
-                    //     barrierDismissible: true);
-                    await userController.signInWithEmailPassword(
-                        mailController.text, passwordController.text);
-                  }
-                },
-              ),
+              _isLoading
+                  ? const Center(child: CustomLoadingWidget())
+                  : AppButton(
+                      color: Colors.blue,
+                      text: "Login",
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await userController.signInWithEmailPassword(
+                              mailController.text.trim(),
+                              passwordController.text.trim());
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
+                      },
+                    ),
               const SizedBox(
                 height: 20,
               ),
