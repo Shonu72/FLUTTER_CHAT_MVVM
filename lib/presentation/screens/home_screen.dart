@@ -309,12 +309,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Text('No data'),
                                   );
                                 }
+                                List<Group> sortedGroups = snapshot.data!
+                                  ..sort((a, b) =>
+                                      b.timeSent.compareTo(a.timeSent));
 
                                 return ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: snapshot.data!.length,
+                                  itemCount: sortedGroups.length,
                                   itemBuilder: (context, index) {
-                                    var groupData = snapshot.data![index];
+                                    var groupData = sortedGroups[index];
 
                                     return Column(
                                       children: [
@@ -387,12 +390,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: CircularProgressIndicator(),
                                   );
                                 }
+                                List<ChatContact> sortedChatContacts = snapshot
+                                    .data!
+                                  ..sort((a, b) =>
+                                      b.timeSent.compareTo(a.timeSent));
 
                                 return ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: snapshot.data!.length,
+                                  itemCount: sortedChatContacts.length,
                                   itemBuilder: (context, index) {
-                                    var chatContactData = snapshot.data![index];
+                                    var chatContactData =
+                                        sortedChatContacts[index];
 
                                     return Column(
                                       children: [
