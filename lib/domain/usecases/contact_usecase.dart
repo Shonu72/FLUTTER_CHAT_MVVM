@@ -20,3 +20,5 @@ class SelectContactUseCase {
     return await repository.selectContact(selectedContact);
   }
 }
+
+

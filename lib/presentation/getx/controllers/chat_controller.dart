@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:charterer/core/utils/enums.dart';
 import 'package:charterer/data/models/chat_contact_model.dart';
+import 'package:charterer/data/models/group_model.dart';
 import 'package:charterer/data/models/messages_model.dart';
 import 'package:charterer/domain/usecases/chat_usecase.dart';
 import 'package:charterer/domain/usecases/mark_as_seen_usecase.dart';
@@ -14,9 +15,11 @@ import 'package:get/get.dart';
 class ChatController extends GetxController {
   final GetChatContacts getChatContactsUseCase;
   final GetChatStream getChatStreamUseCase;
+  final GetGroupChatStream getGroupChatStreamUseCase;
   final SendTextMessage sendTextMessageUseCase;
   final SendFileMsgUseCase sendFileMessageUseCase;
   final MarkAsSeenUseCase setChatMessageSeen;
+  final GetChatGroupsUseCase getChatGroupsUseCase;
 
   ChatController({
     required this.getChatStreamUseCase,
@@ -24,6 +27,8 @@ class ChatController extends GetxController {
     required this.getChatContactsUseCase,
     required this.sendFileMessageUseCase,
     required this.setChatMessageSeen,
+    required this.getChatGroupsUseCase,
+    required this.getGroupChatStreamUseCase,
   });
 
   final messageReply = Get.find<MessageReplyController>();
@@ -31,14 +36,23 @@ class ChatController extends GetxController {
     return getChatContactsUseCase();
   }
 
+  Stream<List<Group>> chatGroups() {
+    return getChatGroupsUseCase();
+  }
+
   Stream<List<Message>> chatStream(String receiverUserId) {
     return getChatStreamUseCase(receiverUserId);
+  }
+
+  Stream<List<Message>> groupChatStream(String groupId) {
+    return getGroupChatStreamUseCase(groupId);
   }
 
   void sendTextMessage({
     required BuildContext context,
     required String text,
     required String receiverUserId,
+    required bool isGroupChat,
   }) {
     final messageReply = messageReplyController.messageReply.value;
     sendTextMessageUseCase(
@@ -46,6 +60,7 @@ class ChatController extends GetxController {
       text: text,
       receiverUserId: receiverUserId,
       messageReply: messageReply,
+      isGroupChat: isGroupChat,
     );
     messageReplyController.clearMessageReply();
   }
@@ -56,6 +71,7 @@ class ChatController extends GetxController {
     required String receiverUserId,
     required MessageEnum messageEnum,
     // required UserModel senderUserData,
+    required bool isGroupChat,
   }) {
     final messageReply = messageReplyController.messageReply.value;
 
@@ -66,6 +82,7 @@ class ChatController extends GetxController {
       // senderUserData: senderUserData,
       messageEnum: messageEnum,
       messageReply: messageReply,
+      isGroupChat: isGroupChat,
     );
     messageReplyController.clearMessageReply();
   }

@@ -16,8 +16,8 @@ class SendFileMsgUseCase {
     required File file,
     required String receiverUserId,
     required MessageEnum messageEnum,
-        required MessageReply? messageReply,
-
+    required MessageReply? messageReply,
+    required bool isGroupChat,
   }) async {
     try {
       return chatRepository.sendFileMessage(
@@ -26,6 +26,7 @@ class SendFileMsgUseCase {
         receiverUserId: receiverUserId,
         messageEnum: messageEnum,
         messageReply: messageReply,
+        isGroupChat: isGroupChat,
       );
     } catch (e) {
       Helpers.toast(e.toString());

@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:charterer/core/theme/colors.dart';
+import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/presentation/getx/controllers/contact_controller.dart';
+import 'package:charterer/presentation/getx/controllers/group_controller.dart';
+import 'package:charterer/presentation/screens/groups/widgets/select_contact.dart';
+import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
 
 class CreateGroupScreen extends StatefulWidget {
@@ -13,8 +18,37 @@ class CreateGroupScreen extends StatefulWidget {
 }
 
 class _CreateGroupScreenState extends State<CreateGroupScreen> {
+  final groupController = Get.find<GroupController>();
+  final contactController = Get.find<SelectContactController>();
+
   TextEditingController groupNameController = TextEditingController();
-  final controller = Get.find<SelectContactController>();
+  File? image;
+
+  void pickImage() async {
+    image = await Helpers.pickImageFromGallery(context);
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    groupNameController.dispose();
+    super.dispose();
+  }
+
+  void createGroup() {
+    try {
+      if (groupNameController.text.isNotEmpty && image != null) {
+        groupController.createGroup(
+          groupNameController.text,
+          image!,
+          contactController.selectedGroupContacts,
+        );
+        Get.back();
+      }
+    } catch (e) {
+      Helpers.toast("Please provide group name and image.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,133 +63,71 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
           size: 24,
         ),
         leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.to(const MainPage());
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: whiteColor,
+          ),
         ),
       ),
       body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            const Stack(
-              children: [
-                CircleAvatar(
-                  radius: 100,
-                  backgroundColor: whiteColor,
-                  backgroundImage: AssetImage("assets/images/boy.png"),
-                  // child: Icon(
-                  //   Icons.camera_alt,
-                  //   color: backgroundDarkColor,
-                  // ),
-                ),
-                Positioned(
-                  right: 10,
-                  bottom: 20,
-                  child: Icon(
-                    Icons.add_a_photo_sharp,
-                    color: whiteColor,
-                    size: 30,
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                style: const TextStyle(color: whiteColor),
-                controller: groupNameController,
-                cursorColor: whiteColor,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Group Name',
-                    hintStyle: TextStyle(color: whiteColor),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                        color: whiteColor,
-                      ),
-                    )),
-              ),
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Stack(
                 children: [
-                  const AppText(
-                    text: 'Select Contacts',
-                    color: whiteColor,
-                    size: 20,
-                  ),
-                  const Divider(
-                    thickness: 0.2,
-                    color: lightGreyColor,
-                  ),
-                  SizedBox(
-                    height: 400,
-                    child: FutureBuilder<List<Contact>>(
-                      future: controller.getContacts(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        }
-                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Center(child: Text('No contacts found'));
-                        }
-                        final contacts = snapshot.data!;
-                        return ListView.builder(
-                          itemCount: contacts.length,
-                          itemBuilder: (context, index) {
-                            final contact = contacts[index];
-                            final image = contact.photo != null
-                                ? MemoryImage(contact.photo!)
-                                : null;
-                            return ListTile(
-                              tileColor: backgroundDarkColor
-                                  .withBlue(backgroundDarkColor.blue + 20),
-                              leading: CircleAvatar(
-                                  backgroundImage: image,
-                                  child: image == null
-                                      ? const Icon(
-                                          Icons.person,
-                                          color: whiteColor,
-                                        )
-                                      : null),
-                              title: AppText(
-                                text: contact.displayName,
-                                color: whiteColor,
-                                size: 16,
-                              ),
-                              subtitle: Text(
-                                contact.phones.isNotEmpty
-                                    ? contact.phones.first.number
-                                    : 'No phone number',
-                                style: const TextStyle(color: textWhiteColor),
-                              ),
-                              onTap: () {
-                                // controller.selectContact(contact);
-                              },
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
+                  image == null
+                      ? const CircleAvatar(
+                          backgroundImage: AssetImage('assets/images/boy.png'),
+                          radius: 100,
+                        )
+                      : CircleAvatar(
+                          backgroundImage: FileImage(
+                            image!,
+                          ),
+                          radius: 100,
+                        ),
+                  Positioned(
+                      right: 10,
+                      bottom: 20,
+                      child: IconButton(
+                        onPressed: pickImage,
+                        icon: const Icon(
+                          Icons.add_a_photo_sharp,
+                          color: whiteColor,
+                          size: 30,
+                        ),
+                      ))
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextField(
+                  style: const TextStyle(color: whiteColor),
+                  controller: groupNameController,
+                  cursorColor: whiteColor,
+                  decoration: const InputDecoration(
+                      hintText: 'Enter Group Name',
+                      hintStyle: TextStyle(color: whiteColor),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(
+                          color: whiteColor,
+                        ),
+                      )),
+                ),
+              ),
+              const SelectGroupContact(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: createGroup,
         backgroundColor: Colors.blue,
         child: const Icon(
           Icons.done,

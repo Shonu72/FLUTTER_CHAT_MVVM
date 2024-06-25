@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/data/models/chat_contact_model.dart';
+import 'package:charterer/data/models/group_model.dart';
 import 'package:charterer/data/models/story_model.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
@@ -197,11 +198,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 100,
-                        width: MediaQuery.of(context).size.width * 0.75,
-                        child: Expanded(
-                          // stories list
+                      Expanded(
+                        child: SizedBox(
+                          height: 100,
+                          width: MediaQuery.of(context).size.width * 0.75,
                           child: FutureBuilder<List<StoryModel>>(
                             future: storyController.getStories(),
                             builder: (context, snapshot) {
@@ -292,84 +292,173 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Expanded(
                       // conversations list
-                      child: StreamBuilder<List<ChatContact>>(
-                          stream: chatController.chatContacts(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
+                      child: Column(
+                        children: [
+                          StreamBuilder<List<Group>>(
+                              stream: chatController.chatGroups(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
 
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                var chatContactData = snapshot.data![index];
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                    child: Text('No data'),
+                                  );
+                                }
 
-                                return Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Get.toNamed(Routes.chatPage,
-                                            arguments: {
-                                              'name': chatContactData.name,
-                                              'uid': chatContactData.contactId,
-                                              // 'isGroupChat': false,
-                                              'profilePic':
-                                                  chatContactData.profilePic,
-                                            });
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8, right: 8, top: 4),
-                                        child: ListTile(
-                                          tileColor: textLightColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          title: Text(
-                                            chatContactData.name,
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                color: whiteColor),
-                                          ),
-                                          subtitle: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 6.0),
-                                            child: Text(
-                                              chatContactData.lastMessage,
-                                              style: const TextStyle(
-                                                  fontSize: 15,
-                                                  color: whiteColor),
-                                            ),
-                                          ),
-                                          leading: CircleAvatar(
-                                            backgroundImage:
-                                                CachedNetworkImageProvider(
-                                              chatContactData.profilePic,
-                                            ),
-                                            radius: 30,
-                                          ),
-                                          trailing: Text(
-                                            DateFormat.Hm().format(
-                                                chatContactData.timeSent),
-                                            style: TextStyle(
-                                              color:
-                                                  whiteColor.withOpacity(0.7),
-                                              fontSize: 13,
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    var groupData = snapshot.data![index];
+
+                                    return Column(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Get.toNamed(Routes.chatPage,
+                                                arguments: {
+                                                  'name': groupData.name,
+                                                  'uid': groupData.groupId,
+                                                  'isGroupChat': true,
+                                                  'profilePic':
+                                                      groupData.groupPic,
+                                                });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, right: 8, top: 4),
+                                            child: ListTile(
+                                              tileColor: textLightColor,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              title: Text(
+                                                groupData.name,
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: whiteColor),
+                                              ),
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 6.0),
+                                                child: Text(
+                                                  groupData.lastMessage,
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      color: whiteColor),
+                                                ),
+                                              ),
+                                              leading: CircleAvatar(
+                                                backgroundImage:
+                                                    CachedNetworkImageProvider(
+                                                  groupData.groupPic,
+                                                ),
+                                                radius: 30,
+                                              ),
+                                              trailing: Text(
+                                                DateFormat.Hm()
+                                                    .format(groupData.timeSent),
+                                                style: TextStyle(
+                                                  color: whiteColor
+                                                      .withOpacity(0.7),
+                                                  fontSize: 13,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ],
+                                      ],
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          }),
+                              }),
+                          StreamBuilder<List<ChatContact>>(
+                              stream: chatController.chatContacts(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    var chatContactData = snapshot.data![index];
+
+                                    return Column(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Get.toNamed(Routes.chatPage,
+                                                arguments: {
+                                                  'name': chatContactData.name,
+                                                  'uid':
+                                                      chatContactData.contactId,
+                                                  'isGroupChat': false,
+                                                  'profilePic': chatContactData
+                                                      .profilePic,
+                                                });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, right: 8, top: 4),
+                                            child: ListTile(
+                                              tileColor: textLightColor,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              title: Text(
+                                                chatContactData.name,
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: whiteColor),
+                                              ),
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 6.0),
+                                                child: Text(
+                                                  chatContactData.lastMessage,
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      color: whiteColor),
+                                                ),
+                                              ),
+                                              leading: CircleAvatar(
+                                                backgroundImage:
+                                                    CachedNetworkImageProvider(
+                                                  chatContactData.profilePic,
+                                                ),
+                                                radius: 30,
+                                              ),
+                                              trailing: Text(
+                                                DateFormat.Hm().format(
+                                                    chatContactData.timeSent),
+                                                style: TextStyle(
+                                                  color: whiteColor
+                                                      .withOpacity(0.7),
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }),
+                        ],
+                      ),
                     ),
                   ],
                 ),

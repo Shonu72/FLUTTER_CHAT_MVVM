@@ -1,4 +1,5 @@
 import 'package:charterer/core/utils/enums.dart';
+import 'package:charterer/data/models/messages_model.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:charterer/presentation/getx/controllers/message_reply_controller.dart';
 import 'package:charterer/presentation/screens/chats/widgets/my_message_card.dart';
@@ -11,7 +12,10 @@ import 'package:intl/intl.dart';
 
 class ChatList extends StatefulWidget {
   final String receiverUserId;
-  const ChatList({Key? key, required this.receiverUserId}) : super(key: key);
+  final bool isGroupChat;
+  const ChatList(
+      {Key? key, required this.receiverUserId, required this.isGroupChat})
+      : super(key: key);
 
   @override
   State<ChatList> createState() => _ChatListState();
@@ -38,8 +42,10 @@ class _ChatListState extends State<ChatList> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: chatController.chatStream(widget.receiverUserId),
+    return StreamBuilder<List<Message>>(
+        stream: widget.isGroupChat
+            ? chatController.groupChatStream(widget.receiverUserId)
+            : chatController.chatStream(widget.receiverUserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

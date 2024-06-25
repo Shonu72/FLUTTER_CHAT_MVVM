@@ -16,7 +16,9 @@ import 'package:video_player/video_player.dart';
 
 class BottomChatFieldSheet extends StatefulWidget {
   final String receiverUserId;
-  const BottomChatFieldSheet({super.key, required this.receiverUserId});
+  final bool isGroupChat;
+  const BottomChatFieldSheet(
+      {super.key, required this.receiverUserId, required this.isGroupChat});
 
   @override
   State<BottomChatFieldSheet> createState() => _BottomChatFieldSheetState();
@@ -67,6 +69,7 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
         context: context,
         text: messageController.text,
         receiverUserId: widget.receiverUserId,
+        isGroupChat: widget.isGroupChat,
       );
       setState(() {
         messageController.clear();
@@ -99,6 +102,7 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
       file: file,
       receiverUserId: widget.receiverUserId,
       messageEnum: messageEnum,
+      isGroupChat: widget.isGroupChat,
     );
     setState(() {
       _selectedImage = null;

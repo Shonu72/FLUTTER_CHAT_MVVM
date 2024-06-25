@@ -19,46 +19,49 @@ class DisplayTextImage extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isPlaying = false;
     final AudioPlayer audioPlayer = AudioPlayer();
-    return type == MessageEnum.text
-        ? AppText(
-            text: message,
-            color: whiteColor,
-          )
-        : type == MessageEnum.audio
-            ? StatefulBuilder(builder: (context, setState) {
-                return IconButton(
-                  constraints: const BoxConstraints(
-                    minWidth: 60,
-                  ),
-                  onPressed: () async {
-                    if (isPlaying) {
-                      await audioPlayer.pause();
-                      setState(() {
-                        isPlaying = false;
-                      });
-                    } else {
-                      await audioPlayer.play(UrlSource(message));
-                      setState(() {
-                        isPlaying = true;
-                      });
-                    }
-                  },
-                  icon: Icon(
-                    isPlaying ? Icons.pause_circle : Icons.play_circle,
-                    color: isPlaying ? whiteColor : Colors.yellowAccent,
-                  ),
-                );
-              })
-            : type == MessageEnum.video
-                ? VideoPlayerItem(
-                    videoUrl: message,
-                  )
-                : type == MessageEnum.file
-                    ? CachedNetworkImage(
-                        imageUrl: message,
-                      )
-                    : CachedNetworkImage(
-                        imageUrl: message,
-                      );
+    return SingleChildScrollView(
+      child: type == MessageEnum.text
+          ? AppText(
+              text: message,
+              color: whiteColor,
+            )
+          : type == MessageEnum.audio
+              ? StatefulBuilder(builder: (context, setState) {
+                  return IconButton(
+                    constraints: const BoxConstraints(
+                      minWidth: 60,
+                    ),
+                    onPressed: () async {
+                      if (isPlaying) {
+                        await audioPlayer.pause();
+                        setState(() {
+                          isPlaying = false;
+                        });
+                      } else {
+                        await audioPlayer.play(UrlSource(message));
+                        setState(() {
+                          isPlaying = true;
+                        });
+                      }
+                    },
+                    icon: Icon(
+                      isPlaying ? Icons.pause_circle : Icons.play_circle,
+                      color: isPlaying ? whiteColor : Colors.yellowAccent,
+                    ),
+                  );
+                })
+              : type == MessageEnum.video
+                  ? VideoPlayerItem(
+                      videoUrl: message,
+                    )
+                  : type == MessageEnum.file
+                      ? CachedNetworkImage(
+                          imageUrl: message,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: message,
+                          // height: 300,
+                        ),
+    );
   }
 }

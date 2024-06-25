@@ -30,8 +30,7 @@ class ContactScreen extends StatelessWidget {
               color: whiteColor,
             ),
           )),
-      body: 
-      FutureBuilder<List<Contact>>(
+      body: FutureBuilder<List<Contact>>(
         future: controller.getContacts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -66,12 +65,12 @@ class ContactScreen extends StatelessWidget {
                   color: whiteColor,
                   size: 16,
                 ),
-              subtitle: Text(
-                        contact.phones.isNotEmpty
-                            ? contact.phones.first.number
-                            : 'No phone number',
-                        style: const TextStyle(color: textWhiteColor),
-                      ),
+                // subtitle: Text(
+                //   contact.phones.isNotEmpty
+                //       ? contact.phones.first.number
+                //       : 'No phone number',
+                //   style: const TextStyle(color: textWhiteColor),
+                // ),
                 onTap: () {
                   controller.selectContact(contact);
                 },
@@ -80,7 +79,6 @@ class ContactScreen extends StatelessWidget {
           );
         },
       ),
-   
     );
   }
 }

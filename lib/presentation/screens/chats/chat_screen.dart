@@ -20,6 +20,7 @@ class ChatScreen extends StatelessWidget {
     final String name = args["name"];
     final String uid = args["uid"];
     final String profile = args["profilePic"];
+    final bool isGroupChat = args["isGroupChat"];
 
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 42, 39, 62),
@@ -36,12 +37,8 @@ class ChatScreen extends StatelessWidget {
             ),
           ),
           titleSpacing: 0,
-          title: StreamBuilder<UserModel>(
-            stream: authcontroller.userData(uid),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                print("online : ${snapshot.data!.isOnline}");
-                return Row(
+          title: isGroupChat
+              ? Row(
                   children: <Widget>[
                     CircleAvatar(
                       backgroundImage: CachedNetworkImageProvider(profile),
@@ -56,12 +53,6 @@ class ChatScreen extends StatelessWidget {
                           color: whiteColor,
                           size: 18,
                         ),
-                        Text(snapshot.data!.isOnline ? "Online" : "Offline",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: snapshot.data!.isOnline
-                                    ? Colors.green
-                                    : Colors.grey)),
                       ],
                     ),
                     const Spacer(),
@@ -84,21 +75,76 @@ class ChatScreen extends StatelessWidget {
                           color: whiteColor,
                         )),
                   ],
-                );
-              } else {
-                return const Text("User");
-              }
-            },
-          ),
+                )
+              : StreamBuilder<UserModel>(
+                  stream: authcontroller.userData(uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print("online : ${snapshot.data!.isOnline}");
+                      return Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundImage:
+                                CachedNetworkImageProvider(profile),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            children: [
+                              AppText(
+                                text: name,
+                                color: whiteColor,
+                                size: 18,
+                              ),
+                              Text(
+                                  snapshot.data!.isOnline
+                                      ? "Online"
+                                      : "Offline",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: snapshot.data!.isOnline
+                                          ? Colors.green
+                                          : Colors.grey)),
+                            ],
+                          ),
+                          const Spacer(),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.video_call,
+                                color: whiteColor,
+                              )),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.call,
+                                color: whiteColor,
+                              )),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.more_vert,
+                                color: whiteColor,
+                              )),
+                        ],
+                      );
+                    } else {
+                      return const Text("User");
+                    }
+                  },
+                ),
         ),
         body: Column(
           children: [
             Expanded(
                 child: ChatList(
               receiverUserId: uid,
+              isGroupChat: isGroupChat,
             )),
             BottomChatFieldSheet(
               receiverUserId: uid,
+              isGroupChat: isGroupChat,
             )
           ],
         ));

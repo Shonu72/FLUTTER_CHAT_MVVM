@@ -1,10 +1,9 @@
 // data/datasources/contact_datasource_impl.dart
+import 'package:charterer/data/datasources/contact_datasource.dart';
+import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-
-import 'package:charterer/data/datasources/contact_datasource.dart';
-import 'package:charterer/data/models/user_model.dart';
 import 'package:get/get.dart';
 
 class SelectContactRemoteDataSourceImpl
@@ -52,4 +51,14 @@ class SelectContactRemoteDataSourceImpl
     }
     return false;
   }
+
+  // @override
+  // void selectGroupContact(int index, Contact groupContact) {
+  //   List<int> selectedContactsIndex = [];
+  //   if (selectedContactsIndex.contains(index)) {
+  //     selectedContactsIndex.removeAt(index);
+  //   } else {
+  //     selectedContactsIndex.add(index);
+  //   }
+  // }
 }
