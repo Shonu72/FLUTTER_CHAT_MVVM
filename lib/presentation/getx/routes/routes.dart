@@ -1,7 +1,9 @@
 import 'package:charterer/presentation/screens/add_charterer_screen.dart';
 import 'package:charterer/presentation/screens/auth/login_screen.dart';
 import 'package:charterer/presentation/screens/auth/sign_up_screen.dart';
-import 'package:charterer/presentation/screens/call_screen.dart';
+import 'package:charterer/presentation/screens/calls/call_history_screen.dart';
+import 'package:charterer/presentation/screens/calls/call_screen.dart';
+import 'package:charterer/presentation/screens/calls/pick_up_screen.dart';
 import 'package:charterer/presentation/screens/chats/chat_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
 import 'package:charterer/presentation/screens/groups/create_group_screen.dart';
@@ -19,7 +21,7 @@ class Routes {
   static String signup = '/signup';
   static String homePage = '/homePage';
   static String mainPage = '/mainPage';
-  static String callScreen = '/callScreen';
+  static String callHistoryScreen = '/callhistoryScreen';
   static String profileScreen = '/profileScreen';
   static String contactScreen = '/contactScreen';
   static String addChartererScreen = '/addChartererScreen';
@@ -29,6 +31,8 @@ class Routes {
   static String confirmStory = '/confirmStory';
   static String storyview = '/storyview';
   static String createGroup = '/createGroup';
+  static String callScreen = '/callScreen';
+  static String callPickUpScreen = '/callPickUpScreen';
 }
 
 final getPages = [
@@ -36,7 +40,8 @@ final getPages = [
   GetPage(name: Routes.signup, page: () => const SignUpScreen()),
   GetPage(name: Routes.homePage, page: () => const HomeScreen()),
   GetPage(name: Routes.mainPage, page: () => const MainPage(initialIndex: 0)),
-  GetPage(name: Routes.callScreen, page: () => const CallScreen()),
+  GetPage(
+      name: Routes.callHistoryScreen, page: () => const CallHistoryScreen()),
   GetPage(name: Routes.profileScreen, page: () => const ProfileScreen()),
   GetPage(name: Routes.editProfile, page: () => const EditProfileScreen()),
   GetPage(name: Routes.contactScreen, page: () => const ContactScreen()),
@@ -45,6 +50,9 @@ final getPages = [
   GetPage(name: Routes.confirmStory, page: () => ConfirmStoryScreen()),
   GetPage(name: Routes.storyview, page: () => const StoryViewScreen()),
   GetPage(name: Routes.createGroup, page: () => const CreateGroupScreen()),
+  GetPage(name: Routes.createGroup, page: () => const CreateGroupScreen()),
+  GetPage(name: Routes.callScreen, page: () => const CallScreen()),
+  // GetPage(name: Routes.callPickUpScreen, page: () =>  CallPickUpScreen()),
   GetPage(
       name: Routes.notificationPage, page: () => const NotificationScreen()),
 ];

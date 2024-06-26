@@ -12,8 +12,7 @@ class SendTextMessage {
     required String text,
     required String receiverUserId,
     required MessageReply? messageReply,
-        required bool isGroupChat,
-
+    required bool isGroupChat,
   }) {
     repository.sendTextMessage(
       context: context,

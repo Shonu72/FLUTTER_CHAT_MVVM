@@ -1,6 +1,6 @@
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/screens/add_charterer_screen.dart';
-import 'package:charterer/presentation/screens/call_screen.dart';
+import 'package:charterer/presentation/screens/calls/call_history_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
 import 'package:charterer/presentation/screens/notification_screen.dart';
@@ -55,7 +55,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     const HomeScreen(),
     const NotificationScreen(),
     const AddCharterer(),
-    const CallScreen(),
+    const CallHistoryScreen(),
     const ContactScreen(),
   ];
 

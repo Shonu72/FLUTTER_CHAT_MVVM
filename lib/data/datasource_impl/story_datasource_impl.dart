@@ -58,7 +58,7 @@ class StoryDataSourceImpl implements StoryDataSource {
           // .where('phoneNumber', isEqualTo: contacts[i].phones[0].number)
           .get();
       // print("userData: ${contacts[i].phones[0].number}");
-      if (userDataFirebase.docs.isNotEmpty ) {
+      if (userDataFirebase.docs.isNotEmpty) {
         for (var doc in userDataFirebase.docs) {
           var userData = UserModel.fromMap(doc.data());
           if (userData.uid != auth.currentUser!.uid) {

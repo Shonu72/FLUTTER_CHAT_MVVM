@@ -2,17 +2,21 @@ import 'package:charterer/data/datasource_impl/chat_remote_datasource_impl.dart'
 import 'package:charterer/data/datasource_impl/contact_datasource_impl.dart';
 import 'package:charterer/data/datasource_impl/firebase_auth_datasource_impl.dart';
 import 'package:charterer/data/datasource_impl/group_data_source_impl.dart';
+import 'package:charterer/data/datasource_impl/make_call_datasource_impl.dart';
 import 'package:charterer/data/datasource_impl/story_datasource_impl.dart';
 import 'package:charterer/data/datasources/chat_remote_datasource.dart';
 import 'package:charterer/data/datasources/contact_datasource.dart';
 import 'package:charterer/data/datasources/firebase_auth_datasource.dart';
 import 'package:charterer/data/datasources/group_data_source.dart';
+import 'package:charterer/data/datasources/make_call_datasource.dart';
 import 'package:charterer/data/datasources/story_datasource.dart';
+import 'package:charterer/data/repositories/call_repo_impl.dart';
 import 'package:charterer/data/repositories/chat_repository_impl.dart';
 import 'package:charterer/data/repositories/contact_repository_impl.dart';
 import 'package:charterer/data/repositories/firebase_repository_impl.dart';
 import 'package:charterer/data/repositories/group_repo_impl.dart';
 import 'package:charterer/data/repositories/story_repository_impl.dart';
+import 'package:charterer/domain/repositories/call_repository.dart';
 import 'package:charterer/domain/repositories/chat_repository.dart';
 import 'package:charterer/domain/repositories/contact_repository.dart';
 import 'package:charterer/domain/repositories/firebase_repository.dart';
@@ -21,13 +25,19 @@ import 'package:charterer/domain/repositories/story_repository.dart';
 import 'package:charterer/domain/usecases/chat_usecase.dart';
 import 'package:charterer/domain/usecases/contact_usecase.dart';
 import 'package:charterer/domain/usecases/create_group_usercase.dart';
+import 'package:charterer/domain/usecases/end_call_usecase.dart';
+import 'package:charterer/domain/usecases/end_group_call_usecase.dart';
 import 'package:charterer/domain/usecases/firebase_auth_usecase.dart';
+import 'package:charterer/domain/usecases/get_call_usecase.dart';
 import 'package:charterer/domain/usecases/get_story_usecase.dart';
+import 'package:charterer/domain/usecases/make_call_usecase.dart';
+import 'package:charterer/domain/usecases/make_group_call_usecase.dart';
 import 'package:charterer/domain/usecases/mark_as_seen_usecase.dart';
 import 'package:charterer/domain/usecases/send_file_msg_usecase.dart';
 import 'package:charterer/domain/usecases/send_text_msg_usecase.dart';
 import 'package:charterer/domain/usecases/upload_story_usecase.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
+import 'package:charterer/presentation/getx/controllers/call_controller.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:charterer/presentation/getx/controllers/contact_controller.dart';
 import 'package:charterer/presentation/getx/controllers/group_controller.dart';
@@ -62,6 +72,8 @@ class DependencyInjector {
         () => StoryDataSourceImpl(firestore: Get.find(), auth: Get.find()));
     Get.lazyPut<GroupDataSource>(
         () => GroupDataSourceImpl(auth: Get.find(), firestore: Get.find()));
+    Get.lazyPut<MakeCallDataSource>(
+        () => MakeCallDataSourceImpl(firestore: Get.find(), auth: Get.find()));
   }
 
   static void injectRepository() {
@@ -75,6 +87,8 @@ class DependencyInjector {
         StoryRepositoryImpl(storyDataSource: Get.find<StoryDataSource>()));
     Get.lazyPut<GroupRepository>(
         () => GroupRepoImpl(dataSource: Get.find<GroupDataSource>()));
+    Get.lazyPut<CallRepository>(
+        () => MakeCallRepoImpl(Get.find<MakeCallDataSource>()));
   }
 
   static void injectUseCase() {
@@ -103,6 +117,11 @@ class DependencyInjector {
     Get.lazyPut(() => GetStoryUseCase(Get.find<StoryRepository>()));
     Get.lazyPut(() => CreateGroupUseCase(Get.find<GroupRepository>()));
     Get.lazyPut(() => GetChatGroupsUseCase(Get.find<ChatRepository>()));
+    Get.lazyPut(() => MakeCallUseCase(Get.find<CallRepository>()));
+    Get.lazyPut(() => GetCallStreamUseCase(Get.find<CallRepository>()));
+    Get.lazyPut(() => MakeGroupCallUseCase(Get.find<CallRepository>()));
+    Get.lazyPut(() => EndCallUseCase(Get.find<CallRepository>()));
+    Get.lazyPut(() => EndGroupCallUseCase(Get.find<CallRepository>()));
   }
 
   static void injectController() {
@@ -119,7 +138,7 @@ class DependencyInjector {
           getContactsUseCase: Get.find(),
           selectContactUseCase: Get.find(),
         ));
-    Get.lazyPut(() => ChatController(
+    Get.lazyPut<ChatController>(() => ChatController(
           getChatContactsUseCase: Get.find(),
           getChatStreamUseCase: Get.find(),
           getGroupChatStreamUseCase: Get.find(),
@@ -129,10 +148,19 @@ class DependencyInjector {
           getChatGroupsUseCase: Get.find(),
         ));
 
-    Get.lazyPut(() => MessageReplyController());
-    Get.lazyPut(() => StoryController(
+    Get.lazyPut<MessageReplyController>(() => MessageReplyController());
+    Get.lazyPut<StoryController>(() => StoryController(
         uploadStoryUseCase: Get.find(), getStoryUseCase: Get.find()));
 
-    Get.lazyPut(() => GroupController(createGroupUseCase: Get.find()));
+    Get.lazyPut<GroupController>(
+        () => GroupController(createGroupUseCase: Get.find()));
+
+    Get.lazyPut<CallController>(() => CallController(
+          getCallStreamUseCase: Get.find(),
+          makeCallUseCase: Get.find(),
+          makeGroupCallUseCase: Get.find(),
+          endCallUseCase: Get.find(),
+          endGroupCallUseCase: Get.find(),
+        ));
   }
 }

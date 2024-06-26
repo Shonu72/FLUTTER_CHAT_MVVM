@@ -2,7 +2,7 @@ import 'package:charterer/core/utils/enums.dart';
 import 'package:charterer/domain/entities/messages_entity.dart';
 
 class Message extends MessageEntity {
-  Message({
+  const Message({
     required String senderId,
     required String recieverid,
     required String text,
@@ -52,7 +52,6 @@ class Message extends MessageEntity {
         isSeen: map['isSeen'] ?? false,
         repliedMessage: map['repliedMessage'] ?? '',
         repliedTo: map['repliedTo'] ?? '',
-        repliedMessageType: (map['repliedMessageType'] as String).toEnum()
-        );
+        repliedMessageType: (map['repliedMessageType'] as String).toEnum());
   }
 }

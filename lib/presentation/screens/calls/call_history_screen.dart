@@ -3,8 +3,8 @@ import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:charterer/presentation/widgets/call_history_tile.dart';
 import 'package:flutter/material.dart';
 
-class CallScreen extends StatelessWidget {
-  const CallScreen({super.key});
+class CallHistoryScreen extends StatelessWidget {
+  const CallHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class CallScreen extends StatelessWidget {
             backgroundDarkColor.withBlue(backgroundDarkColor.blue - 20),
         appBar: AppBar(
             backgroundColor: backgroundDarkColor,
-            title: AppText(
+            title: const AppText(
               text: "Call Screen",
               color: textWhiteColor,
               size: 20,
@@ -28,19 +28,19 @@ class CallScreen extends StatelessWidget {
               ),
             )),
         body: Expanded(
-          flex: 1,
+            flex: 1,
             child: ListView.builder(
-          itemCount: 10,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            return CallHistoryTile(
-              image: "assets/images/boy.png",
-              name: "Client $index",
-              calltype: "Incoming",
-              time: "12:50 PM",
-              icon: Icons.call,
-            );
-          },
-        )));
+              itemCount: 10,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return CallHistoryTile(
+                  image: "assets/images/boy.png",
+                  name: "Client $index",
+                  calltype: "Incoming",
+                  time: "12:50 PM",
+                  icon: Icons.call,
+                );
+              },
+            )));
   }
 }
