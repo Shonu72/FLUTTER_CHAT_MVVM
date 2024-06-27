@@ -1,5 +1,11 @@
 import 'package:charterer/di/injection.dart';
+import 'package:charterer/domain/usecases/end_call_usecase.dart';
+import 'package:charterer/domain/usecases/end_group_call_usecase.dart';
+import 'package:charterer/domain/usecases/get_call_usecase.dart';
+import 'package:charterer/domain/usecases/make_call_usecase.dart';
+import 'package:charterer/domain/usecases/make_group_call_usecase.dart';
 import 'package:charterer/firebase_options.dart';
+import 'package:charterer/presentation/getx/controllers/call_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/auth/login_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
@@ -9,9 +15,15 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  DependencyInjector.inject();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  DependencyInjector.inject();
+  Get.put(CallController(
+      getCallStreamUseCase: Get.find<GetCallStreamUseCase>(),
+      makeCallUseCase: Get.find<MakeCallUseCase>(),
+      makeGroupCallUseCase: Get.find<MakeGroupCallUseCase>(),
+      endCallUseCase: Get.find<EndCallUseCase>(),
+      endGroupCallUseCase: Get.find<EndGroupCallUseCase>()));
   runApp(const MyApp());
 }
 

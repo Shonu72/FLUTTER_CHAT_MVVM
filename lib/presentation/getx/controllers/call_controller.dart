@@ -107,9 +107,11 @@ class CallController extends GetxController {
 
   void endCall(String callerId, String receiverId) async {
     await endCallUseCase(callerId, receiverId);
+    update();
   }
 
   void endGroupCall(String callerId, String receiverId) async {
     await endGroupCallUseCase(callerId, receiverId);
+    update();
   }
 }

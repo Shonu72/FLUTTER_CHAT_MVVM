@@ -33,7 +33,7 @@ class SelectContactRemoteDataSourceImpl
       for (var document in userCollection.docs) {
         var userData = UserModel.fromMap(document.data());
         String selectedPhoneNum =
-            selectedContact.phones[0].number.replaceAll(' ', '');
+            selectedContact.phones[0].normalizedNumber.replaceAll(' ', '');
         if (selectedPhoneNum == userData.phoneNumber) {
           print('Selected contact: ${userData.phoneNumber}');
           print('Selected contact: ${userData.uid}');

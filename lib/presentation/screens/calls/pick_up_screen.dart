@@ -44,7 +44,9 @@ class CallPickUpScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 50),
                       Text(
-                        callModel.callerName,
+                        isGroupChat
+                            ? callModel.callerName
+                            : '${callModel.callerName} is calling you',
                         style: const TextStyle(
                           fontSize: 25,
                           color: Colors.white,

@@ -51,13 +51,13 @@ class DependencyInjector {
   static void inject() {
     injectDataSource();
     injectRepository();
-    injectController();
     injectUseCase();
+    injectController();
   }
 
   static void injectDataSource() {
-    Get.lazyPut(() => FirebaseFirestore.instance);
-    Get.lazyPut(() => FirebaseAuth.instance);
+    Get.put(FirebaseFirestore.instance);
+    Get.put(FirebaseAuth.instance);
     // auth
     Get.lazyPut<AuthDataSource>(
         () => FirebaseAuthDataSource(auth: Get.find(), firestore: Get.find()));
@@ -139,13 +139,13 @@ class DependencyInjector {
           selectContactUseCase: Get.find(),
         ));
     Get.lazyPut<ChatController>(() => ChatController(
-          getChatContactsUseCase: Get.find(),
-          getChatStreamUseCase: Get.find(),
-          getGroupChatStreamUseCase: Get.find(),
-          sendTextMessageUseCase: Get.find(),
-          sendFileMessageUseCase: Get.find(),
-          setChatMessageSeen: Get.find(),
-          getChatGroupsUseCase: Get.find(),
+          getChatContactsUseCase: Get.find<GetChatContacts>(),
+          getChatStreamUseCase: Get.find<GetChatStream>(),
+          getGroupChatStreamUseCase: Get.find<GetGroupChatStream>(),
+          sendTextMessageUseCase: Get.find<SendTextMessage>(),
+          sendFileMessageUseCase: Get.find<SendFileMsgUseCase>(),
+          setChatMessageSeen: Get.find<MarkAsSeenUseCase>(),
+          getChatGroupsUseCase: Get.find<GetChatGroupsUseCase>(),
         ));
 
     Get.lazyPut<MessageReplyController>(() => MessageReplyController());
@@ -155,12 +155,11 @@ class DependencyInjector {
     Get.lazyPut<GroupController>(
         () => GroupController(createGroupUseCase: Get.find()));
 
-    Get.lazyPut<CallController>(() => CallController(
-          getCallStreamUseCase: Get.find(),
-          makeCallUseCase: Get.find(),
-          makeGroupCallUseCase: Get.find(),
-          endCallUseCase: Get.find(),
-          endGroupCallUseCase: Get.find(),
-        ));
+    Get.lazyPut(() => CallController(
+        getCallStreamUseCase: Get.find<GetCallStreamUseCase>(),
+        makeCallUseCase: Get.find<MakeCallUseCase>(),
+        makeGroupCallUseCase: Get.find<MakeGroupCallUseCase>(),
+        endCallUseCase: Get.find<EndCallUseCase>(),
+        endGroupCallUseCase: Get.find<EndGroupCallUseCase>()));
   }
 }

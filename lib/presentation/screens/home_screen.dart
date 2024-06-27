@@ -9,7 +9,6 @@ import 'package:charterer/data/models/group_model.dart';
 import 'package:charterer/data/models/story_model.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
-import 'package:charterer/presentation/getx/controllers/call_controller.dart';
 import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:charterer/presentation/getx/controllers/story_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
@@ -26,9 +25,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final chatController = Get.find<ChatController>();
-  final authcontroller = Get.find<AuthControlller>();
-  final storyController = Get.find<StoryController>();
+  final ChatController chatController = Get.find<ChatController>();
+  final AuthControlller authcontroller = Get.find<AuthControlller>();
+  final StoryController storyController = Get.find<StoryController>();
 
   UserModel? currentUser;
 
@@ -44,7 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
       currentUser = user;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {

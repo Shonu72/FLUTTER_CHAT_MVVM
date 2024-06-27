@@ -43,7 +43,8 @@ class MakeCallDataSourceImpl implements MakeCallDataSource {
 
   @override
   Stream<DocumentSnapshot> getCallStream() {
-    return firestore.collection('call').doc(auth.currentUser!.uid).snapshots();
+    String uid = auth.currentUser!.uid;
+    return firestore.collection('call').doc(uid).snapshots();
   }
 
   @override
@@ -84,6 +85,7 @@ class MakeCallDataSourceImpl implements MakeCallDataSource {
     try {
       await firestore.collection('call').doc(callerId).delete();
       await firestore.collection('call').doc(receiverId).delete();
+      
     } catch (e) {
       Helpers.toast(e.toString());
     }
