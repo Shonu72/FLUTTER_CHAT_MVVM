@@ -4,16 +4,9 @@ import 'package:charterer/presentation/screens/chats/widgets/display_text_img.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MessageReplyPreview extends StatefulWidget {
-  const MessageReplyPreview({super.key});
-
-  @override
-  State<MessageReplyPreview> createState() => _MessageReplyPreviewState();
-}
-
-class _MessageReplyPreviewState extends State<MessageReplyPreview> {
+class MessageReplyPreview extends StatelessWidget {
+  MessageReplyPreview({super.key});
   final messageReplyController = Get.find<MessageReplyController>();
-
   @override
   Widget build(BuildContext context) {
     final messageReply = messageReplyController.messageReply.value;
@@ -47,9 +40,7 @@ class _MessageReplyPreviewState extends State<MessageReplyPreview> {
                     color: whiteColor,
                   ),
                   onTap: () {
-                    setState(() {
-                      messageReplyController.clearMessageReply();
-                    });
+                    messageReplyController.clearMessageReply();
                   }),
             ],
           ),

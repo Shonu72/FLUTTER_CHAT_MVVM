@@ -58,12 +58,6 @@ class _ChatListState extends State<ChatList> {
                 .jumpTo(messageController.position.maxScrollExtent);
           });
 
-          void scrollToMessage(int index) {
-            if (index >= 0 && index < snapshot.data!.length) {
-              messageController.jumpTo(index * 100.0);
-            }
-          }
-
           return ListView.builder(
             itemCount: snapshot.data!.length,
             controller: messageController,
@@ -80,6 +74,11 @@ class _ChatListState extends State<ChatList> {
                     receiverUserId: widget.receiverUserId,
                     messageId: messageData.messageId);
               }
+              void scrollToMessage(int index) {
+                if (index >= 0 && index < snapshot.data!.length) {
+                  messageController.jumpTo(index * 50.0);
+                }
+              }
 
               if (messageData.senderId ==
                   FirebaseAuth.instance.currentUser!.uid) {
@@ -91,7 +90,10 @@ class _ChatListState extends State<ChatList> {
                   username: messageData.repliedTo,
                   repliedMessageType: messageData.repliedMessageType,
                   ontap: () {
-                    scrollToMessage(index);
+                    if (messageData.repliedTo.isNotEmpty) {
+                      scrollToMessage(index);
+                    }
+                    // scrollToMessage(index);
                   },
                   onLeftSwipe: () {
                     onMessageSwipe(messageData.text, true, messageData.type);
@@ -108,7 +110,10 @@ class _ChatListState extends State<ChatList> {
                   username: messageData.repliedTo,
                   repliedMessageType: messageData.repliedMessageType,
                   ontap: () {
-                    scrollToMessage(index);
+                    // scrollToMessage(index);
+                    if (messageData.repliedTo.isNotEmpty) {
+                      scrollToMessage(index);
+                    }
                   },
                   onRightSwipe: () {
                     onMessageSwipe(messageData.text, false, messageData.type);
