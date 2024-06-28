@@ -4,9 +4,16 @@ import 'package:charterer/presentation/screens/chats/widgets/display_text_img.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MessageReplyPreview extends StatelessWidget {
-  MessageReplyPreview({super.key});
+class MessageReplyPreview extends StatefulWidget {
+  const MessageReplyPreview({super.key});
+
+  @override
+  State<MessageReplyPreview> createState() => _MessageReplyPreviewState();
+}
+
+class _MessageReplyPreviewState extends State<MessageReplyPreview> {
   final messageReplyController = Get.find<MessageReplyController>();
+
   @override
   Widget build(BuildContext context) {
     final messageReply = messageReplyController.messageReply.value;
@@ -34,15 +41,16 @@ class MessageReplyPreview extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                child: const Icon(
-                  Icons.close,
-                  size: 20,
-                  color: whiteColor,
-                ),
-                onTap: () {
-                  messageReplyController.clearMessageReply();
-                },
-              ),
+                  child: const Icon(
+                    Icons.close,
+                    size: 20,
+                    color: whiteColor,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      messageReplyController.clearMessageReply();
+                    });
+                  }),
             ],
           ),
           const SizedBox(height: 8),

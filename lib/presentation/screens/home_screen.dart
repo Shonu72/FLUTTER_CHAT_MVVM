@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   child: CircleAvatar(
                                     backgroundColor: Colors.white,
-                                    maxRadius: 25,
+                                    maxRadius: 30,
                                     backgroundImage: CachedNetworkImageProvider(
                                         currentUser?.profilePic ?? ''),
                                   ),
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text(
                               currentUser?.name ?? '',
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 color: Colors.white,
                               ),
                             ),
@@ -229,9 +229,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   return Padding(
                                     padding: const EdgeInsets.only(
-                                      left: 10,
+                                      left: 5,
                                       top: 10,
-                                      right: 10,
+                                      right: 5,
                                     ),
                                     child: Column(
                                       children: [
@@ -247,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           },
                                           child: CircleAvatar(
                                             backgroundColor: Colors.white,
-                                            maxRadius: 25,
+                                            maxRadius: 30,
                                             backgroundImage:
                                                 CachedNetworkImageProvider(
                                                     storyData.profilePic),
@@ -259,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Text(
                                           storyData.username,
                                           style: const TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 16,
                                               color: Colors.white),
                                         ),
                                       ],
@@ -271,76 +271,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-
-                      // Expanded(
-                      //   child: SizedBox(
-                      //     height: 100,
-                      //     width: MediaQuery.of(context).size.width * 0.75,
-                      //     child: FutureBuilder<List<StoryModel>>(
-                      //       future: storyController.getStories(),
-                      //       builder: (context, snapshot) {
-                      //         if (snapshot.connectionState ==
-                      //             ConnectionState.waiting) {
-                      //           return const Center(
-                      //             child: CircularProgressIndicator(),
-                      //           );
-                      //         }
-                      //         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      //           return const Center(
-                      //               child: AppText(
-                      //             text: "No stories available",
-                      //             color: whiteColor,
-                      //           ));
-                      //         }
-                      //         return ListView.builder(
-                      //           scrollDirection: Axis.horizontal,
-                      //           itemCount: snapshot.data!.length,
-                      //           itemBuilder: (context, index) {
-                      //             var storyData = snapshot.data![index];
-                      //             print(storyData.username);
-                      //             print(storyData.profilePic);
-
-                      //             return Padding(
-                      //               padding: const EdgeInsets.only(
-                      //                 left: 10,
-                      //                 top: 10,
-                      //                 right: 10,
-                      //               ),
-                      //               child: Column(
-                      //                 children: [
-                      //                   GestureDetector(
-                      //                     onTap: () {
-                      //                       Get.toNamed(Routes.storyview,
-                      //                           arguments: {
-                      //                             'storyData': storyData,
-                      //                           });
-                      //                     },
-                      //                     child: CircleAvatar(
-                      //                       backgroundColor: Colors.white,
-                      //                       maxRadius: 25,
-                      //                       backgroundImage:
-                      //                           CachedNetworkImageProvider(
-                      //                               storyData.profilePic),
-                      //                     ),
-                      //                   ),
-                      //                   const SizedBox(
-                      //                     height: 5,
-                      //                   ),
-                      //                   Text(
-                      //                     storyData.username,
-                      //                     style: const TextStyle(
-                      //                         fontSize: 20,
-                      //                         color: Colors.white),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             );
-                      //           },
-                      //         );
-                      //       },
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   )
                 ],

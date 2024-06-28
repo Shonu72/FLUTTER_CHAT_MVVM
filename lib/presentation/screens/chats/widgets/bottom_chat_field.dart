@@ -242,6 +242,7 @@ class _BottomChatFieldSheetState extends State<BottomChatFieldSheet> {
     final isShowMessageReply = messageReply != null;
     return Column(
       children: [
+        // ignore: prefer_const_constructors
         isShowMessageReply ? MessageReplyPreview() : const SizedBox(),
         if (_selectedImage != null)
           Padding(

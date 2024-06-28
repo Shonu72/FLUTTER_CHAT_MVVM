@@ -13,6 +13,7 @@ class MyMessageCard extends StatelessWidget {
   final String username;
   final MessageEnum repliedMessageType;
   final bool isSeen;
+  final VoidCallback ontap;
 
   const MyMessageCard({
     Key? key,
@@ -24,6 +25,7 @@ class MyMessageCard extends StatelessWidget {
     required this.username,
     required this.repliedMessageType,
     required this.isSeen,
+    required this.ontap,
   }) : super(key: key);
 
   @override
@@ -35,87 +37,91 @@ class MyMessageCard extends StatelessWidget {
       },
       child: Align(
         alignment: Alignment.centerRight,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width - 45,
-          ),
-          child: Card(
-            elevation: 1,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            color: textFieldHintColor,
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: type == MessageEnum.text || type == MessageEnum.audio
-                      ? const EdgeInsets.only(
-                          left: 10,
-                          right: 60,
-                          top: 5,
-                          bottom: 20,
-                        )
-                      : const EdgeInsets.only(
-                          left: 1,
-                          top: 1,
-                          right: 1,
-                          bottom: 25,
-                        ),
-                  child: Column(
-                    children: [
-                      if (isReplying) ...[
-                        Text(
-                          "replied to ~$username",
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white30),
-                        ),
+        child: GestureDetector(
+          onTap: ontap,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width - 45,
+            ),
+            child: Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              color: textFieldHintColor,
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding:
+                        type == MessageEnum.text || type == MessageEnum.audio
+                            ? const EdgeInsets.only(
+                                left: 10,
+                                right: 60,
+                                top: 5,
+                                bottom: 20,
+                              )
+                            : const EdgeInsets.only(
+                                left: 1,
+                                top: 1,
+                                right: 1,
+                                bottom: 25,
+                              ),
+                    child: Column(
+                      children: [
+                        if (isReplying) ...[
+                          Text(
+                            "replied to ~$username",
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white30),
+                          ),
 
-                        // Divid
-                        const SizedBox(height: 3),
-                        Container(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, top: 5, bottom: 5),
-                          decoration: BoxDecoration(
-                            color: backgroundDarkColor.withRed(50),
-                            borderRadius: BorderRadius.circular(5),
+                          // Divid
+                          const SizedBox(height: 3),
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15, top: 5, bottom: 5),
+                            decoration: BoxDecoration(
+                              color: backgroundDarkColor.withRed(50),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: DisplayTextImage(
+                              message: repliedText,
+                              type: repliedMessageType,
+                            ),
                           ),
-                          child: DisplayTextImage(
-                            message: repliedText,
-                            type: repliedMessageType,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
+                          const SizedBox(height: 4),
+                        ],
+                        DisplayTextImage(message: message, type: type),
                       ],
-                      DisplayTextImage(message: message, type: type),
-                    ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  bottom: 4,
-                  right: 10,
-                  child: Row(
-                    children: [
-                      Text(
-                        date,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.white60,
+                  Positioned(
+                    bottom: 4,
+                    right: 10,
+                    child: Row(
+                      children: [
+                        Text(
+                          date,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.white60,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Icon(
-                        isSeen ? Icons.done_all : Icons.done_all,
-                        size: 20,
-                        color: isSeen ? Colors.blue : Colors.white,
-                      ),
-                    ],
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          isSeen ? Icons.done_all : Icons.done_all,
+                          size: 20,
+                          color: isSeen ? Colors.blue : Colors.white,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

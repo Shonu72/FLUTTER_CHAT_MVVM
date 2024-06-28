@@ -31,7 +31,7 @@ class ChatController extends GetxController {
     required this.getGroupChatStreamUseCase,
   });
 
-  final messageReply = Get.find<MessageReplyController>();
+  final messageReplyController = Get.find<MessageReplyController>();
   Stream<List<ChatContact>> chatContacts() {
     return getChatContactsUseCase();
   }

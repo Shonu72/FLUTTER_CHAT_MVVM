@@ -57,12 +57,20 @@ class _ChatListState extends State<ChatList> {
             messageController
                 .jumpTo(messageController.position.maxScrollExtent);
           });
+
+          void scrollToMessage(int index) {
+            if (index >= 0 && index < snapshot.data!.length) {
+              messageController.jumpTo(index * 100.0);
+            }
+          }
+
           return ListView.builder(
             itemCount: snapshot.data!.length,
             controller: messageController,
             itemBuilder: (context, index) {
               final messageData = snapshot.data![index];
               var timeSent = DateFormat.jm().format(messageData.timeSent);
+              print(messageData.messageId);
 
               if (!messageData.isSeen &&
                   messageData.recieverid ==
@@ -82,8 +90,12 @@ class _ChatListState extends State<ChatList> {
                   repliedText: messageData.repliedMessage,
                   username: messageData.repliedTo,
                   repliedMessageType: messageData.repliedMessageType,
-                  onLeftSwipe: () => {
-                    onMessageSwipe(messageData.text, true, messageData.type)
+                  ontap: () {
+                    scrollToMessage(index);
+                  },
+                  onLeftSwipe: () {
+                    onMessageSwipe(messageData.text, true, messageData.type);
+                    // FocusManager.instance.primaryFocus!.requestFocus();
                   },
                   isSeen: messageData.isSeen,
                 );
@@ -95,10 +107,13 @@ class _ChatListState extends State<ChatList> {
                   repliedText: messageData.repliedMessage,
                   username: messageData.repliedTo,
                   repliedMessageType: messageData.repliedMessageType,
-                  onRightSwipe: () => {
-                        onMessageSwipe(
-                            messageData.text, false, messageData.type)
-                      });
+                  ontap: () {
+                    scrollToMessage(index);
+                  },
+                  onRightSwipe: () {
+                    onMessageSwipe(messageData.text, false, messageData.type);
+                    // FocusManager.instance.primaryFocus!.requestFocus();
+                  });
             },
           );
         });
