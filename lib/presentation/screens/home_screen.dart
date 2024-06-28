@@ -213,10 +213,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                 return const Center(
-                                    child: AppText(
-                                  text: "No stories available",
-                                  color: whiteColor,
-                                ));
+                                  child: AppText(
+                                    text: "No stories available",
+                                    color: whiteColor,
+                                  ),
+                                );
                               }
                               return ListView.builder(
                                 scrollDirection: Axis.horizontal,
@@ -236,10 +237,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            Get.toNamed(Routes.storyview,
-                                                arguments: {
-                                                  'storyData': storyData,
-                                                });
+                                            Get.toNamed(
+                                              Routes.storyview,
+                                              arguments: {
+                                                'allStories': snapshot.data,
+                                                'initialIndex': index,
+                                              },
+                                            );
                                           },
                                           child: CircleAvatar(
                                             backgroundColor: Colors.white,
@@ -267,6 +271,76 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+
+                      // Expanded(
+                      //   child: SizedBox(
+                      //     height: 100,
+                      //     width: MediaQuery.of(context).size.width * 0.75,
+                      //     child: FutureBuilder<List<StoryModel>>(
+                      //       future: storyController.getStories(),
+                      //       builder: (context, snapshot) {
+                      //         if (snapshot.connectionState ==
+                      //             ConnectionState.waiting) {
+                      //           return const Center(
+                      //             child: CircularProgressIndicator(),
+                      //           );
+                      //         }
+                      //         if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      //           return const Center(
+                      //               child: AppText(
+                      //             text: "No stories available",
+                      //             color: whiteColor,
+                      //           ));
+                      //         }
+                      //         return ListView.builder(
+                      //           scrollDirection: Axis.horizontal,
+                      //           itemCount: snapshot.data!.length,
+                      //           itemBuilder: (context, index) {
+                      //             var storyData = snapshot.data![index];
+                      //             print(storyData.username);
+                      //             print(storyData.profilePic);
+
+                      //             return Padding(
+                      //               padding: const EdgeInsets.only(
+                      //                 left: 10,
+                      //                 top: 10,
+                      //                 right: 10,
+                      //               ),
+                      //               child: Column(
+                      //                 children: [
+                      //                   GestureDetector(
+                      //                     onTap: () {
+                      //                       Get.toNamed(Routes.storyview,
+                      //                           arguments: {
+                      //                             'storyData': storyData,
+                      //                           });
+                      //                     },
+                      //                     child: CircleAvatar(
+                      //                       backgroundColor: Colors.white,
+                      //                       maxRadius: 25,
+                      //                       backgroundImage:
+                      //                           CachedNetworkImageProvider(
+                      //                               storyData.profilePic),
+                      //                     ),
+                      //                   ),
+                      //                   const SizedBox(
+                      //                     height: 5,
+                      //                   ),
+                      //                   Text(
+                      //                     storyData.username,
+                      //                     style: const TextStyle(
+                      //                         fontSize: 20,
+                      //                         color: Colors.white),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             );
+                      //           },
+                      //         );
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   )
                 ],
@@ -365,7 +439,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 radius: 30,
                                               ),
                                               trailing: Text(
-                                                DateFormat.Hm()
+                                                DateFormat.jm()
                                                     .format(groupData.timeSent),
                                                 style: TextStyle(
                                                   color: whiteColor
@@ -449,7 +523,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 radius: 30,
                                               ),
                                               trailing: Text(
-                                                DateFormat.Hm().format(
+                                                DateFormat.jm().format(
                                                     chatContactData.timeSent),
                                                 style: TextStyle(
                                                   color: whiteColor

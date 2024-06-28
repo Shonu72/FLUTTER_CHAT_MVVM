@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'failure.dart';
@@ -115,20 +116,23 @@ class Helpers {
     }
     return file;
   }
+ static Future<bool> checkPermissions() async {
+    PermissionStatus cameraStatus = await Permission.camera.status;
+    PermissionStatus microphoneStatus = await Permission.microphone.status;
+    return cameraStatus.isGranted && microphoneStatus.isGranted;
+  }
 
-  // static Future<GiphyGif?> pickGIF(BuildContext context) async {
-  //   GiphyGif? gif;
-  //   try {
-  //     gif = await Giphy.getGif(
-  //       context: context,
-  //       apiKey: 'pwXu0t7iuNVm8VO5bgND2NzwCpVH9S0F',
-  //     );
-  //   } catch (e) {
-  //     showSnackBar(context: context, content: e.toString());
-  //   }
-  //   return gif;
-  // }
+static  Future<void> requestPermissions() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.microphone,
+    ].request();
 
+    if (statuses[Permission.camera]!.isDenied ||
+        statuses[Permission.microphone]!.isDenied) {
+      Helpers.toast("Permissions are required to make a call");
+    }
+  }
   static String convertFailureToMessage(Failure failure) {
     if (failure is ServerFailure) {
       return failure.message;

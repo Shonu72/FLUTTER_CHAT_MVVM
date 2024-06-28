@@ -7,10 +7,12 @@ import 'package:charterer/data/datasources/story_datasource.dart';
 import 'package:charterer/data/models/story_model.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/data/repositories/common_firebase_repo.dart';
+import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 class StoryDataSourceImpl implements StoryDataSource {
@@ -31,8 +33,10 @@ class StoryDataSourceImpl implements StoryDataSource {
     required BuildContext context,
   }) async {
     try {
+      final AuthControlller authController = Get.find<AuthControlller>();
+      final currentUser = await authController.getCurrentUser();
       var storyId = const Uuid().v1();
-      String uid = auth.currentUser!.uid;
+      String uid = currentUser!.uid;
       // String phoneNumber = auth.currentUser!.phoneNumber!;
       String imageurl =
           await commonFirebaseStorageRepository.storeFileToFirebase(
@@ -61,7 +65,7 @@ class StoryDataSourceImpl implements StoryDataSource {
       if (userDataFirebase.docs.isNotEmpty) {
         for (var doc in userDataFirebase.docs) {
           var userData = UserModel.fromMap(doc.data());
-          if (userData.uid != auth.currentUser!.uid) {
+          if (userData.uid != currentUser.uid) {
             uidWhoCanSee.add(userData.uid);
             print("userData.uid: ${userData.uid}");
           }
@@ -75,10 +79,8 @@ class StoryDataSourceImpl implements StoryDataSource {
           .collection('stories')
           .where(
             'uid',
-            isEqualTo: auth.currentUser!.uid,
+            isEqualTo: currentUser.uid,
           )
-          .where('createdAt',
-              isLessThan: DateTime.now().subtract(const Duration(hours: 24)))
           .get();
 
       if (storySnapshot.docs.isNotEmpty) {
@@ -92,7 +94,7 @@ class StoryDataSourceImpl implements StoryDataSource {
             .update({
           'photoUrl': storyImageUrls,
         });
-        // return;
+        return;
       } else {
         storyImageUrls = [imageurl];
       }
@@ -121,6 +123,8 @@ class StoryDataSourceImpl implements StoryDataSource {
   Future<List<StoryModel>> getStories() async {
     List<StoryModel> storyData = [];
     try {
+      final AuthControlller authController = Get.find<AuthControlller>();
+      final currentUser = await authController.getCurrentUser();
       List<Contact> contacts = [];
       if (await FlutterContacts.requestPermission()) {
         contacts = await FlutterContacts.getContacts(
@@ -136,16 +140,16 @@ class StoryDataSourceImpl implements StoryDataSource {
           //         '',
           //       ),
           // )
-          // .where(
-          //   'createdAt',
-          //   isGreaterThan: DateTime.now()
-          //       .subtract(const Duration(hours: 24))
-          //       .millisecondsSinceEpoch,
-          // )
+          .where(
+            'createdAt',
+            isGreaterThan: DateTime.now()
+                .subtract(const Duration(hours: 24))
+                .millisecondsSinceEpoch,
+          )
           .get();
       for (var tempData in storySnapshot.docs) {
         StoryModel tempStory = StoryModel.fromMap(tempData.data());
-        if (tempStory.whoCanSee.contains(auth.currentUser!.uid)) {
+        if (tempStory.whoCanSee.contains(currentUser!.uid)) {
           storyData.add(tempStory);
         }
       }

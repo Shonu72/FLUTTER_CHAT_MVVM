@@ -62,7 +62,7 @@ class _ChatListState extends State<ChatList> {
             controller: messageController,
             itemBuilder: (context, index) {
               final messageData = snapshot.data![index];
-              var timeSent = DateFormat.Hm().format(messageData.timeSent);
+              var timeSent = DateFormat.jm().format(messageData.timeSent);
 
               if (!messageData.isSeen &&
                   messageData.recieverid ==

@@ -11,7 +11,6 @@ import 'package:charterer/presentation/screens/chats/widgets/chat_list.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class ChatScreen extends StatelessWidget {
   ChatScreen({
@@ -28,37 +27,19 @@ class ChatScreen extends StatelessWidget {
     final String profile = args["profilePic"];
     final bool isGroupChat = args["isGroupChat"];
 
-    Future<bool> checkPermissions() async {
-      PermissionStatus cameraStatus = await Permission.camera.status;
-      PermissionStatus microphoneStatus = await Permission.microphone.status;
-      return cameraStatus.isGranted && microphoneStatus.isGranted;
-    }
-
-    Future<void> requestPermissions() async {
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.camera,
-        Permission.microphone,
-      ].request();
-
-      if (statuses[Permission.camera]!.isDenied ||
-          statuses[Permission.microphone]!.isDenied) {
-        Helpers.toast("Permissions are required to make a call");
-      }
-    }
-
     void makeCall() async {
-      if (await checkPermissions()) {
+      if (await Helpers.checkPermissions()) {
         callController.makeCall(name, uid, profile);
       } else {
-        await requestPermissions();
+        await Helpers.requestPermissions();
       }
     }
 
     void makeGroupCall() async {
-      if (await checkPermissions()) {
+      if (await Helpers.checkPermissions()) {
         callController.makeGroupCall(name, uid, profile);
       } else {
-        await requestPermissions();
+        await Helpers.requestPermissions();
       }
     }
 
