@@ -127,16 +127,18 @@ class DependencyInjector {
   static void injectController() {
     Get.lazyPut<AuthControlller>(() => AuthControlller(
           getCurrentUserUseCase: Get.find<GetCurrentUserUseCase>(),
-          signInWithEmailPasswordUseCase: Get.find(),
-          signUpWithEmailPasswordUseCase: Get.find(),
-          userDataUseCase: Get.find(),
-          setUserStateUseCase: Get.find(),
-          signOutUseCase: Get.find(),
+          signInWithEmailPasswordUseCase:
+              Get.find<SignInWithEmailPasswordUseCase>(),
+          signUpWithEmailPasswordUseCase:
+              Get.find<SignUpWithEmailPasswordUseCase>(),
+          userDataUseCase: Get.find<UserDataUseCase>(),
+          setUserStateUseCase: Get.find<SetUserStateUseCase>(),
+          signOutUseCase: Get.find<SignOutUseCase>(),
         ));
     Get.lazyPut<SelectContactController>(() => SelectContactController(
           // selectGroupContactUseCase: Get.find(),
-          getContactsUseCase: Get.find(),
-          selectContactUseCase: Get.find(),
+          getContactsUseCase: Get.find<GetContactsUseCase>(),
+          selectContactUseCase: Get.find<SelectContactUseCase>(),
         ));
     Get.lazyPut<ChatController>(() => ChatController(
           getChatContactsUseCase: Get.find<GetChatContacts>(),
@@ -150,10 +152,13 @@ class DependencyInjector {
 
     Get.lazyPut<MessageReplyController>(() => MessageReplyController());
     Get.lazyPut<StoryController>(() => StoryController(
-        uploadStoryUseCase: Get.find(), getStoryUseCase: Get.find()));
+          uploadStoryUseCase: Get.find<UploadStoryUseCase>(),
+          getStoryUseCase: Get.find<GetStoryUseCase>(),
+        ));
 
-    Get.lazyPut<GroupController>(
-        () => GroupController(createGroupUseCase: Get.find()));
+    Get.lazyPut<GroupController>(() => GroupController(
+          createGroupUseCase: Get.find<CreateGroupUseCase>(),
+        ));
 
     Get.lazyPut(() => CallController(
         getCallStreamUseCase: Get.find<GetCallStreamUseCase>(),

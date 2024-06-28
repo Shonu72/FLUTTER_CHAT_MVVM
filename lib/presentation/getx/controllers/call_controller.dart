@@ -43,6 +43,7 @@ class CallController extends GetxController {
       receiverPic: receiverProfilePic,
       callId: callId,
       hasDialled: true,
+      timeCalled: DateTime.now(),
     );
 
     CallModel receiverCallData = CallModel(
@@ -54,6 +55,7 @@ class CallController extends GetxController {
       receiverPic: receiverProfilePic,
       callId: callId,
       hasDialled: false,
+      timeCalled: DateTime.now(),
     );
 
     await makeCallUseCase(senderCallData, receiverCallData);
@@ -79,6 +81,7 @@ class CallController extends GetxController {
       receiverPic: receiverProfilePic,
       callId: callId,
       hasDialled: true,
+      timeCalled: DateTime.now(),
     );
 
     CallModel receiverCallData = CallModel(
@@ -90,6 +93,7 @@ class CallController extends GetxController {
       receiverPic: receiverProfilePic,
       callId: callId,
       hasDialled: false,
+      timeCalled: DateTime.now(),
     );
 
     await makeGroupCallUseCase(senderCallData, receiverCallData);

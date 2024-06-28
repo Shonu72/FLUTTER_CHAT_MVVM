@@ -1,4 +1,3 @@
-import 'package:charterer/core/utils/calls_enum.dart';
 import 'package:charterer/domain/entities/call_entity.dart';
 
 class CallModel extends CallEntity {
@@ -11,6 +10,7 @@ class CallModel extends CallEntity {
     required String receiverPic,
     required String callId,
     required bool hasDialled,
+    required DateTime timeCalled,
     // required CallsEnum type,
   }) : super(
           callerId: callerId,
@@ -21,6 +21,7 @@ class CallModel extends CallEntity {
           receiverPic: receiverPic,
           callId: callId,
           hasDialled: hasDialled,
+          timeCalled: timeCalled,
           // type: type,
         );
 
@@ -34,6 +35,7 @@ class CallModel extends CallEntity {
       'receiverPic': receiverPic,
       'callId': callId,
       'hasDialled': hasDialled,
+      'timeCalled': timeCalled.millisecondsSinceEpoch,
       // 'type': type.type,
     };
   }
@@ -48,6 +50,7 @@ class CallModel extends CallEntity {
       receiverPic: map['receiverPic'] ?? '',
       callId: map['callId'] ?? '',
       hasDialled: map['hasDialled'] ?? false,
+      timeCalled: DateTime.fromMillisecondsSinceEpoch(map['timeCalled']),
       // type: (map['type'] as String).toEnum(),
     );
   }

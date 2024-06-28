@@ -85,7 +85,6 @@ class MakeCallDataSourceImpl implements MakeCallDataSource {
     try {
       await firestore.collection('call').doc(callerId).delete();
       await firestore.collection('call').doc(receiverId).delete();
-      
     } catch (e) {
       Helpers.toast(e.toString());
     }

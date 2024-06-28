@@ -1,4 +1,3 @@
-import 'package:charterer/core/utils/calls_enum.dart';
 import 'package:equatable/equatable.dart';
 
 class CallEntity extends Equatable {
@@ -10,9 +9,11 @@ class CallEntity extends Equatable {
   final String receiverPic;
   final String callId;
   final bool hasDialled;
+  final DateTime timeCalled;
+
   // final CallsEnum type;
 
-  const CallEntity({
+  const CallEntity( {
     required this.callerId,
     required this.callerName,
     required this.callerPic,
@@ -21,6 +22,7 @@ class CallEntity extends Equatable {
     required this.receiverPic,
     required this.callId,
     required this.hasDialled,
+    required this.timeCalled,
     // required this.type,
   });
 
@@ -34,6 +36,7 @@ class CallEntity extends Equatable {
         receiverPic,
         callId,
         hasDialled,
+        timeCalled,
         // type,
       ];
 }

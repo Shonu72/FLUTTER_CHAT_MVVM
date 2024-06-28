@@ -52,14 +52,4 @@ class SelectContactRemoteDataSourceImpl
     }
     return false;
   }
-
-  // @override
-  // void selectGroupContact(int index, Contact groupContact) {
-  //   List<int> selectedContactsIndex = [];
-  //   if (selectedContactsIndex.contains(index)) {
-  //     selectedContactsIndex.removeAt(index);
-  //   } else {
-  //     selectedContactsIndex.add(index);
-  //   }
-  // }
 }

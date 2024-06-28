@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,8 @@ class CallHistoryTile extends StatelessWidget {
       required this.image,
       required this.name,
       required this.time,
-      required this.icon, required this.calltype});
+      required this.icon,
+      required this.calltype});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class CallHistoryTile extends StatelessWidget {
         tileColor: textCharcoalBlueColor,
         leading: CircleAvatar(
           radius: 30,
-          backgroundImage: AssetImage(image),
+          backgroundImage: CachedNetworkImageProvider(image),
         ),
         title: AppText(text: name, color: textWhiteColor),
         subtitle: Row(
