@@ -10,6 +10,7 @@ import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/auth/login_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+
+  await fMessaging.requestPermission();
+
   DependencyInjector.inject();
   Get.put(CallController(
       getCallStreamUseCase: Get.find<GetCallStreamUseCase>(),
@@ -41,6 +46,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getLoggedInStatus();
+    initializeNotifications();
   }
 
   Future<void> getLoggedInStatus() async {
@@ -48,6 +54,12 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     });
+  }
+
+  void initializeNotifications() async {
+    // await PushNotifications.init();
+    // await PushNotifications.initLocalNotification();
+    // FCMService().initFirebaseMessaging();
   }
 
   @override

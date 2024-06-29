@@ -50,8 +50,8 @@ class SetUserStateUseCase {
 
   SetUserStateUseCase({required this.repository});
 
-  Future<void> call(bool isOnline) async {
-    return await repository.setUserState(isOnline);
+  Future<void> call(bool isOnline, String pushToken) async {
+    return await repository.setUserState(isOnline, pushToken);
   }
 }
 

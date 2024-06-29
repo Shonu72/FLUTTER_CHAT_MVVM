@@ -4,6 +4,7 @@ import 'package:charterer/presentation/screens/calls/call_history_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
 import 'package:charterer/presentation/screens/notification_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,12 +20,17 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   final authController = Get.find<AuthControlller>();
   late int currentIndex;
+  late String pushToken;
 
   @override
   void initState() {
     super.initState();
     currentIndex = widget.initialIndex;
-
+    FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        pushToken = token ?? '';
+      });
+    });
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -40,13 +46,14 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     switch (state) {
       case AppLifecycleState.resumed:
         debugPrint("resumed");
-        authController.setUserState(true);
+        debugPrint("pushToken: $pushToken");
+        authController.setUserState(true, pushToken);
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-        authController.setUserState(false);
+        authController.setUserState(false, pushToken);
         break;
     }
   }

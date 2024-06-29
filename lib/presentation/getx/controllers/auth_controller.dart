@@ -45,8 +45,8 @@ class AuthControlller extends GetxController {
     return userDataUseCase(userId);
   }
 
-  Future<void> setUserState(bool isOnline) async {
-    await setUserStateUseCase(isOnline);
+  Future<void> setUserState(bool isOnline, String pushToken) async {
+    await setUserStateUseCase(isOnline, pushToken);
   }
 
   Future<void> signOut() async {

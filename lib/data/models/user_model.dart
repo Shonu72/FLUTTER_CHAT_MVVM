@@ -8,6 +8,7 @@ class UserModel extends UserEntity {
     required bool isOnline,
     required String phoneNumber,
     required List<String> groupId,
+    required String pushToken,
   }) : super(
           name: name,
           uid: uid,
@@ -15,6 +16,7 @@ class UserModel extends UserEntity {
           isOnline: isOnline,
           phoneNumber: phoneNumber,
           groupId: groupId,
+          pushToken: pushToken,
         );
 
   Map<String, dynamic> toMap() {
@@ -25,6 +27,7 @@ class UserModel extends UserEntity {
       'isOnline': isOnline,
       'phoneNumber': phoneNumber,
       'groupId': groupId,
+      'pushToken': pushToken,
     };
   }
 
@@ -36,6 +39,7 @@ class UserModel extends UserEntity {
       isOnline: map['isOnline'] ?? false,
       phoneNumber: map['phoneNumber'] ?? '',
       groupId: List<String>.from(map['groupId']),
+      pushToken: map['pushToken'] ?? '',
     );
   }
 }

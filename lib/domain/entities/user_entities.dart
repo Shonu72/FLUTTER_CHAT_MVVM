@@ -7,6 +7,7 @@ class UserEntity extends Equatable {
   final bool isOnline;
   final String phoneNumber;
   final List<String> groupId;
+  final String pushToken;
 
   const UserEntity({
     required this.name,
@@ -15,6 +16,7 @@ class UserEntity extends Equatable {
     required this.isOnline,
     required this.phoneNumber,
     required this.groupId,
+    required this.pushToken,
   });
 
   @override
@@ -25,5 +27,6 @@ class UserEntity extends Equatable {
         isOnline,
         phoneNumber,
         groupId,
+        pushToken,
       ];
 }

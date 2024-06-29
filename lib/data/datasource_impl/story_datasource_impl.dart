@@ -111,6 +111,9 @@ class StoryDataSourceImpl implements StoryDataSource {
       );
 
       await firestore.collection('stories').doc(storyId).set(story.toMap());
+      // Notifications.sendPushNotification(
+      //     currentUser,userData,  "${currentUser.name} added a story");
+
       print("upload ho gya : ${story.toMap()}");
     } catch (e, stackTrace) {
       debugPrint("Error: ${e.toString()}");
@@ -125,6 +128,7 @@ class StoryDataSourceImpl implements StoryDataSource {
     try {
       final AuthControlller authController = Get.find<AuthControlller>();
       final currentUser = await authController.getCurrentUser();
+      print("pushToken: ${currentUser?.pushToken}");
       List<Contact> contacts = [];
       if (await FlutterContacts.requestPermission()) {
         contacts = await FlutterContacts.getContacts(

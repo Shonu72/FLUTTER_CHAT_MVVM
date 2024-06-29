@@ -13,6 +13,6 @@ abstract class FirebaseRepository {
       String password,
       String confirmPassword);
   Stream<UserModel> userData(String userId);
-  Future<void> setUserState(bool isOnline);
+  Future<void> setUserState(bool isOnline, String pushToken);
   Future<void> signOut();
 }

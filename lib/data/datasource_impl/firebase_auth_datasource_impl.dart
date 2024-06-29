@@ -7,6 +7,7 @@ import 'package:charterer/data/repositories/common_firebase_repo.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -65,6 +66,9 @@ class FirebaseAuthDataSource implements AuthDataSource {
         photoUrl = await commonFirebaseStorageRepository.storeFileToFirebase(
             "profilePic/$uid", profilePic);
       }
+      String pushToken = await FirebaseMessaging.instance.getToken() ?? '';
+     
+
       var user = UserModel(
         name: name,
         uid: uid,
@@ -72,6 +76,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
         isOnline: true,
         phoneNumber: phoneNumber,
         groupId: const [],
+        pushToken: pushToken,
       );
       await firestore.collection('users').doc(uid).set(user.toMap());
       Helpers.saveUser(key: "isLoggedIn", value: true);
@@ -92,9 +97,10 @@ class FirebaseAuthDataSource implements AuthDataSource {
   }
 
   @override
-  Future<void> setUserState(bool isOnline) async {
+  Future<void> setUserState(bool isOnline, String pushToken) async {
     await firestore.collection('users').doc(auth.currentUser!.uid).update({
       'isOnline': isOnline,
+      'pushToken': pushToken,
     });
   }
 

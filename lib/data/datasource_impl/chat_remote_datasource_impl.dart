@@ -9,6 +9,7 @@ import 'package:charterer/data/models/messages_model.dart';
 import 'package:charterer/data/models/user_model.dart';
 import 'package:charterer/data/repositories/common_firebase_repo.dart';
 import 'package:charterer/presentation/getx/controllers/message_reply_controller.dart';
+import 'package:charterer/services/notifications/send_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +93,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       var receiverUserData =
           await firestore.collection('users').doc(receiverUserId).get();
       receiverUser = UserModel.fromMap(receiverUserData.data()!);
+      Notifications.sendPushNotification(receiverUser, text);
     }
 
     await _saveDataToContactsSubcollection(

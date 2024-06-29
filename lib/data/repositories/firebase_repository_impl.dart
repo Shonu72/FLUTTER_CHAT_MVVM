@@ -37,8 +37,8 @@ class AuthRepositoryImpl implements FirebaseRepository {
   }
 
   @override
-  Future<void> setUserState(bool isOnline) async {
-    return dataSource.setUserState(isOnline);
+  Future<void> setUserState(bool isOnline, String pushToken) async {
+    return dataSource.setUserState(isOnline, pushToken);
   }
 
   @override
