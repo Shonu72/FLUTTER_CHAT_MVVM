@@ -44,38 +44,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBFDZ_Vwc6WPJaCwhyGjY2mrW-Wbxlo4dc',
-    appId: '1:1034498336374:web:36e0586f8dd34f3357a157',
-    messagingSenderId: '1034498336374',
-    projectId: 'chatter-6f294',
-    authDomain: 'chatter-6f294.firebaseapp.com',
-    storageBucket: 'chatter-6f294.appspot.com',
-    measurementId: 'G-4HNWQ6L0Z1',
+    apiKey: 'AIzaSyCo2suKjhRiqBBSQrm2XkvllmDGzdINx4I',
+    appId: '1:541388242989:web:34ea6397473ff937c7b8a4',
+    messagingSenderId: '541388242989',
+    projectId: 'whatasapp-shourya',
+    authDomain: 'whatasapp-shourya.firebaseapp.com',
+    databaseURL: 'https://whatasapp-shourya-default-rtdb.firebaseio.com',
+    storageBucket: 'whatasapp-shourya.appspot.com',
+    measurementId: 'G-LY3SHFGGPD',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBdM71Bk3IKhYYN0QagZLGWfC4ZvIc793g',
-    appId: '1:1034498336374:android:9adc9a44abdb267357a157',
-    messagingSenderId: '1034498336374',
-    projectId: 'chatter-6f294',
-    storageBucket: 'chatter-6f294.appspot.com',
+    apiKey: 'AIzaSyBsxgb-NcU3Vhz_rH76LX83JUq2BfmC25k',
+    appId: '1:541388242989:android:78dd238cc78af011c7b8a4',
+    messagingSenderId: '541388242989',
+    projectId: 'whatasapp-shourya',
+    databaseURL: 'https://whatasapp-shourya-default-rtdb.firebaseio.com',
+    storageBucket: 'whatasapp-shourya.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBHIARgSeUUHhiFhTJWcgeivp--9MvrWPQ',
-    appId: '1:1034498336374:ios:3af22aebcffe8c3b57a157',
-    messagingSenderId: '1034498336374',
-    projectId: 'chatter-6f294',
-    storageBucket: 'chatter-6f294.appspot.com',
+    apiKey: 'AIzaSyAUm7mhgt8Ip0dQJ0qOUlZuHrumj5P0TJU',
+    appId: '1:541388242989:ios:4bd96a3265cea26bc7b8a4',
+    messagingSenderId: '541388242989',
+    projectId: 'whatasapp-shourya',
+    databaseURL: 'https://whatasapp-shourya-default-rtdb.firebaseio.com',
+    storageBucket: 'whatasapp-shourya.appspot.com',
+    androidClientId: '541388242989-jp00h00nbatjpoaafojge0ocsjvq0vg6.apps.googleusercontent.com',
+    iosClientId: '541388242989-nhavg7a89bsfbb4t916jvu23po8u3dk5.apps.googleusercontent.com',
     iosBundleId: 'com.example.charterer',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBHIARgSeUUHhiFhTJWcgeivp--9MvrWPQ',
-    appId: '1:1034498336374:ios:3af22aebcffe8c3b57a157',
-    messagingSenderId: '1034498336374',
-    projectId: 'chatter-6f294',
-    storageBucket: 'chatter-6f294.appspot.com',
+    apiKey: 'AIzaSyAUm7mhgt8Ip0dQJ0qOUlZuHrumj5P0TJU',
+    appId: '1:541388242989:ios:4bd96a3265cea26bc7b8a4',
+    messagingSenderId: '541388242989',
+    projectId: 'whatasapp-shourya',
+    databaseURL: 'https://whatasapp-shourya-default-rtdb.firebaseio.com',
+    storageBucket: 'whatasapp-shourya.appspot.com',
+    androidClientId: '541388242989-jp00h00nbatjpoaafojge0ocsjvq0vg6.apps.googleusercontent.com',
+    iosClientId: '541388242989-nhavg7a89bsfbb4t916jvu23po8u3dk5.apps.googleusercontent.com',
     iosBundleId: 'com.example.charterer',
   );
 }

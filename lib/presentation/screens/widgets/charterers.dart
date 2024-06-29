@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../core/theme/colors.dart';
 import '../../getx/controllers/chaterer_controller.dart';
@@ -29,9 +27,9 @@ class _CharterersState extends State<Charterers> {
       children: [
         Text(
           'Charterer',
-          style: textTheme.headline3,
+          style: textTheme.displaySmall,
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         TextFieldWidget(
@@ -41,7 +39,7 @@ class _CharterersState extends State<Charterers> {
             chartererController.getCharterers(search: value);
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Container(
@@ -67,7 +65,7 @@ class _CharterersState extends State<Charterers> {
                   return ListTile(
                     title: Text(
                       charterer.chartererName,
-                      style: textTheme.headline3,
+                      style: textTheme.displaySmall,
                     ),
                   );
                 },
@@ -75,14 +73,14 @@ class _CharterersState extends State<Charterers> {
             }
           }),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Row(
           children: [
             Text(
               "Can't find your character ?",
-              style: textTheme.headline4?.copyWith(color: bodyTextColor),
+              style: textTheme.headlineMedium?.copyWith(color: bodyTextColor),
             ),
             InkWell(
                 onTap: () {
@@ -90,7 +88,8 @@ class _CharterersState extends State<Charterers> {
                 },
                 child: Text(
                   '  Add Now',
-                  style: textTheme.headline4?.copyWith(color: primaryColor),
+                  style:
+                      textTheme.headlineMedium?.copyWith(color: primaryColor),
                 )),
           ],
         ),

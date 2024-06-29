@@ -60,7 +60,8 @@ class DisplayTextImage extends StatelessWidget {
                         )
                       : CachedNetworkImage(
                           imageUrl: message,
-                          // height: 300,
+                          height: 400,
+                          fit: BoxFit.cover,
                         ),
     );
   }

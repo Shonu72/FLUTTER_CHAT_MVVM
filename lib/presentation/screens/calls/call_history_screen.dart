@@ -69,6 +69,7 @@ class CallHistoryScreen extends StatelessWidget {
                 DateTime timeCalled =
                     DateTime.fromMillisecondsSinceEpoch(timeCalledMilis);
                 String formattedTime = DateFormat.jm().format(timeCalled);
+                String formattedDate = DateFormat.yMMMd().format(timeCalled);
 
                 bool isOutgoing = (callerId == currentUserId) && hasDialled;
 
@@ -81,6 +82,7 @@ class CallHistoryScreen extends StatelessWidget {
                     name: isOutgoing ? receiverName : callerName,
                     calltype: isOutgoing ? "Outgoing" : "Incoming",
                     time: formattedTime,
+                    date: formattedDate,
                     icon: Icons.call,
                   );
                 } else {

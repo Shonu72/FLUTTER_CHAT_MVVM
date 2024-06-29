@@ -7,6 +7,7 @@ class CallHistoryTile extends StatelessWidget {
   final String image;
   final String name;
   final String time;
+  final String date;
   final IconData icon;
   final String calltype;
   const CallHistoryTile(
@@ -15,7 +16,8 @@ class CallHistoryTile extends StatelessWidget {
       required this.name,
       required this.time,
       required this.icon,
-      required this.calltype});
+      required this.calltype,
+      required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,9 @@ class CallHistoryTile extends StatelessWidget {
             const SizedBox(
               width: 5,
             ),
-            AppText(text: time, color: textWhiteColor, size: 14)
+            AppText(text: date, color: textWhiteColor, size: 12),
+            const SizedBox(width: 5),
+            AppText(text: time, color: textWhiteColor, size: 14),
           ],
         ),
         trailing: const Icon(
