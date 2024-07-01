@@ -67,8 +67,6 @@ class FirebaseAuthDataSource implements AuthDataSource {
             "profilePic/$uid", profilePic);
       }
       String pushToken = await FirebaseMessaging.instance.getToken() ?? '';
-     
-
       var user = UserModel(
         name: name,
         uid: uid,

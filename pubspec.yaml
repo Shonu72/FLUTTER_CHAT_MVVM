@@ -49,7 +49,10 @@ dependencies:
   firebase_messaging: ^14.7.19
   swipe_to: ^1.0.6
   audioplayers: ^5.2.1
-  cached_video_player: ^2.0.4
+  cached_video_player:
+    git:
+      url: https://github.com/vikram25897/flutter_cached_video_player
+      ref: feature/gradle_version_bump
   cached_network_image: ^3.3.1
   intl: ^0.19.0
   flutter_sound: ^9.2.13

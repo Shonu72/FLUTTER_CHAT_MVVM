@@ -96,6 +96,8 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       sendPushNotification(senderUser, receiverUser, text);
     }
 
+    // sendPushNotification(senderUser, receiverUser!, text);
+
     await _saveDataToContactsSubcollection(
       senderUser,
       receiverUser,
@@ -251,6 +253,9 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         receiverUserData = UserModel.fromMap(userDataMap.data()!);
         sendPushNotification(senderUser, receiverUserData, 'file');
       }
+
+      // sendPushNotification(senderUser, receiverUserData!, 'file');
+
       String contactMsg;
 
       switch (messageEnum) {

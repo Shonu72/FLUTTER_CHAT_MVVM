@@ -65,8 +65,6 @@ class _CallScreenState extends State<CallScreen> {
 
   void initAgora() async {
     await client!.initialize();
-    await client!.engine.enableVideo();
-    await client!.engine.startPreview();
   }
 
   @override
@@ -84,9 +82,9 @@ class _CallScreenState extends State<CallScreen> {
                 children: [
                   AgoraVideoViewer(
                     client: client!,
-                    layoutType: Layout.floating,
-                    showNumberOfUsers: true,
-                    enableHostControls: true,
+                    // layoutType: Layout.floating,
+                    // showNumberOfUsers: true,
+                    // enableHostControls: true,
                   ),
                   AgoraVideoButtons(
                     client: client!,

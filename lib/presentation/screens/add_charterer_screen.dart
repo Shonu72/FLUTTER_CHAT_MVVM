@@ -1,12 +1,17 @@
 import 'dart:io';
 
 import 'package:charterer/core/utils/helpers.dart';
+import 'package:charterer/data/models/user_model.dart';
+import 'package:charterer/data/repositories/common_firebase_repo.dart';
 import 'package:charterer/presentation/getx/controllers/auth_controller.dart';
 import 'package:charterer/presentation/screens/auth/widgets/auth_text_field_widget.dart';
 import 'package:charterer/presentation/screens/auth/widgets/button_widget.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
 import 'package:charterer/presentation/widgets/app_text_widget.dart';
 import 'package:charterer/presentation/widgets/custom_loading_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
@@ -40,6 +45,8 @@ class _AddChartererState extends State<AddCharterer> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final userController = Get.find<AuthControlller>();
+  final auth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
 
   final ImagePicker picker = ImagePicker();
   File? image;
@@ -78,6 +85,48 @@ class _AddChartererState extends State<AddCharterer> {
       Helpers.toast('Permission to access contacts is not granted');
       print('Permission to access contacts is not granted');
     }
+  }
+
+  Future<void> saveChaterer(File? profilePic, String name, String email,
+      String phoneNumber, String password, String confirmPassword) async {
+    await auth.createUserWithEmailAndPassword(
+        email: email, password: passwordController.text);
+    String uid = auth.currentUser!.uid;
+    String photoUrl =
+        'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png';
+
+    if (image != null) {
+      photoUrl = await commonFirebaseStorageRepository.storeFileToFirebase(
+          "profilePic/$uid", image!);
+    }
+    String pushToken = await FirebaseMessaging.instance.getToken() ?? '';
+
+    var user = UserModel(
+      name: name,
+      uid: uid,
+      profilePic: photoUrl,
+      isOnline: true,
+      phoneNumber: phoneNumber,
+      groupId: const [],
+      pushToken: pushToken,
+    );
+    await firestore.collection('users').doc(uid).set(user.toMap());
+  }
+
+  @override
+  void dispose() {
+    fullName;
+    email;
+    country;
+    mobileNumber;
+    address;
+    state;
+    city;
+    website;
+    passwordController;
+
+    confirmPasswordController;
+    super.dispose();
   }
 
   @override
@@ -301,6 +350,15 @@ class _AddChartererState extends State<AddCharterer> {
                             //   passwordController.text.trim(),
                             //   confirmPasswordController.text.trim(),
                             // );
+                            saveChaterer(
+                              image,
+                              fullName.text.trim(),
+                              email.text.trim(),
+                              "+91${mobileNumber.text.trim()}",
+                              passwordController.text.trim(),
+                              confirmPasswordController.text.trim(),
+                            );
+
                             Helpers.toast(
                                 "Charterer added to contacts successfully");
                             setState(() {
