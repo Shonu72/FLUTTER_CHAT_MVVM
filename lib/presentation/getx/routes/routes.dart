@@ -8,7 +8,7 @@ import 'package:charterer/presentation/screens/contact_screen.dart';
 import 'package:charterer/presentation/screens/groups/create_group_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
-import 'package:charterer/presentation/screens/notification_screen.dart';
+import 'package:charterer/presentation/screens/notification/notification_screen.dart';
 import 'package:charterer/presentation/screens/profiles/edit_profile_screen.dart';
 import 'package:charterer/presentation/screens/profiles/profile_screen.dart';
 import 'package:charterer/presentation/screens/stories/confirm_stories_screen.dart';

@@ -54,7 +54,9 @@ Future<void> sendPushNotification(
       'senderId': sender.uid,
       'senderName': sender.name,
       'recipientId': recipient.uid,
+      'recipientName': recipient.name,
       'message': msg,
+      'profile': sender.profilePic,
       'timestamp': FieldValue.serverTimestamp(),
     });
   } catch (e) {

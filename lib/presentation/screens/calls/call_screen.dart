@@ -98,7 +98,8 @@ class _CallScreenState extends State<CallScreen> {
                                 callModel.callerId, callModel.receiverId)
                             : callController.endCall(
                                 callModel.callerId, callModel.receiverId);
-                        Get.back();
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
                       },
                       icon: const Icon(
                         Icons.call_end,

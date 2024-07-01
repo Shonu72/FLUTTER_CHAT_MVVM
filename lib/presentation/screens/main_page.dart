@@ -3,7 +3,7 @@ import 'package:charterer/presentation/screens/add_charterer_screen.dart';
 import 'package:charterer/presentation/screens/calls/call_history_screen.dart';
 import 'package:charterer/presentation/screens/contact_screen.dart';
 import 'package:charterer/presentation/screens/home_screen.dart';
-import 'package:charterer/presentation/screens/notification_screen.dart';
+import 'package:charterer/presentation/screens/notification/notification_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

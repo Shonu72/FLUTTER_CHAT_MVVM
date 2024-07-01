@@ -111,8 +111,6 @@ class StoryDataSourceImpl implements StoryDataSource {
       );
 
       await firestore.collection('stories').doc(storyId).set(story.toMap());
-      // Notifications.sendPushNotification(
-      //     currentUser,userData,  "${currentUser.name} added a story");
 
       print("upload ho gya : ${story.toMap()}");
     } catch (e, stackTrace) {

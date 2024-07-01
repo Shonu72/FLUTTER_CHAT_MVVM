@@ -74,8 +74,7 @@ class NotificationService {
     final profile = data['profile'] as String?;
     // final isGroupChat = data['isGroupChat'] as bool?;
 
-    if (uid != null &&
-        name != null && profile != null ) {
+    if (uid != null && name != null && profile != null) {
       Get.toNamed(
         Routes.chatPage,
         arguments: {

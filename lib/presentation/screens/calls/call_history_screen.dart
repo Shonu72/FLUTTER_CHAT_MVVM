@@ -53,6 +53,7 @@ class CallHistoryScreen extends StatelessWidget {
 
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
+              shrinkWrap: true,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
                 var callData = snapshot.data!.docs[index];
@@ -86,13 +87,7 @@ class CallHistoryScreen extends StatelessWidget {
                     icon: Icons.call,
                   );
                 } else {
-                  return const Center(
-                    child: AppText(
-                      text: "No calls found",
-                      color: whiteColor,
-                      size: 24,
-                    ),
-                  );
+                  return const SizedBox.shrink();
                 }
               });
         },
