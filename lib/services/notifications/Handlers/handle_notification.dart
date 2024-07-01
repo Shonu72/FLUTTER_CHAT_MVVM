@@ -1,94 +1,92 @@
-// import 'package:charterer/presentation/screens/main_page.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:get/get.dart';
+// notification_service.dart
+import 'dart:convert';
 
-// class PushNotifications {
-//   static final _firebaseMessaging = FirebaseMessaging.instance;
-//   static final FlutterLocalNotificationsPlugin
-//       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+import 'package:charterer/presentation/getx/routes/routes.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 
-//   // request permission for notification
-//   static Future init() async {
-//     await _firebaseMessaging.requestPermission(
-//         alert: true,
-//         badge: true,
-//         sound: true,
-//         announcement: true,
-//         criticalAlert: true,
-//         provisional: false,
-//         carPlay: false);
-//     // get token from devcie
-//     // final token = await _firebaseMessaging.getToken();
-//     // print("device token : $token");
-//   }
-//   // initialize local notification
+class NotificationService {
+  static final NotificationService _instance = NotificationService._internal();
 
-//   static Future initLocalNotification() async {
-//     // for android
-//     const AndroidInitializationSettings androidInitializationSettings =
-//         AndroidInitializationSettings('@mipmap/ic_launcher');
-//     // for ios
-//     final DarwinInitializationSettings iosInitializationSettings =
-//         DarwinInitializationSettings(
-//       onDidReceiveLocalNotification: (id, title, body, payload) {
-//         print("onDidReceiveLocalNotification");
-//       },
-//     );
-//     // for linux
-//     const LinuxInitializationSettings initializationSettingsLinux =
-//         LinuxInitializationSettings(defaultActionName: 'Open notification');
-//     final InitializationSettings initializationSettings =
-//         InitializationSettings(
-//             android: androidInitializationSettings,
-//             iOS: iosInitializationSettings,
-//             linux: initializationSettingsLinux);
+  factory NotificationService() {
+    return _instance;
+  }
 
-//     // request permission for android 13 and above
-//     _flutterLocalNotificationsPlugin
-//         .resolvePlatformSpecificImplementation<
-//             AndroidFlutterLocalNotificationsPlugin>()!
-//         .requestNotificationsPermission();
+  NotificationService._internal();
 
-//     _flutterLocalNotificationsPlugin.initialize(
-//       initializationSettings,
-//       onDidReceiveNotificationResponse: (notificationResponse) {
-//         onNotificationTap(notificationResponse);
-//       },
-//       onDidReceiveBackgroundNotificationResponse: (notificationResponse) {
-//         onNotificationTap(notificationResponse);
-//       },
-//     );
-//   }
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
-//   // on tap local notification in foreground
-//   static void onNotificationTap(NotificationResponse notificationResponse) {
-//     print("onNotificationTap ");
-//     Get.to(const MainPage(
-//       initialIndex: 1,
-//     ));
-//   }
+  Future<void> init() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // Handle notification click here
+        final payload = response.payload;
+        if (payload != null) {
+          _handleMessageRedirect(payload);
+        }
+      },
+    );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _showNotification(message);
+    });
 
-//   // show a simple notification
-//   static Future showSampleNotifcation({
-//     required String title,
-//     required String body,
-//     required String payload,
-//   }) async {
-//     const AndroidNotificationDetails androidNotificationDetails =
-//         AndroidNotificationDetails(
-//       'channel id',
-//       'channel name',
-//       channelDescription: 'channel description',
-//       importance: Importance.max,
-//       priority: Priority.high,
-//       ticker: 'ticker',
-//     );
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      _handleMessageRedirect(jsonEncode(message.data));
+    });
 
-//     const NotificationDetails notificationDetails =
-//         NotificationDetails(android: androidNotificationDetails);
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        _handleMessageRedirect(jsonEncode(message.data));
+      }
+    });
+  }
 
-//     await _flutterLocalNotificationsPlugin
-//         .show(0, title, body, notificationDetails, payload: payload);
-//   }
-// }
+  Future<void> _showNotification(RemoteMessage message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('your_channel_id', 'your_channel_name',
+            importance: Importance.max,
+            priority: Priority.high,
+            showWhen: false);
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      message.notification?.title,
+      message.notification?.body,
+      platformChannelSpecifics,
+      payload: jsonEncode(message.data),
+    );
+  }
+
+  void _handleMessageRedirect(String payload) {
+    final data = jsonDecode(payload);
+    final uid = data['senderId'] as String?;
+    final name = data['senderName'] as String?;
+    final profile = data['profile'] as String?;
+    // final isGroupChat = data['isGroupChat'] as bool?;
+
+    if (uid != null &&
+        name != null && profile != null ) {
+      Get.toNamed(
+        Routes.chatPage,
+        arguments: {
+          'uid': uid,
+          'name': name,
+          'profilePic': profile,
+          'isGroupChat': false,
+        },
+      );
+    } else {
+      print("Error: Missing necessary data in notification payload.");
+    }
+  }
+}

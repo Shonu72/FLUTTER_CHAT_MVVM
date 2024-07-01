@@ -22,10 +22,10 @@ class ChatScreen extends StatelessWidget {
   final args = Get.arguments as Map<String, dynamic>;
   @override
   Widget build(BuildContext context) {
-    final String name = args["name"];
-    final String uid = args["uid"];
-    final String profile = args["profilePic"];
-    final bool isGroupChat = args["isGroupChat"];
+    final String name = args["name"] ?? '';
+    final String uid = args["uid"] ?? '';
+    final String profile = args["profilePic"] ?? '';
+    final bool isGroupChat = args["isGroupChat"] ?? false;
 
     void makeCall() async {
       if (await Helpers.checkPermissions()) {

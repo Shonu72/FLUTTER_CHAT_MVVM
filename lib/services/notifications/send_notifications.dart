@@ -3,47 +3,61 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:charterer/data/models/user_model.dart';
+import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/services/notifications/admin_firebase_notification.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart';
 
-class Notifications {
-  static Future<void> sendPushNotification(UserModel user, String msg) async {
-    try {
-      final body = {
-        "message": {
-          "token": user.pushToken,
-          "notification": {
-            "title": user.name, //our name should be send
-            "body": msg,
-          },
-        }
-      };
-
-      // Firebase Project > Project Settings > General Tab > Project ID
-      const projectID = 'whatasapp-shourya';
-
-      // get firebase admin token
-      final bearerToken = await NotificationAccessToken.getToken;
-
-      log('bearerToken: $bearerToken');
-
-      // handle null token
-      if (bearerToken == null) return;
-
-      var res = await post(
-        Uri.parse(
-            'https://fcm.googleapis.com/v1/projects/$projectID/messages:send'),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-          HttpHeaders.authorizationHeader: 'Bearer $bearerToken'
+Future<void> sendPushNotification(
+    UserModel sender, UserModel recipient, String msg) async {
+  try {
+    final body = {
+      "message": {
+        "token": recipient.pushToken,
+        "notification": {
+          "title": "${sender.name} sent you a message",
+          "body": msg,
         },
-        body: jsonEncode(body),
-      );
+        "data": {
+          "senderId": sender.uid,
+          "senderName": sender.name,
+          "recipientId": recipient.uid,
+          "route": Routes.chatPage,
+          "profile": sender.profilePic,
+          // "isGroupChat": false,
+        }
+      }
+    };
 
-      log('Response status: ${res.statusCode}');
-      log('Response body: ${res.body}');
-    } catch (e) {
-      log('\nsendPushNotificationE: $e');
-    }
+    const projectID = 'whatasapp-shourya';
+
+    final bearerToken = await NotificationAccessToken.getToken;
+    log('bearerToken: $bearerToken');
+
+    if (bearerToken == null) return;
+
+    var res = await post(
+      Uri.parse(
+          'https://fcm.googleapis.com/v1/projects/$projectID/messages:send'),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $bearerToken'
+      },
+      body: jsonEncode(body),
+    );
+
+    log('Response status: ${res.statusCode}');
+    log('Response body: ${res.body}');
+
+    // Store notification in Firebase Firestore
+    await FirebaseFirestore.instance.collection('notifications').add({
+      'senderId': sender.uid,
+      'senderName': sender.name,
+      'recipientId': recipient.uid,
+      'message': msg,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  } catch (e) {
+    log('\nsendPushNotificationE: $e');
   }
 }

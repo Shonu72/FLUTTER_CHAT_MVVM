@@ -86,7 +86,13 @@ class CallHistoryScreen extends StatelessWidget {
                     icon: Icons.call,
                   );
                 } else {
-                  return const SizedBox.shrink();
+                  return const Center(
+                    child: AppText(
+                      text: "No calls found",
+                      color: whiteColor,
+                      size: 24,
+                    ),
+                  );
                 }
               });
         },

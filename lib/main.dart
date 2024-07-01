@@ -1,14 +1,20 @@
 import 'package:charterer/di/injection.dart';
+import 'package:charterer/domain/usecases/chat_usecase.dart';
 import 'package:charterer/domain/usecases/end_call_usecase.dart';
 import 'package:charterer/domain/usecases/end_group_call_usecase.dart';
 import 'package:charterer/domain/usecases/get_call_usecase.dart';
 import 'package:charterer/domain/usecases/make_call_usecase.dart';
 import 'package:charterer/domain/usecases/make_group_call_usecase.dart';
+import 'package:charterer/domain/usecases/mark_as_seen_usecase.dart';
+import 'package:charterer/domain/usecases/send_file_msg_usecase.dart';
+import 'package:charterer/domain/usecases/send_text_msg_usecase.dart';
 import 'package:charterer/firebase_options.dart';
 import 'package:charterer/presentation/getx/controllers/call_controller.dart';
+import 'package:charterer/presentation/getx/controllers/chat_controller.dart';
 import 'package:charterer/presentation/getx/routes/routes.dart';
 import 'package:charterer/presentation/screens/auth/login_screen.dart';
 import 'package:charterer/presentation/screens/main_page.dart';
+import 'package:charterer/services/notifications/Handlers/handle_notification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +35,15 @@ void main() async {
       makeGroupCallUseCase: Get.find<MakeGroupCallUseCase>(),
       endCallUseCase: Get.find<EndCallUseCase>(),
       endGroupCallUseCase: Get.find<EndGroupCallUseCase>()));
+  Get.put(ChatController(
+    getChatContactsUseCase: Get.find<GetChatContacts>(),
+    getChatStreamUseCase: Get.find<GetChatStream>(),
+    getGroupChatStreamUseCase: Get.find<GetGroupChatStream>(),
+    sendTextMessageUseCase: Get.find<SendTextMessage>(),
+    sendFileMessageUseCase: Get.find<SendFileMsgUseCase>(),
+    setChatMessageSeen: Get.find<MarkAsSeenUseCase>(),
+    getChatGroupsUseCase: Get.find<GetChatGroupsUseCase>(),
+  ));
   runApp(const MyApp());
 }
 
@@ -46,7 +61,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getLoggedInStatus();
-    initializeNotifications();
+    NotificationService().init();
   }
 
   Future<void> getLoggedInStatus() async {
@@ -54,12 +69,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     });
-  }
-
-  void initializeNotifications() async {
-    // await PushNotifications.init();
-    // await PushNotifications.initLocalNotification();
-    // FCMService().initFirebaseMessaging();
   }
 
   @override

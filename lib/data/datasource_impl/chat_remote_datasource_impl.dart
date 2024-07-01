@@ -93,7 +93,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       var receiverUserData =
           await firestore.collection('users').doc(receiverUserId).get();
       receiverUser = UserModel.fromMap(receiverUserData.data()!);
-      Notifications.sendPushNotification(receiverUser, text);
+      sendPushNotification(senderUser, receiverUser, text);
     }
 
     await _saveDataToContactsSubcollection(
@@ -249,6 +249,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         var userDataMap =
             await firestore.collection('users').doc(receiverUserId).get();
         receiverUserData = UserModel.fromMap(userDataMap.data()!);
+        sendPushNotification(senderUser, receiverUserData, 'file');
       }
       String contactMsg;
 
