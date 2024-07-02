@@ -22,57 +22,67 @@ class _CallScreenState extends State<CallScreen> {
   final AuthControlller authController = Get.find<AuthControlller>();
   AgoraClient? client;
   String baseUrl = 'https://agoraserver.up.railway.app';
-  String? token;
-
-  Future<void> getToken() async {
-    final currentUser = await authController.getCurrentUser();
-    final uid = currentUser!.uid;
-    final response = await http.get(Uri.parse(
-      '$baseUrl/access_token?channelName=video$uid&role=subscriber&uid=0',
-    ));
-    if (response.statusCode == 200) {
-      setState(() {
-        token = jsonDecode(response.body)['token'];
-        print("token: $token");
-      });
-      // Initialize Agora
-      initAgora();
-    }
-  }
+  late String token;
+  late String channelId;
+  late CallModel callModel;
+  late bool isGroupChat;
 
   @override
   void initState() {
     super.initState();
     final args = Get.arguments as Map<String, dynamic>;
-    final String channelId = args["channelId"];
-    CallModel callModel = args["call"];
+    channelId = args["channelId"];
+    callModel = args["call"];
+    isGroupChat = args["isGroupChat"];
     getToken();
-    client = AgoraClient(
-      agoraConnectionData: AgoraConnectionData(
-        appId: AgoraConfig.appId,
-        channelName: channelId,
-        tokenUrl: baseUrl,
-        tempToken: token,
-        username: callModel.callerName,
-      ),
-      enabledPermission: [
-        Permission.camera,
-        Permission.microphone,
-      ],
-    );
-    initAgora();
+  }
+
+  Future<void> getToken() async {
+    final currentUser = await authController.getCurrentUser();
+    final uid = currentUser!.uid;
+    debugPrint("UID: $uid");
+    final response = await http.get(Uri.parse(
+      '$baseUrl/access_token?channelName=$channelId',
+    ));
+
+    debugPrint("Response status: ${response.statusCode}");
+    debugPrint("Response body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      try {
+        final responseData = jsonDecode(response.body);
+        setState(() {
+          token = responseData['token'];
+          debugPrint("Generated Token: $token");
+          debugPrint("Channel Name: $channelId");
+        });
+        initAgora();
+      } catch (e) {
+        debugPrint('Error parsing JSON: $e');
+      }
+    } else {
+      debugPrint('Failed to generate token: ${response.body}');
+    }
   }
 
   void initAgora() async {
+    client = AgoraClient(
+      agoraConnectionData: AgoraConnectionData(
+        appId: AgoraConfig.appId,
+        // channelName: channelId,
+        channelName: 'test',
+        // tempToken: token,
+        tempToken:
+            '007eJxTYLDqWvWwK2PqGYZefz5OBt2NF5SfbeswFJzhXuUic5Jn7nQFBktDC7MkM4vkZDMjIxODJAuLNIsUozSgoLG5SYplqmnLt+a0hkBGBoUHvCyMDBAI4rMwlKQWlzAwAACVwBz7',
+      ),
+    );
     await client!.initialize();
+    debugPrint(
+        "Agora client initialized with channel: $channelId and token: $token");
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = Get.arguments as Map<String, dynamic>;
-    CallModel callModel = args["call"];
-    final bool isGroupChat = args["isGroupChat"];
-
     return Scaffold(
       backgroundColor: backgroundDarkColor,
       body: client == null
@@ -82,12 +92,21 @@ class _CallScreenState extends State<CallScreen> {
                 children: [
                   AgoraVideoViewer(
                     client: client!,
-                    // layoutType: Layout.floating,
-                    // showNumberOfUsers: true,
-                    // enableHostControls: true,
+                    showNumberOfUsers: true,
+                    showAVState: true,
                   ),
                   AgoraVideoButtons(
                     client: client!,
+                    // onDisconnect: () async {
+                    //   await client!.engine.leaveChannel();
+                    //   isGroupChat
+                    //       ? callController.endGroupCall(
+                    //           callModel.callerId, callModel.receiverId)
+                    //       : callController.endCall(
+                    //           callModel.callerId, callModel.receiverId);
+                    //   // ignore: use_build_context_synchronously
+                    //   Navigator.pop(context);
+                    // },
                     disconnectButtonChild: IconButton(
                       onPressed: () async {
                         await client!.engine.leaveChannel();

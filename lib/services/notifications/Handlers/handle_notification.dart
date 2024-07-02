@@ -1,4 +1,3 @@
-// notification_service.dart
 import 'dart:convert';
 
 import 'package:charterer/presentation/getx/routes/routes.dart';
@@ -57,6 +56,7 @@ class NotificationService {
         AndroidNotificationDetails('your_channel_id', 'your_channel_name',
             importance: Importance.max,
             priority: Priority.high,
+            
             showWhen: false);
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);

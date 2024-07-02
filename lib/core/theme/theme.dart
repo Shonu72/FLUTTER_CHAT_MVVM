@@ -23,67 +23,67 @@ class ApplicationTheme {
             color: primaryTextColor,
             fontFamily: 'Heebo',
           ),
-          headline1: TextStyle(
+          displayLarge: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 4.5.sp : 19.sp,
             fontWeight: FontWeight.w500,
             color: primaryTextColor,
             fontFamily: 'Heebo',
           ),
-          headline2: TextStyle(
+          displayMedium: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 4.0.sp : 14.sp,
             fontWeight: FontWeight.w500,
             color: primaryTextColor,
             fontFamily: 'Noto Sans',
           ),
-          headline3: TextStyle(
+          displaySmall: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 3.5.sp : 12.5.sp,
             fontWeight: FontWeight.w400,
             color: primaryTextColor,
             fontFamily: 'Noto Sans',
           ),
-          headline4: TextStyle(
+          headlineMedium: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 3.0.sp : 11.sp,
             fontWeight: FontWeight.w600,
             color: primaryTextColor,
             fontFamily: 'Noto Sans',
           ),
-          headline5: TextStyle(
+          headlineSmall: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 2.5.sp : 10.sp,
             fontWeight: FontWeight.w500,
             color: primaryTextColor,
             fontFamily: 'Noto Sans',
           ),
-          headline6: TextStyle(
+          titleLarge: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 2.0.sp : 9.sp,
             fontWeight: FontWeight.w400,
             color: primaryTextColor,
             fontFamily: 'Noto Sans',
           ),
-          subtitle1: const TextStyle(
+          titleMedium: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w400,
             color: textInputTitleColor,
             fontFamily: 'Noto Sans',
           ),
-          subtitle2: const TextStyle(
+          titleSmall: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: bodyTextColor,
             fontFamily: 'Noto Sans',
           ),
-          bodyText1: const TextStyle(
+          bodyLarge: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
             color: bodyTextColor,
             fontFamily: 'Noto Sans',
           ),
-          bodyText2: const TextStyle(
+          bodyMedium: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w400,
             color: primaryTextColor,
             fontFamily: 'Noto Sans',
           ),
-          button: TextStyle(
+          labelLarge: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w700,
             color: primaryTextColor,

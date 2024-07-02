@@ -145,7 +145,7 @@ class StoryDataSourceImpl implements StoryDataSource {
           .where(
             'createdAt',
             isGreaterThan: DateTime.now()
-                .subtract(const Duration(hours: 24))
+                .subtract(const Duration(hours: 48))
                 .millisecondsSinceEpoch,
           )
           .get();

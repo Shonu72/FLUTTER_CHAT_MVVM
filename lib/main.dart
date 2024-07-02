@@ -1,3 +1,4 @@
+import 'package:charterer/core/utils/helpers.dart';
 import 'package:charterer/di/injection.dart';
 import 'package:charterer/domain/usecases/chat_usecase.dart';
 import 'package:charterer/domain/usecases/end_call_usecase.dart';
@@ -27,6 +28,7 @@ void main() async {
   FirebaseMessaging fMessaging = FirebaseMessaging.instance;
 
   await fMessaging.requestPermission();
+  await Helpers.requestPermissions();
 
   DependencyInjector.inject();
   Get.put(CallController(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:charterer/core/theme/colors.dart';
 import 'package:charterer/data/models/call_model.dart';
 import 'package:charterer/presentation/getx/controllers/call_controller.dart';
@@ -65,6 +67,9 @@ class CallPickUpScreen extends StatelessWidget {
                           const SizedBox(width: 25),
                           IconButton(
                             onPressed: () {
+                              debugPrint(
+                                  "callModel.callId: ${callModel.callId}");
+                              log("callModel.callId: ${callModel.callId}");
                               isGroupChat
                                   ? Get.toNamed(Routes.callScreen, arguments: {
                                       'channelId': callModel.callId,
@@ -72,7 +77,7 @@ class CallPickUpScreen extends StatelessWidget {
                                       'isGroupChat': true,
                                     })
                                   : Get.toNamed(Routes.callScreen, arguments: {
-                                      'channelId': callModel.callId,
+                                      'channelId': callModel.receiverId,
                                       'call': callModel,
                                       'isGroupChat': false,
                                     });

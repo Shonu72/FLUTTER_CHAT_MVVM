@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
 
@@ -86,7 +85,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       textCapitalization: widget.textCapitalization!,
       obscureText: widget.obscureText,
       // maxLengthEnforced: true,
-      style: textTheme.headline4?.copyWith(
+      style: textTheme.headlineMedium?.copyWith(
           color: widget.isReadableOnly ? textInputTitleColor : textBlackColor),
       scrollPadding: EdgeInsets.only(bottom: widget.scrollBottomPadding!),
 
@@ -115,13 +114,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderSide: const BorderSide(color: textErrorColor, width: 0.5),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          labelStyle: textTheme.headline4?.copyWith(
+          labelStyle: textTheme.headlineMedium?.copyWith(
             color: Colors.black.withOpacity(0.6),
           ),
-          errorStyle: textTheme.headline5?.copyWith(color: Colors.red),
+          errorStyle: textTheme.headlineSmall?.copyWith(color: Colors.red),
           hintText: widget.hintText,
           errorText: widget.errorText,
-          hintStyle: TextStyle(color: Colors.white),
+          hintStyle: const TextStyle(color: Colors.white),
           labelText: widget.labelText,
           helperText: widget.helperText),
       maxLines: widget.maxLines,
