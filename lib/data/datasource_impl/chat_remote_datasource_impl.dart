@@ -82,43 +82,48 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required MessageReply? messageReply,
     required bool isGroupChat,
   }) async {
-    var timeSent = DateTime.now();
-    var messageId = const Uuid().v1();
-    UserModel? receiverUser;
+    try {
+      var timeSent = DateTime.now();
+      var messageId = const Uuid().v1();
+      UserModel? receiverUser;
 
-    var senderUserData =
-        await firestore.collection('users').doc(auth.currentUser!.uid).get();
-    var senderUser = UserModel.fromMap(senderUserData.data()!);
-    if (!isGroupChat) {
-      var receiverUserData =
-          await firestore.collection('users').doc(receiverUserId).get();
-      receiverUser = UserModel.fromMap(receiverUserData.data()!);
-      sendPushNotification(senderUser, receiverUser, text);
+      var senderUserData =
+          await firestore.collection('users').doc(auth.currentUser!.uid).get();
+      var senderUser = UserModel.fromMap(senderUserData.data()!);
+      if (!isGroupChat) {
+        var receiverUserData =
+            await firestore.collection('users').doc(receiverUserId).get();
+        receiverUser = UserModel.fromMap(receiverUserData.data()!);
+        sendPushNotification(senderUser, receiverUser, text);
+      }
+
+      // sendPushNotification(senderUser, receiverUser!, text);
+
+      await _saveDataToContactsSubcollection(
+        senderUser,
+        receiverUser,
+        text,
+        timeSent,
+        receiverUserId,
+        isGroupChat,
+      );
+
+      await _saveMessageToMessageSubcollection(
+        receiverUserId: receiverUserId,
+        text: text,
+        timeSent: timeSent,
+        messageId: messageId,
+        username: senderUser.name,
+        messageType: MessageEnum.text,
+        senderUsername: senderUser.name,
+        receiverUserName: receiverUser?.name ?? '',
+        messageReply: messageReply,
+        isGroupChat: isGroupChat,
+      );
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      Helpers.showSnackBar(context: context, content: e.toString());
     }
-
-    // sendPushNotification(senderUser, receiverUser!, text);
-
-    await _saveDataToContactsSubcollection(
-      senderUser,
-      receiverUser,
-      text,
-      timeSent,
-      receiverUserId,
-      isGroupChat,
-    );
-
-    await _saveMessageToMessageSubcollection(
-      receiverUserId: receiverUserId,
-      text: text,
-      timeSent: timeSent,
-      messageId: messageId,
-      username: senderUser.name,
-      messageType: MessageEnum.text,
-      senderUsername: senderUser.name,
-      receiverUserName: receiverUser?.name ?? '',
-      messageReply: messageReply,
-      isGroupChat: isGroupChat,
-    );
   }
 
   Future<void> _saveDataToContactsSubcollection(

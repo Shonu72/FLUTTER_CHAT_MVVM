@@ -35,7 +35,6 @@ dependencies:
 
   #project_config
   rename: ^2.0.1
-  flutter_dotenv: ^5.0.2
   logger: ^1.1.0
   firebase_core: ^2.27.0
   firebase_storage: ^11.6.9
@@ -82,9 +81,6 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - .env.production
-    - .env.development
-
   # example:
   fonts:
     - family: Heebo

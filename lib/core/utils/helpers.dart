@@ -3,13 +3,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 // import 'package:enough_giphy_flutter/enough_giphy_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'failure.dart';
 
 enum RequestType { get, post, delete }
 
@@ -116,13 +113,14 @@ class Helpers {
     }
     return file;
   }
- static Future<bool> checkPermissions() async {
+
+  static Future<bool> checkPermissions() async {
     PermissionStatus cameraStatus = await Permission.camera.status;
     PermissionStatus microphoneStatus = await Permission.microphone.status;
     return cameraStatus.isGranted && microphoneStatus.isGranted;
   }
 
-static  Future<void> requestPermissions() async {
+  static Future<void> requestPermissions() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.camera,
       Permission.microphone,
@@ -132,19 +130,5 @@ static  Future<void> requestPermissions() async {
         statuses[Permission.microphone]!.isDenied) {
       Helpers.toast("Permissions are required to make a call");
     }
-  }
-  static String convertFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return failure.message;
-    }
-    return "Unknown error occurred";
-  }
-
-  static loader() {
-    SmartDialog.showLoading();
-  }
-
-  static hideLoader() {
-    SmartDialog.dismiss();
   }
 }
