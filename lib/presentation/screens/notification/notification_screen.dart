@@ -66,7 +66,7 @@ class NotificationScreen extends StatelessWidget {
                   Expanded(
                     child: StreamBuilder(
                       stream: FirebaseFirestore.instance
-                          .collection('notifications')
+                          .collection('notifications').orderBy('timestamp', descending: true)
                           .where(
                             'timestamp',
                             isGreaterThan: DateTime.now()
@@ -103,7 +103,7 @@ class NotificationScreen extends StatelessWidget {
                             String formattedTime =
                                 DateFormat.jm().format(timeNotif);
                             String formattedDate =
-                                DateFormat.yMMMd().format(timeNotif);
+                                DateFormat.yMd().format(timeNotif);
                             bool isThisForMe =
                                 notification['recipientId'] == currentUserId;
 

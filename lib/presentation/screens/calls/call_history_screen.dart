@@ -36,7 +36,10 @@ class CallHistoryScreen extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('call').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('call')
+            .orderBy('timeCalled', descending: true)
+            .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

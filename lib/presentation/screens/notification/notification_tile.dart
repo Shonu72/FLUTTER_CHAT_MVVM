@@ -36,7 +36,7 @@ class NotificationTile extends StatelessWidget {
               size: 18,
             ),
             const Spacer(),
-            AppText(text: "~ ( $date )", color: textWhiteColor, size: 14),
+            AppText(text: "~ ( $date )", color: textWhiteColor, size: 12),
             // 8360617749
           ],
         ),

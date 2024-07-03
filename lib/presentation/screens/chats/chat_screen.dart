@@ -86,7 +86,9 @@ class ChatScreen extends StatelessWidget {
                           color: whiteColor,
                         )),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Helpers.toast("Group call not supported yet");
+                        },
                         icon: const Icon(
                           Icons.call,
                           color: whiteColor,
@@ -139,7 +141,9 @@ class ChatScreen extends StatelessWidget {
                                 color: whiteColor,
                               )),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Helpers.toast("Call not supported yet");
+                              },
                               icon: const Icon(
                                 Icons.call,
                                 color: whiteColor,

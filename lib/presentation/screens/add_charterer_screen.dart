@@ -113,19 +113,31 @@ class _AddChartererState extends State<AddCharterer> {
     await firestore.collection('users').doc(uid).set(user.toMap());
   }
 
+  void clearTextFields() {
+    fullName.clear();
+    email.clear();
+    country.clear();
+    mobileNumber.clear();
+    address.clear();
+    state.clear();
+    city.clear();
+    website.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+  }
+
   @override
   void dispose() {
-    fullName;
-    email;
-    country;
-    mobileNumber;
-    address;
-    state;
-    city;
-    website;
-    passwordController;
-
-    confirmPasswordController;
+    fullName.dispose();
+    email.dispose();
+    country.dispose();
+    mobileNumber.dispose();
+    address.dispose();
+    state.dispose();
+    city.dispose();
+    website.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -361,6 +373,7 @@ class _AddChartererState extends State<AddCharterer> {
 
                             Helpers.toast(
                                 "Charterer added to contacts successfully");
+                            clearTextFields();
                             setState(() {
                               _isLoading = false;
                             });

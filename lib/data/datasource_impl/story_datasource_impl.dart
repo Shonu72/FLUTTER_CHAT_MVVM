@@ -142,12 +142,12 @@ class StoryDataSourceImpl implements StoryDataSource {
           //         '',
           //       ),
           // )
-          .where(
-            'createdAt',
-            isGreaterThan: DateTime.now()
-                .subtract(const Duration(hours: 48))
-                .millisecondsSinceEpoch,
-          )
+          // .where(
+          //   'createdAt',
+          //   isGreaterThan: DateTime.now()
+          //       .subtract(const Duration(hours: 48))
+          //       .millisecondsSinceEpoch,
+          // )
           .get();
       for (var tempData in storySnapshot.docs) {
         StoryModel tempStory = StoryModel.fromMap(tempData.data());
