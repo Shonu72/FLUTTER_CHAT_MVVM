@@ -60,7 +60,10 @@ class CallPickUpScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              callController.endCall(
+                                  callModel.callerId, callModel.receiverId);
+                            },
                             icon: const Icon(Icons.call_end,
                                 color: Colors.redAccent),
                           ),
