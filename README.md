@@ -1,6 +1,9 @@
 # Flutter MVVM Clean Architecture
 
-#Folder Structure: 
+#Folder Structure: <br>
+
+
+
 ![alt text](mvvm_folder_structuring.png)
 
 
